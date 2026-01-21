@@ -1,0 +1,31 @@
+{
+  "name": "Dev Environment",
+  "dockerComposeFile": "../compose.yaml",
+  "service": "environment",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        // Language Support
+        "mikestead.dotenv",
+        "redhat.vscode-yaml",
+        // Linting
+        "exiasr.hadolint",
+        "dbaeumer.vscode-eslint",
+        // Containers
+        "docker.docker",
+        "ms-azuretools.vscode-containers",
+        // TypeScript
+        "ms-vscode.vscode-typescript-next",
+        // Errors
+        "usernamehw.errorlens",
+        // Copilot
+        "github.copilot",
+        "github.copilot-chat",
+        // Icons
+        "pkief.material-icon-theme"
+      ]
+    }
+  }
+}

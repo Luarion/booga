@@ -1,0 +1,28 @@
+{
+  "name": "booga",
+  "workspaces": [
+    "src/*"
+  ],
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "eslint .",
+    "format": "bun prettier --write .",
+    "qc": "bun lint && bun prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^9.39.2",
+    "@eslint/json": "^0.14.0",
+    "@eslint/markdown": "^7.5.1",
+    "@types/bun": "latest",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.0.0",
+    "jiti": "^2.6.1",
+    "prettier": "^3.8.0",
+    "typescript": "^5",
+    "typescript-eslint": "^8.53.1"
+  }
+}
