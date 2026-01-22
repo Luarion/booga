@@ -1,16 +1,10 @@
-## 📋 Table of contents
+# Contributing to booga
 
-- [Development environment](#development-environment)
-  - [Requirements](#requirements)
-    - [Windows](#windows)
-  - [Opening the environment](#opening-the-environment)
-  - [Rebuild the environment](#rebuild-the-environment)
-
----
+Welcome, and thank you for your interest in contributing to booga!
 
 # 🧪 Development environment
 
-### Requirements
+### 🧩 Requirements
 
 You'll only need [Docker](https://www.docker.com/get-started/) and the VSCode's [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
 
@@ -40,3 +34,7 @@ I've chose this workflow because of the next reasons:
 
 - More scure: it reduces highly the exposure of your host machine to any package vulnerability
 - More accesible: anyone can test their features without knowing how to build a server, like a database, etc.
+
+# Thank You
+
+Thank you for taking the time to contribute.
