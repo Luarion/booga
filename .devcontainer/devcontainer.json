@@ -24,7 +24,9 @@
         "github.copilot",
         "github.copilot-chat",
         // Icons
-        "pkief.material-icon-theme"
+        "pkief.material-icon-theme",
+        // DB
+        "ms-ossdata.vscode-pgsql"
       ]
     }
   }
