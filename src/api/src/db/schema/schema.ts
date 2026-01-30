@@ -9,7 +9,7 @@ export const users = table("users", {
   email: t.varchar({ length: 254 }).notNull().unique(),
   username: t.varchar({ length: 64 }).notNull().unique(),
   password_hash: t.varchar({ length: 128 }).notNull(),
-  pfp: t.varchar({ length: 2048 }).notNull(),
+  pfp: t.varchar({ length: 2048 }),
   timestamp: timestamp,
 });
 
