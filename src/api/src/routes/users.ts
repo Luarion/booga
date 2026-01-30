@@ -7,14 +7,13 @@ import validate from "../middleware/validate";
 import { users as schema } from "../db/schema/schema";
 import * as c from "../controllers/users";
 
-// import multer from "multer";
-// const upload = multer({ dest: "uploads/" });
+import upload from "../middleware/upload";
 
 const router = Router();
 
 router.post(
   "/",
-  // upload.single("avatar"),
+  upload.single("avatar"),
   validate(
     createInsertSchema(schema, {
       username: (s) => s.trim(),
