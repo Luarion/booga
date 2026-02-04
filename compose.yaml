@@ -1,7 +1,7 @@
 services:
   environment:
     build:
-      context: Dockerfiles/environment
+      context: dockerfiles/environment
       dockerfile: Dockerfile
     container_name: environment
     volumes:
