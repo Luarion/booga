@@ -15,6 +15,12 @@
     "editor.defaultFormatter": "vscode.json-language-features",
     "editor.formatOnSave": true
   },
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true
+  },
   "pgsql.connections": [
     {
       "id": "B82619D0-0F29-43FD-AD31-BBD53B7F0C82",
