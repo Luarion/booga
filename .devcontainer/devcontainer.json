@@ -28,7 +28,9 @@
         // DB
         "ms-ossdata.vscode-pgsql",
         // APIs
-        "postman.postman-for-vscode"
+        "postman.postman-for-vscode",
+        // Debug
+        "oven.bun-vscode"
       ]
     }
   }
