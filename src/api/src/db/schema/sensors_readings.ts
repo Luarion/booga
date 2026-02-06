@@ -11,7 +11,7 @@ const schema = table(
       .notNull()
       .references(() => sensors.id, { onDelete: "cascade" }),
     value: t.numeric().notNull(),
-    timestamp: timestamp,
+    timestamp: timestamp(),
   },
   (table) => [t.primaryKey({ columns: [table.sensor_id, table.timestamp] })],
 );

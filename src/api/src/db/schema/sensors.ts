@@ -1,6 +1,6 @@
 import { pgTable as table } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
-import { id } from "./common";
+import { id, alias } from "./common";
 import controllers from "./controllers";
 
 export const schema = table("sensors", {
@@ -9,7 +9,7 @@ export const schema = table("sensors", {
     .integer()
     .notNull()
     .references(() => controllers.id, { onDelete: "cascade" }),
-  alias: t.varchar({ length: 64 }),
+  alias: alias().unique(),
 });
 
 export default schema;

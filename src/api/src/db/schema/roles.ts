@@ -5,7 +5,7 @@ import { id, timestamp } from "./common";
 const schema = table("roles", {
   id: id,
   name: t.varchar({ length: 64 }).notNull().unique(),
-  timestamp: timestamp,
+  timestamp: timestamp(),
 });
 
 export default schema;

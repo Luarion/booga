@@ -15,7 +15,7 @@ const schema = table(
       .integer()
       .notNull()
       .references(() => roles.id, { onDelete: "cascade" }),
-    timestamp: timestamp,
+    timestamp: timestamp(),
   },
   (table) => [t.primaryKey({ columns: [table.user_id, table.role_id] })],
 );

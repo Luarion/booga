@@ -1,7 +1,7 @@
 import { pgTable as table } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
 import { timestamp } from "./common";
-import sensors from "./sensors";
+import actuators from "./actuators";
 
 const schema = table(
   "actuators_actions",
@@ -9,9 +9,9 @@ const schema = table(
     actuator_id: t
       .integer()
       .notNull()
-      .references(() => sensors.id, { onDelete: "cascade" }),
+      .references(() => actuators.id, { onDelete: "cascade" }),
     value: t.numeric().notNull(),
-    timestamp: timestamp,
+    timestamp: timestamp(),
   },
   (table) => [t.primaryKey({ columns: [table.actuator_id, table.timestamp] })],
 );
