@@ -7,7 +7,7 @@ RUN microdnf makecache && \
     microdnf install -y \
     # General
     curl-8.15.0 \
-    git-2.52.0 \
+    git-2.53.0 \
     sudo-1.9.17 \
     unzip-6.0 \
     # Python3
