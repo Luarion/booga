@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import db from "../db";
-import { users as schema } from "../db/schema/schema";
+import { users as schema } from "../db/schema/users";
 import argon2 from "argon2";
 
 export const create = async (req: Request, res: Response) => {

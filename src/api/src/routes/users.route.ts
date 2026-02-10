@@ -3,11 +3,11 @@ import { Router } from "express";
 import z from "zod";
 import { createInsertSchema } from "drizzle-zod";
 
-import validate from "../middleware/validate";
-import { users as schema } from "../db/schema/schema";
+import validate from "../middleware/validate.middleware";
+import { users as schema } from "../db/schema/users";
 import * as c from "../controllers/users";
 
-import upload from "../middleware/upload";
+import upload from "../middleware/upload.middleware";
 
 const router = Router();
 
