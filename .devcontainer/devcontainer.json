@@ -20,6 +20,7 @@
         "ms-vscode.vscode-typescript-next",
         // Errors
         "usernamehw.errorlens",
+        "yoavbls.pretty-ts-errors",
         // Copilot
         "github.copilot",
         "github.copilot-chat",
@@ -30,7 +31,9 @@
         // APIs
         "postman.postman-for-vscode",
         // Debug
-        "oven.bun-vscode"
+        "oven.bun-vscode",
+        // Testing
+        "orta.vscode-jest"
       ]
     }
   }
