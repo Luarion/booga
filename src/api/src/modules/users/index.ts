@@ -22,7 +22,7 @@ module.post(
 module.get(
   "/",
   async ({ set }) => {
-    const records = Controller.getAll();
+    const records = await Controller.getAll();
     set.status = 200;
     return records;
   },
@@ -32,11 +32,14 @@ module.get(
 module.get(
   "/:id",
   async ({ set, params: { id } }) => {
-    const record = Controller.getByID(id);
+    const record = await Controller.getByID(id);
     set.status = 200;
     return record;
   },
-  { params: t.Object({ id: t.Integer() }), response: { 200: s.select } },
+  {
+    params: t.Object({ id: t.Integer({ minimum: 1 }) }),
+    response: { 200: s.select },
+  },
 );
 
 export default module;
