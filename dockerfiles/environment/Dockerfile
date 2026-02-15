@@ -10,6 +10,7 @@ RUN microdnf makecache && \
     git-2.53.0 \
     sudo-1.9.17 \
     unzip-6.0 \
+    openssl-3.5.4 \
     # Python3
     python3-3.14.2 \
     python3-pip-25.1.1 \
