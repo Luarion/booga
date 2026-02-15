@@ -10,7 +10,6 @@ module.post(
     const record = await Controller.create(
       new User(email, phone, username, password, pfp),
     );
-    console.debug(record);
     set.status = 201;
     return record;
   },
