@@ -1,14 +1,16 @@
-import express from "express";
+import { Elysia } from "elysia";
 
-import usersRouter from "./routes/users.js";
+// Module imports
+import * as m from "./modules/index";
 
-const app = express();
-const port = 3000;
+const api = new Elysia();
 
-app.use(express.json({ limit: "100mb" }));
-
-app.use("/users", usersRouter);
-
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+api.get("/", "Hello World").post("/id/:id", ({ status, params: { id } }) => {
+  return status(201, id);
 });
+
+api.use(m.users.default);
+
+api.listen(3000);
+
+console.debug("working");
