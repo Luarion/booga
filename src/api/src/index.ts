@@ -1,4 +1,5 @@
 import { Elysia } from "elysia";
+// import * as bonjour from "./bonjour";
 
 // Module imports
 import * as modules from "./modules/index";
@@ -7,13 +8,17 @@ const api = new Elysia();
 
 // Load all defined modules
 Object.values(modules).forEach((m) => {
-  if (m.default instanceof Elysia) {
-    const prefix = m.default.config.prefix;
-    console.debug("Loading: " + prefix);
-    api.use(m.default);
+  const def = m.default;
+  if (def instanceof Elysia) {
+    const prefix = def.config.prefix;
+    console.info("Loading: " + prefix);
+    api.use(def);
+  } else {
+    throw new Error("Failed to load Elisya module: " + def);
   }
 });
 
-api.listen(3000);
-
-console.debug("working");
+api.listen(process.env.API_PORT || 3000, ({ protocol, hostname, port }) => {
+  console.info(`Server listening on: ${protocol}://${hostname}:${port}`);
+  // bonjour.announce("Elisya", protocol as string, port as number);
+});
