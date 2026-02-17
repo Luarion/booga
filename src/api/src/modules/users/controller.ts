@@ -34,7 +34,7 @@ export class Controller {
       const [record] = await db
         .insert(table)
         .values({
-          email: user.email.toLowerCase(),
+          email: user.email.trim().toLowerCase(),
           phone: user.phone.trim(),
           username: user.username.trim(),
           password_hash: await Bun.password.hash(user.password),
@@ -50,24 +50,32 @@ export class Controller {
   }
 
   static async getAll() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password_hash, ...columns } = getTableColumns(table);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password_hash, ...columns } = getTableColumns(table);
 
-    const records = await db.select(columns).from(table);
-    if (!records) throw new Error("Failed to fetch users");
-    return records;
+      const records = await db.select(columns).from(table);
+      if (!records) throw new Error("Failed to fetch users");
+      return records;
+    } catch (error) {
+      console.debug(error);
+    }
   }
 
   static async getByID(id: number) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password_hash, ...columns } = getTableColumns(table);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password_hash, ...columns } = getTableColumns(table);
 
-    const [record] = await db
-      .select(columns)
-      .from(table)
-      .where(eq(table.id, id));
+      const [record] = await db
+        .select(columns)
+        .from(table)
+        .where(eq(table.id, id));
 
-    if (!record) throw new Error("User not found");
-    return record;
+      if (!record) throw new Error("User not found");
+      return record;
+    } catch (error) {
+      console.debug(error);
+    }
   }
 }
