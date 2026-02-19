@@ -8,7 +8,7 @@ const schema = table("users", {
   phone: t.varchar({ length: 15 }).notNull().unique(),
   username: t.varchar({ length: 64 }).notNull().unique(),
   password_hash: t.varchar({ length: 128 }).notNull(),
-  pfp_hash: t.varchar({ length: 2048 }).notNull(),
+  pfp_hash: t.varchar({ length: 256 }),
   timestamp: timestamp().defaultNow().notNull(),
 });
 
