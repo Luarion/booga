@@ -1,27 +1,20 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import db from "../../db";
 import table from "../../db/schema/users";
 import { eq } from "drizzle-orm";
-import { jwt } from "@elysiajs/jwt";
+import jwt from "../../jwt";
+import * as s from "../../schemas/users";
 
 const module = new Elysia({ prefix: "/login" });
 
-module
-  .use(
-    jwt({
-      name: "jwt",
-      secret: process.env.JWT_SECRET! as string,
-      exp: "1d",
-      schema: t.Object({
-        id: t.Integer({ minimum: 1 }),
-      }),
-    }),
-  )
-  .post(
-    "/",
-    async ({ jwt, set, cookie, body: { email, password } }) => {
+module.use(jwt).post(
+  "/",
+  async ({ jwt, set, cookie, body }) => {
+    try {
+      const { email, password } = body;
+
       const [record] = await db
-        .select({ id: table.id, password_hash: table.password_hash })
+        .select()
         .from(table)
         .where(eq(table.email, email.trim().toLowerCase()));
 
@@ -29,7 +22,7 @@ module
       if (!(await Bun.password.verify(password, record.password_hash)))
         throw new Error("Password missmatch");
 
-      const token = await jwt.sign({
+      const token: string = await jwt.sign({
         id: record.id,
       });
 
@@ -41,15 +34,19 @@ module
         maxAge: 1 * 86400,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password_hash, ...refined } = record;
+
       set.status = 200;
-      return { login: true };
-    },
-    {
-      body: t.Object({
-        email: t.String({ format: "email" }),
-        password: t.String(),
-      }),
-    },
-  );
+      return refined;
+    } catch (error) {
+      console.debug(error);
+      throw error;
+    }
+  },
+  {
+    body: s.login,
+  },
+);
 
 export default module;
