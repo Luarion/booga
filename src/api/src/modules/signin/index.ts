@@ -1,52 +1,26 @@
 import { Elysia } from "elysia";
 import db from "../../db";
 import table from "../../db/schema/users";
-import * as s from "../../schemas/users";
+import { eq } from "drizzle-orm";
 import jwt from "../../jwt";
-import { User } from "../../models/User";
-import { getTableColumns } from "drizzle-orm";
-import { join } from "path";
-import mime from "mime";
+import * as s from "../../schemas/users";
 
 const module = new Elysia({ prefix: "/signin" });
 
 module.use(jwt).post(
   "/",
-  async ({ set, cookie, jwt, body }) => {
+  async ({ jwt, set, cookie, body }) => {
     try {
-      const { email, phone, username, password, pfp } = body;
-
-      const user = new User(email, phone, username, password, pfp);
-
-      // Hash the pfp
-      let pfpHash: string | undefined = undefined;
-      if (user.pfp) {
-        const buffer: Uint8Array = new Uint8Array(await user.pfp.arrayBuffer());
-        pfpHash = new Bun.CryptoHasher("sha256").update(buffer).digest("hex");
-        const extension: string = mime.getExtension(user.pfp.type) ?? "bin";
-        await Bun.write(join("uploads", `${pfpHash}.${extension}`), buffer);
-        if (!pfpHash) throw new Error("Failed hashing the user's pfp");
-      }
-
-      const passwordHash: string = await Bun.password.hash(user.password);
-
-      const payload: typeof s.insert.static = {
-        email: user.email,
-        phone: user.phone,
-        username: user.username,
-        password_hash: passwordHash,
-        pfp_hash: pfpHash,
-      };
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password_hash, ...columns } = getTableColumns(table);
+      const { email, password } = body;
 
       const [record] = await db
-        .insert(table)
-        .values(payload)
-        .returning(columns); // Only retrieve needed columns
+        .select()
+        .from(table)
+        .where(eq(table.email, email.trim().toLowerCase()));
 
-      if (!record) throw new Error("Failed saving the user into the DB");
+      if (!record) throw new Error("User not found");
+      if (!(await Bun.password.verify(password, record.password_hash)))
+        throw new Error("Password missmatch");
 
       const token: string = await jwt.sign({
         id: record.id,
@@ -60,15 +34,19 @@ module.use(jwt).post(
         maxAge: 1 * 86400,
       });
 
-      set.status = 201;
-      return record;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password_hash, ...refined } = record;
+
+      set.status = 200;
+      return refined;
     } catch (error) {
       console.debug(error);
-      set.status = 500;
       throw error;
     }
   },
-  { body: s.register },
+  {
+    body: s.login,
+  },
 );
 
 export default module;
