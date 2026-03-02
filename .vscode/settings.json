@@ -16,6 +16,12 @@
     "editor.formatOnSave": true
   },
   "typescript.inlayHints.parameterNames.enabled": "all",
+  "files.associations": {
+    "**/llms.txt": "markdown"
+  },
+  "material-icon-theme.files.associations": {
+    "llms.txt": "markdown"
+  },
   // "files.exclude": {
   //   "**/.git": true,
   //   "**/node_modules": false,
