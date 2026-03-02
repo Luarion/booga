@@ -12,7 +12,7 @@ RUN microdnf makecache && \
     unzip-6.0 \
     openssl-3.5.4 \
     # Python3
-    python3-3.14.2 \
+    python3-3.14* \
     python3-pip-25.1.1 \
     # Docker
     containerd.io-2.2.1 \
