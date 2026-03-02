@@ -1,6 +1,6 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import table from "../db/schema/users";
+import { users as table } from "../db/schema";
 
 const _insert = createInsertSchema(table, {
   email: t.String({ format: "email" }),

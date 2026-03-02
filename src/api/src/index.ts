@@ -1,8 +1,7 @@
 import { Elysia } from "elysia";
-
 import * as modules from "./modules/index";
 
-const api = new Elysia();
+const api = new Elysia({ precompile: false, prefix: "/api" });
 
 // Load all defined modules
 Object.values(modules).forEach((m) => {
