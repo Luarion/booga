@@ -11,18 +11,6 @@ services:
     tty: true
     stdin_open: true
 
-  bun:
-    image: oven/bun:1.3.6-alpine
-    container_name: bun
-    depends_on:
-      - environment
-    volumes:
-      - .:/workspace:cached,rw
-    working_dir: /workspace
-    command: ["bun", "install"]
-    tty: false
-    stdin_open: false
-
   db:
     image: postgres:16-alpine
     container_name: postgres

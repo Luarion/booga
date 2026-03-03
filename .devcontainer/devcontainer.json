@@ -3,6 +3,7 @@
   "dockerComposeFile": "../compose.yaml",
   "service": "environment",
   "workspaceFolder": "/workspace",
+  "updateContentCommand": "bun install",
   "customizations": {
     "vscode": {
       "extensions": [
