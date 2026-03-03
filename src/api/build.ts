@@ -18,6 +18,8 @@ const binary = await Bun.build({
   compile: {
     outfile: `${outdir}/api`,
   },
+  minify: true,
+  target: "bun",
 });
 
 if (!binary.success) {
