@@ -33,7 +33,7 @@
         // Debug
         "oven.bun-vscode",
         // Testing
-        "orta.vscode-jest"
+        // "orta.vscode-jest"
       ]
     }
   }
