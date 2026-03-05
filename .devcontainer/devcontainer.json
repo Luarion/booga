@@ -33,6 +33,8 @@
         "postman.postman-for-vscode",
         // Debug
         "oven.bun-vscode",
+        // Package versioning
+        "pflannery.vscode-versionlens"
         // Testing
         // "orta.vscode-jest"
       ]
