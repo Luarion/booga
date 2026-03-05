@@ -11,6 +11,8 @@ RUN microdnf makecache && \
     sudo-1.9.17 \
     unzip-6.0 \
     openssl-3.5.4 \
+    make-1:4.4.1-11.fc43 \
+    envsubst \
     # Python3
     python3-3.14* \
     python3-pip-25.1.1 \

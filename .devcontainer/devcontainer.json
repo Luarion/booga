@@ -3,7 +3,11 @@
   "dockerComposeFile": "../compose.yaml",
   "service": "environment",
   "workspaceFolder": "/workspace",
-  "updateContentCommand": "bun install && bun --cwd=src/api run drizzle-kit push",
+  "updateContentCommand": [
+    "sh",
+    "-c",
+    "bun install; (cd src/api; make; bun run drizzle-kit push)"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [

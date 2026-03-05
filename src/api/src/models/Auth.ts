@@ -1,6 +1,9 @@
 import jwt from "@elysiajs/jwt";
 import { t, type Context } from "elysia";
 
+const JWT_SECRET: string = process.env.JWT_SECRET as string;
+if (!JWT_SECRET) throw new Error("JWT_SECRET environment variable is not set");
+
 const schema = t.Object({
   id: t.Integer({ minimum: 1 }),
 });
@@ -10,7 +13,7 @@ type payload = typeof schema.static;
 export default class Auth {
   static readonly jwt = jwt({
     name: "jwt",
-    secret: process.env.JWT_SECRET! as string,
+    secret: JWT_SECRET,
     exp: "1d",
     schema: schema,
   });
