@@ -4,7 +4,7 @@ import { id, timestamp } from "./common";
 
 const schema = table("controllers", {
   id: id,
-  mac: t.varchar({ length: 17 }).notNull().unique(),
+  mac: t.macaddr().notNull().unique(),
   timestamp: timestamp(),
 });
 
