@@ -1,7 +1,9 @@
 import { Elysia } from "elysia";
+import { openapi } from '@elysiajs/openapi'
+
 import * as modules from "./modules/index";
 
-const api = new Elysia({ precompile: false, prefix: "/api" });
+const api = new Elysia({ precompile: false, prefix: "/api" }).use(openapi());
 
 // Load all defined modules
 Object.values(modules).forEach((m) => {
