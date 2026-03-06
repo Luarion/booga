@@ -1,32 +1,23 @@
 import { Elysia, t } from "elysia";
 import * as table from "../../db/schema";
 import db from "../../db/index";
-import Auth from "../../models/Auth";
+import * as middleware from "../../middleware";
 
-const module = new Elysia({ prefix: "/roles" });
-
-module
-  .use(Auth.jwt)
+export default new Elysia({ prefix: "/roles" })
+  .use(middleware.auth)
   .post(
     "/",
-    async ({ set, cookie, jwt, body }) => {
+    async ({ status, body }) => {
       try {
-        const auth = new Auth(set, cookie, jwt);
-        await auth.verify();
-
         const payload = body.map(({ name }) => ({ name }));
 
         const records = await db
           .insert(table.roles)
           .values(payload)
           .returning();
-        if (!records.length) {
-          set.status = 500;
-          throw new Error("Failed creating new roles");
-        }
+        if (!records) return status(500, "Failed creating new roles");
 
-        set.status = 201;
-        return records;
+        return status(201, records);
       } catch (error) {
         console.error(error);
         throw error;
@@ -40,19 +31,12 @@ module
   )
   .get(
     "/",
-    async ({ set, cookie, jwt }) => {
+    async ({ status }) => {
       try {
-        const auth = new Auth(set, cookie, jwt);
-        await auth.verify();
-
         const records = await db.select().from(table.roles);
-        if (!records) {
-          set.status = 500;
-          throw new Error("Failed getting all the roles");
-        }
+        if (!records) return status(500, "Failed creating new roles");
 
-        set.status = 200;
-        return records;
+        return status(200, records);
       } catch (error) {
         console.error(error);
         throw error;
@@ -61,8 +45,7 @@ module
     {
       response: {
         200: t.Array(t.Object({ id: t.Number(), name: t.String() })),
+        500: t.String(),
       },
     },
   );
-
-export default module;

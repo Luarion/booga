@@ -21,20 +21,19 @@ export default class Auth {
   token: string | undefined;
 
   constructor(
-    private readonly set: Context["set"],
     private readonly cookie: Context["cookie"],
     private readonly jwt: (typeof Auth.jwt)["decorator"]["jwt"],
   ) {
     this.token = this.cookie.auth?.value as string | undefined;
   }
 
-  async sign(payload: payload) {
+  async sign(payload: payload): Promise<this> {
     this.token = await this.jwt.sign(payload);
     if (!this.token) throw new Error("Failed signing the JWT");
     return this;
   }
 
-  setCookie() {
+  setCookie(): this {
     if (!this.token) throw new Error("Expected token");
 
     this.cookie.auth?.set({
@@ -47,19 +46,10 @@ export default class Auth {
     return this;
   }
 
-  async verify(): Promise<payload> {
-    if (!this.token) {
-      this.set.status = 401;
-      throw new Error("Missing auth token");
-    }
-
+  async verify(): Promise<this> {
+    if (!this.token) throw new Error("Missing token");
     const payload: payload | false = await this.jwt.verify(this.token);
-
-    if (!payload) {
-      this.set.status = 401;
-      throw new Error("Invalid auth token");
-    }
-
-    return payload;
+    if (!payload) throw new Error("Invalid token");
+    return this;
   }
 }
