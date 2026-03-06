@@ -1,26 +1,10 @@
-import { Elysia } from "elysia";
-import { openapi } from '@elysiajs/openapi'
+import cluster from "node:cluster";
+import os from "node:os";
+import process from "node:process";
 
-import * as modules from "./modules/index";
-
-const api = new Elysia({ precompile: false, prefix: "/api" }).use(openapi());
-
-// Load all defined modules
-Object.values(modules).forEach((m) => {
-  const def = m.default;
-  if (def instanceof Elysia) {
-    const prefix = def.config.prefix;
-    console.info("Loading: " + prefix);
-    api.use(def);
-  } else {
-    throw new Error("Failed to load Elisya module: " + def);
-  }
-});
-
-// Start API server
-api.listen(
-  Number(process.env.API_PORT) || 3000,
-  ({ protocol, hostname, port }) => {
-    console.info(`Server listening on: ${protocol}://${hostname}:${port}`);
-  },
-);
+if (cluster.isPrimary) {
+  for (let i = 0; i < os.availableParallelism(); i++) cluster.fork();
+} else {
+  await import("./server");
+  console.log(`Worker ${process.pid} started`);
+}
