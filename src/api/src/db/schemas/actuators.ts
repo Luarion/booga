@@ -4,7 +4,7 @@ import { alias, id } from "./common";
 import controllers from "./controllers";
 
 const schema = table("actuators", {
-  id: id,
+  id: id(),
   controller_id: t
     .integer()
     .notNull()
