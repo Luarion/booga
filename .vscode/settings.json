@@ -15,7 +15,6 @@
     "editor.defaultFormatter": "vscode.json-language-features",
     "editor.formatOnSave": true
   },
-  "typescript.inlayHints.parameterNames.enabled": "all",
   "files.associations": {
     "**/llms.txt": "markdown"
   },
@@ -28,23 +27,4 @@
   //   "**/dist": true,
   //   "**/build": true
   // },
-  "pgsql.connections": [
-    {
-      "id": "B82619D0-0F29-43FD-AD31-BBD53B7F0C82",
-      "groupId": "EBE6900A-D907-4E9F-A1A0-737905295672",
-      "authenticationType": "SqlLogin",
-      "connectTimeout": 15,
-      "applicationName": "vscode-pgsql",
-      "clientEncoding": "utf8",
-      "sslmode": "prefer",
-      "savePassword": true,
-      "server": "db",
-      "user": "booga",
-      "password": "",
-      "database": "booga",
-      "profileName": "db, booga (booga)",
-      "sshPassword": "",
-      "expiresOn": 0
-    }
-  ]
 }

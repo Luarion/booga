@@ -1,11 +1,16 @@
-import "dotenv/config";
+import { config } from "dotenv";
+import { resolve } from "path";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-const connectionString =
-  process.env.DATABASE_URL || "postgresql://booga:booga@db/booga";
+config({ path: resolve(__dirname, "../../../../.env") });
 
-const client = postgres(connectionString);
+const client = postgres({
+  host: "db",
+  database: process.env.POSTGRES_DB,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+});
 
 const db = drizzle(client);
 
