@@ -1,10 +1,23 @@
 import { Elysia, t } from "elysia";
-import * as table from "../../db/schema";
+
+// General
 import db from "../../db/index";
+import * as tables from "../../db/schema";
 import * as middleware from "../../middleware";
 
 export default new Elysia({ prefix: "/roles" })
   .use(middleware.auth)
+  .get("/", async ({ status }) => {
+    try {
+      const records = await db.select().from(tables.roles);
+      if (!records) return status(500, "Failed creating new roles");
+
+      return status(200, records);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  })
   .post(
     "/",
     async ({ status, body }) => {
@@ -12,7 +25,7 @@ export default new Elysia({ prefix: "/roles" })
         const payload = body.map(({ name }) => ({ name }));
 
         const records = await db
-          .insert(table.roles)
+          .insert(tables.roles)
           .values(payload)
           .returning();
         if (!records) return status(500, "Failed creating new roles");
@@ -29,23 +42,10 @@ export default new Elysia({ prefix: "/roles" })
       ),
     },
   )
-  .get(
-    "/",
-    async ({ status }) => {
-      try {
-        const records = await db.select().from(table.roles);
-        if (!records) return status(500, "Failed creating new roles");
-
-        return status(200, records);
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    },
-    {
-      response: {
-        200: t.Array(t.Object({ id: t.Number(), name: t.String() })),
-        500: t.String(),
-      },
-    },
+  .group("/:id", (a) =>
+    a
+      .get("/", (ctx) => ctx)
+      .put("/", (ctx) => ctx)
+      .patch("/", (ctx) => ctx)
+      .delete("/", (ctx) => ctx),
   );

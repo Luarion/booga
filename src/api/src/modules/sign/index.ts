@@ -1,75 +1,67 @@
-import { Elysia, t } from "elysia";
-import db from "../../db/index";
-import Auth from "../../models/Auth";
-
-import { body, response } from "./model";
-import S from "./service";
+import { Elysia } from "elysia";
 import { eq } from "drizzle-orm";
 
-export default new Elysia({ prefix: "/sign", precompile: true, aot: true })
+// Global
+import db from "../../db/index";
+import * as models from "../../models";
+import Auth from "../../classes/Auth";
+
+// Local
+import S from "./service";
+import * as model from "./model";
+
+export default new Elysia({ prefix: "/sign", name: "plugin.sign" })
   .get("/out", ({ status, cookie: { auth } }) => {
-    if (auth) auth.remove();
+    if (auth) {
+      auth.remove();
+    } else return status(500);
     return status(200);
   })
-  .resolve(async ({ status, cookie: { auth } }) => {
-    if (auth?.value) return status(401);
-  })
   .use(Auth.jwt)
+  .use(models.errors)
+  .use(model.responses)
+  .resolve(async ({ cookie, jwt, status }) => {
+    if (cookie.auth?.value) return status(401);
+    return { Auth: new Auth(cookie, jwt) };
+  })
   .post(
     "/up",
-    async ({ jwt, cookie, status, body }) => {
-      try {
-        const auth = new Auth(cookie, jwt);
-        const { email, phone, username, password, pfp } = body;
+    async ({ status, body, Auth }) => {
+      const { email, phone, username, password, pfp } = body;
 
-        const pfp_hash: string | undefined = pfp
-          ? await S.pfp.hash(pfp)
-          : undefined;
+      const pfp_hash: string | undefined = pfp
+        ? await S.pfp.hash(pfp)
+        : undefined;
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password_hash, ...columns } = S.table.columns;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password_hash, ...columns } = S.table.columns;
 
-        const record = await db.transaction(async (tx) => {
-          const [insertion] = await tx
-            .insert(S.table.schema)
-            .values({
-              email,
-              phone,
-              username,
-              password_hash: await S.password.hash(password),
-              pfp_hash,
-            })
-            .returning(columns);
+      const record = await db.transaction(async (tx) => {
+        const [insertion] = await tx
+          .insert(S.table.schema)
+          .values({
+            email,
+            phone,
+            username,
+            password_hash: await S.password.hash(password),
+            pfp_hash,
+          })
+          .returning(columns);
 
-          if (!insertion) throw new Error("Insert failed");
-          if (pfp && pfp_hash) await S.pfp.save(pfp, pfp_hash);
-          return insertion;
-        });
+        if (!insertion) throw new Error("Insert failed");
+        if (pfp && pfp_hash) await S.pfp.save(pfp, pfp_hash);
+        return insertion;
+      });
 
-        if (!record) return status(500, "User creation failed");
-
-        (await auth.sign({ id: record.id })).setCookie();
-
-        return status(201, record);
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
+      if (!record) return status(500, "User creation failed");
+      (await Auth.sign({ id: record.id })).setCookie();
+      return status(201, record);
     },
-    {
-      body: body.sign.up,
-      response: { 201: response.select, 500: t.String() },
-      transform({ body }) {
-        body.email = body.email.trim().toLowerCase();
-        body.phone = body.phone.trim();
-        body.username = body.username.trim();
-      },
-    },
+    { body: model.sign.up, response: { 201: "user", 500: "500" } },
   )
   .post(
     "/in",
-    async ({ status, jwt, cookie, body }) => {
-      const auth = new Auth(cookie, jwt);
+    async ({ status, body, Auth }) => {
       const { email, password } = body;
 
       const [record] = await db
@@ -82,16 +74,8 @@ export default new Elysia({ prefix: "/sign", precompile: true, aot: true })
       const { password_hash, ...refined } = record;
 
       await S.password.verify(password, password_hash);
-
-      (await auth.sign({ id: record.id })).setCookie();
-
+      (await Auth.sign({ id: record.id })).setCookie();
       return status(200, refined);
     },
-    {
-      body: body.sign.in,
-      response: { 200: response.select, 404: t.String() },
-      transform({ body }) {
-        body.email = body.email.trim().toLowerCase();
-      },
-    },
+    { body: model.sign.in, response: { 200: "user", 404: "500", 500: "500" } },
   );

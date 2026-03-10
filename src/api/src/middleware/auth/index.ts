@@ -1,11 +1,7 @@
 import { Elysia } from "elysia";
-import Auth from "../../models/Auth";
+import Auth from "../../classes/Auth";
 
-export default new Elysia({
-  name: "auth.middleware",
-  aot: true,
-  precompile: true,
-})
+export default new Elysia({ name: "auth.middleware" })
   .use(Auth.jwt)
   .resolve({ as: "scoped" }, async ({ cookie: { auth }, jwt, status }) => {
     const token: string = auth?.value as string;
