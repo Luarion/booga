@@ -33,6 +33,7 @@
         "pkief.material-icon-theme",
         // DB
         "ms-ossdata.vscode-pgsql",
+        "cweijan.vscode-database-client2",
         // APIs
         "postman.postman-for-vscode",
         // Debug
