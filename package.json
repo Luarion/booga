@@ -11,6 +11,9 @@
     "format": "bun prettier --write .",
     "qc": "bun lint && bun prettier --check ."
   },
+  "dependencies": {
+    "dotenv": "^17.3.1"
+  },
   "devDependencies": {
     "@eslint/css": "^0.14.1",
     "@eslint/js": "^9.39.2",
@@ -23,6 +26,7 @@
     "jiti": "^2.6.1",
     "prettier": "^3.8.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.1"
+    "typescript-eslint": "^8.53.1",
+    "@faker-js/faker": "^10.3.0"
   }
 }
