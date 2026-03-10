@@ -1,3 +1,11 @@
-.PHONY: generate-env
-generate-env:
-	@export JWT_SECRET=$$(openssl rand -base64 64 | tr -d '\n'); envsubst < .env.template > .env
+RANDOM = $(shell openssl rand -base64 64 | tr -d '\n')
+
+ENV_FILE := .env
+ENV_TEMPLATE := .env.template
+
+.PHONY: setup-env
+setup-env: $(ENV_FILE)
+
+$(ENV_FILE):
+	@export JWT_SECRET="$(RANDOM)" && \
+	envsubst < $(ENV_TEMPLATE) > $(ENV_FILE)
