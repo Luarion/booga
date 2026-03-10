@@ -6,7 +6,7 @@
   "updateContentCommand": [
     "sh",
     "-c",
-    "bun install; (cd src/api; make; bun run drizzle-kit push)"
+    "bun install; make; (cd src/api; bun run drizzle-kit push)"
   ],
   "customizations": {
     "vscode": {

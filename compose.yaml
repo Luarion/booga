@@ -17,7 +17,7 @@ services:
     depends_on:
       - environment
     env_file:
-      - example.env
+      - .env
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
