@@ -1,7 +1,7 @@
 import { getTableColumns } from "drizzle-orm";
 import { mkdir } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { users as table } from "../../db/schema";
+import { users as table } from "@/db/schema";
 
 export default abstract class {
   static readonly table = {
