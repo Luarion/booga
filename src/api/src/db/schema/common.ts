@@ -4,5 +4,5 @@ export const id = () => t.bigserial({ mode: "bigint" }).primaryKey();
 export const alias = () => t.varchar({ length: 32 }).notNull();
 export const timestamp = () => t.timestamp().notNull().defaultNow();
 // TODO: reference arguments correctly
-export const reference = (ref: () => any, config?: object) =>
+export const reference = (ref: () => t.AnyPgColumn, config?: object) =>
   t.bigint({ mode: "bigint" }).notNull().references(ref, config);

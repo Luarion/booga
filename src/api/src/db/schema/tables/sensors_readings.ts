@@ -10,6 +10,5 @@ export default table(
     sensor_id: reference(() => sensors.id),
     value: t.numeric().notNull(),
     timestamp: timestamp(),
-  },
-  // (table) => [t.primaryKey({ columns: [table.sensor_id, table.timestamp] })],
+  }
 );
