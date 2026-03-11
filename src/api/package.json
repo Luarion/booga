@@ -11,8 +11,8 @@
     "db:erd": "drizzle-erd --in src/db/schema/index.ts --out erd.svg",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "npx tsx ./scripts/db/seed.ts",
-    "db:reset": "npx tsx ./scripts/db/reset.ts"
+    "db:seed": "bun ./scripts/db/seed.ts",
+    "db:reset": "bun ./scripts/db/reset.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
