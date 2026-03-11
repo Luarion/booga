@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "bun --hot src/index.ts",
     "build": "bun run build.ts",
-    "db:erd": "drizzle-erd --in src/db/schema.ts --out erd.svg"
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:erd": "drizzle-erd --in src/db/schema/index.ts --out erd.svg"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",

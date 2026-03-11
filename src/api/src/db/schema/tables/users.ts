@@ -1,8 +1,8 @@
 import { pgTable as table } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
-import { id, timestamp } from "./common";
+import { id, timestamp } from "../common";
 
-const schema = table("users", {
+export default table("users", {
   id: id(),
   email: t.varchar({ length: 254 }).notNull().unique(),
   phone: t.varchar({ length: 15 }).notNull().unique(),
@@ -11,5 +11,3 @@ const schema = table("users", {
   pfp_hash: t.varchar({ length: 256 }),
   timestamp: timestamp().defaultNow().notNull(),
 });
-
-export default schema;
