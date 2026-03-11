@@ -5,4 +5,4 @@ export const alias = () => t.varchar({ length: 32 }).notNull();
 export const timestamp = () => t.timestamp().notNull().defaultNow();
 // TODO: reference arguments correctly
 export const reference = (ref: () => any, config?: object) =>
-  t.bigint({ mode: "bigint" }).references(ref, config);
+  t.bigint({ mode: "bigint" }).notNull().references(ref, config);
