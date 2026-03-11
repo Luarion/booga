@@ -8,7 +8,9 @@
     "build": "bun run build.ts",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:erd": "drizzle-erd --in src/db/schema/index.ts --out erd.svg"
+    "db:erd": "drizzle-erd --in src/db/schema/index.ts --out erd.svg",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "drizzle-erd": "^0.0.1-alpha.11",
-    "drizzle-kit": "^0.31.8"
+    "drizzle-kit": "^0.31.8",
+    "drizzle-seed": "^0.3.1"
   }
 }
