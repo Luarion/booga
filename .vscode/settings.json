@@ -21,6 +21,10 @@
   "material-icon-theme.files.associations": {
     "llms.txt": "markdown"
   },
+  "json.schemaDownload.trustedDomains": {
+    "https://aka.ms": true,
+    "https://biomejs.dev": true
+  },
   // "files.exclude": {
   //   "**/.git": true,
   //   "**/node_modules": false,
