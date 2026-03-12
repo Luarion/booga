@@ -44,5 +44,10 @@
         // "orta.vscode-jest"
       ]
     }
+  },
+  "portsAttributes": {
+    "4983": {
+      "label": "drizzle-kit studio"
+    }
   }
 }
