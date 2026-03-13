@@ -8,7 +8,9 @@ const password = t.String({
   minLength: 8,
   // pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$",
 });
-const pfp = t.File();
+const pfp = t.File({
+  type: ["image/png", "image/jpeg", "image/webp", "image"],
+});
 
 const _insert = createInsertSchema(tables.users, {
   email,

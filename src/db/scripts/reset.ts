@@ -1,6 +1,6 @@
 import { reset } from "drizzle-seed";
-import db from "@/db/index";
-import * as schema from "@/db/schema";
+import db from "@/index";
+import * as schema from "@/schema";
 
 console.log("Resetting DB...");
 await reset(db, schema);

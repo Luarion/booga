@@ -1,0 +1,31 @@
+{
+  "name": "@booga/db",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:erd": "drizzle-erd --in src/db/schema/index.ts --out erd.svg",
+    "db:generate": "drizzle-kit generate",
+    "db:export": "drizzle-kit export",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "bun ./scripts/db/seed.ts",
+    "db:reset": "bun ./scripts/db/reset.ts",
+    "db:docs": "drizzle-mermaid-generator --schema src/schema/index.ts --dialect pg -o docs/schema.mmd && drizzle-docs generate src/schema/index.ts -d postgresql -f dbml -o docs/schema.dbml --force && drizzle-docs generate src/schema/index.ts -d postgresql -f markdown -o docs/README.md --single-file --no-er-diagram --force"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.1",
+    "drizzle-typebox": "^0.3.3",
+    "postgres": "^3.4.8"
+  },
+  "devDependencies": {
+    "drizzle-docs-generator": "^0.7.1",
+    "drizzle-erd": "^0.0.1-alpha.11",
+    "drizzle-kit": "^0.31.8",
+    "drizzle-seed": "^0.3.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

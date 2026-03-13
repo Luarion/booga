@@ -27,7 +27,7 @@ export default new Elysia({ prefix: "/sign", name: "plugin.sign" })
   .post(
     "/up",
     async ({ status, body, Auth }) => {
-      const { email, phone, username, password, pfp } = body;
+      const { email, phone, name, username, password, pfp } = body;
 
       const pfp_hash: string | undefined = pfp
         ? await S.pfp.hash(pfp)
@@ -42,6 +42,7 @@ export default new Elysia({ prefix: "/sign", name: "plugin.sign" })
           .values({
             email,
             phone,
+            name,
             username,
             password_hash: await S.password.hash(password),
             pfp_hash,
