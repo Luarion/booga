@@ -19,7 +19,8 @@
     "**/llms.txt": "markdown"
   },
   "material-icon-theme.files.associations": {
-    "llms.txt": "markdown"
+    "llms.txt": "markdown",
+    "*.dbml": "database"
   },
   "json.schemaDownload.trustedDomains": {
     "https://aka.ms": true,
