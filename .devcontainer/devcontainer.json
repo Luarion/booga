@@ -34,6 +34,7 @@
         // DB
         "ms-ossdata.vscode-pgsql",
         "cweijan.vscode-database-client2",
+        "matt-meyers.vscode-dbml",
         // APIs
         "postman.postman-for-vscode",
         // Debug
