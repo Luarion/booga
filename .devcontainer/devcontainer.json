@@ -39,7 +39,9 @@
         // Debug
         "oven.bun-vscode",
         // Package versioning
-        "pflannery.vscode-versionlens"
+        "pflannery.vscode-versionlens",
+        // Diagrams
+        "mermaidchart.vscode-mermaid-chart"
         // Testing
         // "orta.vscode-jest"
       ]
