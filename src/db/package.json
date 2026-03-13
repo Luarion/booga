@@ -12,7 +12,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "bun ./scripts/db/seed.ts",
     "db:reset": "bun ./scripts/db/reset.ts",
-    "db:docs": "drizzle-mermaid-generator --schema src/schema/index.ts --dialect pg -o docs/schema.mmd && drizzle-docs generate src/schema/index.ts -d postgresql -f dbml -o docs/schema.dbml --force && drizzle-docs generate src/schema/index.ts -d postgresql -f markdown -o docs/README.md --single-file --no-er-diagram --force"
+    "db:docs": "mkdir docs -p; drizzle-mermaid-generator --schema src/schema/index.ts --dialect pg -o docs/schema.mmd && drizzle-docs generate src/schema/index.ts -d postgresql -f dbml -o docs/schema.dbml --force && drizzle-docs generate src/schema/index.ts -d postgresql -f markdown -o docs/README.md --single-file --no-er-diagram --force"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.1",
