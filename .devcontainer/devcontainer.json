@@ -42,7 +42,9 @@
         // Package versioning
         "pflannery.vscode-versionlens",
         // Diagrams
-        "mermaidchart.vscode-mermaid-chart"
+        "mermaidchart.vscode-mermaid-chart",
+        // Utils
+        "ms-vscode.live-server"
         // Testing
         // "orta.vscode-jest"
       ]
