@@ -18,6 +18,7 @@ RUN microdnf makecache && \
     # Python3
     python3-3.14* \
     python3-pip-25.1.1 \
+    python3-uv \
     # Docker
     containerd.io-2.2.1 \
     docker-buildx-plugin-0.30.1 \
@@ -25,6 +26,10 @@ RUN microdnf makecache && \
     docker-ce-cli-29.1.5 \
     docker-compose-plugin-5.0.1 \
     hadolint-2.12.0-21.fc43 \
+    # Jupyter
+    pandoc \
+    texlive-xetex \
+    texlive-tcolorbox \
     # Npm
     nodejs-npm-1:10.9.4-1.22.22.0.2.fc43 \
     # Cleanup
