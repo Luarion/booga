@@ -6,7 +6,8 @@
   "updateContentCommand": [
     "sh",
     "-c",
-    "bun install; make env; (cd src/db; bun run db:push)"
+    // Install dependencies
+    "bun install; uv sync; make env; (cd src/db; bun run db:push)"
   ],
   "customizations": {
     "vscode": {
@@ -27,7 +28,6 @@
         "usernamehw.errorlens",
         "yoavbls.pretty-ts-errors",
         // Copilot
-        "github.copilot",
         "github.copilot-chat",
         // Icons
         "pkief.material-icon-theme",
