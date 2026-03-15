@@ -9,6 +9,11 @@
     // Install dependencies
     "bun install; uv sync; make env; (cd src/db; bun run db:push)"
   ],
+  "postStartCommand": [
+    "sh",
+    "-c",
+    "(cd src/db; bun run db:studio)"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
