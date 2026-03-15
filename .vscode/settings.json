@@ -26,6 +26,7 @@
     "https://aka.ms": true,
     "https://biomejs.dev": true
   },
+  "python.analysis.typeCheckingMode": "strict"
   // "files.exclude": {
   //   "**/.git": true,
   //   "**/node_modules": false,
