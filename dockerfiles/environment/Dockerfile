@@ -1,4 +1,4 @@
-FROM fedora:43 AS runtime
+FROM registry.fedoraproject.org/fedora:43 AS runtime
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
