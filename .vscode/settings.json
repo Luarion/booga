@@ -1,36 +1,36 @@
 {
-  "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml",
-    "editor.formatOnSave": true
-  },
-  "[dockercompose]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml",
-    "editor.formatOnSave": true
-  },
-  "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features",
-    "editor.formatOnSave": true
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features",
-    "editor.formatOnSave": true
-  },
-  "files.associations": {
-    "**/llms.txt": "markdown"
-  },
-  "material-icon-theme.files.associations": {
-    "llms.txt": "markdown",
-    "*.dbml": "database"
-  },
-  "json.schemaDownload.trustedDomains": {
-    "https://aka.ms": true,
-    "https://biomejs.dev": true
-  },
-  "python.analysis.typeCheckingMode": "strict"
-  // "files.exclude": {
-  //   "**/.git": true,
-  //   "**/node_modules": false,
-  //   "**/dist": true,
-  //   "**/build": true
-  // },
+	"[yaml]": {
+		"editor.defaultFormatter": "redhat.vscode-yaml",
+		"editor.formatOnSave": true
+	},
+	"[dockercompose]": {
+		"editor.defaultFormatter": "redhat.vscode-yaml",
+		"editor.formatOnSave": true
+	},
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features",
+		"editor.formatOnSave": true
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "vscode.json-language-features",
+		"editor.formatOnSave": true
+	},
+	"files.associations": {
+		"**/llms.txt": "markdown"
+	},
+	"material-icon-theme.files.associations": {
+		"llms.txt": "markdown",
+		"*.dbml": "database"
+	},
+	"json.schemaDownload.trustedDomains": {
+		"https://aka.ms": true,
+		"https://biomejs.dev": true
+	},
+	"python.analysis.typeCheckingMode": "strict"
+	// "files.exclude": {
+	//   "**/.git": true,
+	//   "**/node_modules": false,
+	//   "**/dist": true,
+	//   "**/build": true
+	// },
 }

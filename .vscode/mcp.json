@@ -2,12 +2,7 @@
 	"servers": {
 		"fetch": {
 			"command": "docker",
-			"args": [
-				"run",
-				"-i",
-				"--rm",
-				"mcp/fetch"
-			],
+			"args": ["run", "-i", "--rm", "mcp/fetch"],
 			"type": "stdio"
 		},
 		// "context7": {
@@ -22,12 +17,7 @@
 		// },
 		"sequentialthinking": {
 			"command": "docker",
-			"args": [
-				"run",
-				"-i",
-				"--rm",
-				"mcp/sequentialthinking"
-			],
+			"args": ["run", "-i", "--rm", "mcp/sequentialthinking"],
 			"type": "stdio"
 		}
 	},

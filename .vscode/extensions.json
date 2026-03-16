@@ -1,43 +1,43 @@
 {
-  "recommendations": [
-    // Language Support
-    "dotenv.dotenv-vscode",
-    "redhat.vscode-yaml",
-    // Linting
-    "exiasr.hadolint",
-    "dbaeumer.vscode-eslint",
-    // Containers
-    "docker.docker",
-    "ms-azuretools.vscode-containers",
-    // TypeScript
-    "ms-vscode.vscode-typescript-next",
-    // Errors
-    "usernamehw.errorlens",
-    "yoavbls.pretty-ts-errors",
-    // Copilot
-    "github.copilot-chat",
-    // Icons
-    "pkief.material-icon-theme",
-    // DB
-    "ms-ossdata.vscode-pgsql",
-    "cweijan.vscode-database-client2",
-    "matt-meyers.vscode-dbml",
-    // APIs
-    "postman.postman-for-vscode",
-    // Debug
-    "oven.bun-vscode",
-    // Package versioning
-    "pflannery.vscode-versionlens",
-    // Python
-    "ms-python.black-formatter",
-    "ms-python.python",
-    // Jupyter
-    "ms-toolsai.jupyter",
-    // Diagrams
-    "mermaidchart.vscode-mermaid-chart",
-    // Utils
-    "ms-vscode.live-server",
-    // Testing
-    // "orta.vscode-jest"
-  ]
+	"recommendations": [
+		// Language Support
+		"dotenv.dotenv-vscode",
+		"redhat.vscode-yaml",
+		// Linting
+		"exiasr.hadolint",
+		"dbaeumer.vscode-eslint",
+		// Containers
+		"docker.docker",
+		"ms-azuretools.vscode-containers",
+		// TypeScript
+		"ms-vscode.vscode-typescript-next",
+		// Errors
+		"usernamehw.errorlens",
+		"yoavbls.pretty-ts-errors",
+		// Copilot
+		"github.copilot-chat",
+		// Icons
+		"pkief.material-icon-theme",
+		// DB
+		"ms-ossdata.vscode-pgsql",
+		"cweijan.vscode-database-client2",
+		"matt-meyers.vscode-dbml",
+		// APIs
+		"postman.postman-for-vscode",
+		// Debug
+		"oven.bun-vscode",
+		// Package versioning
+		"pflannery.vscode-versionlens",
+		// Python
+		"ms-python.black-formatter",
+		"ms-python.python",
+		// Jupyter
+		"ms-toolsai.jupyter",
+		// Diagrams
+		"mermaidchart.vscode-mermaid-chart",
+		// Utils
+		"ms-vscode.live-server"
+		// Testing
+		// "orta.vscode-jest"
+	]
 }
