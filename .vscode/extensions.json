@@ -5,6 +5,7 @@
 		"redhat.vscode-yaml",
 		// Linting
 		"exiasr.hadolint",
+		"biomejs.biome",
 		// Containers
 		"docker.docker",
 		"ms-azuretools.vscode-containers",
