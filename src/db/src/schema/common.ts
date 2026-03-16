@@ -8,6 +8,6 @@ export const alias = () => t.varchar({ length: 32 }).notNull();
 export const timestamp = () => t.timestamp().notNull().defaultNow();
 // TODO: reference arguments correctly
 export const bigreference = (ref: () => t.AnyPgColumn, config?: object) =>
-  t.bigint({ mode: "bigint" }).notNull().references(ref, config);
+	t.bigint({ mode: "bigint" }).notNull().references(ref, config);
 export const reference = (ref: () => t.AnyPgColumn, config?: object) =>
-  t.integer().notNull().references(ref, config);
+	t.integer().notNull().references(ref, config);
