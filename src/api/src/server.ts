@@ -1,14 +1,14 @@
-import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
+import { Elysia } from "elysia";
 
 import * as modules from "./modules/index";
 
 const server = new Elysia({ precompile: false, aot: true, prefix: "/api" })
-  .use(cors())
-  .use(openapi())
-  .use(modules.sign)
-  .use(modules.roles);
+	.use(cors())
+	.use(openapi())
+	.use(modules.sign)
+	.use(modules.roles);
 
 // Load modules dynamically
 // Object.values(modules).forEach((m) => {
@@ -23,10 +23,10 @@ const server = new Elysia({ precompile: false, aot: true, prefix: "/api" })
 // });
 
 server.listen(
-  Number(process.env.API_PORT) || 3000,
-  ({ protocol, hostname, port }) => {
-    console.info(`Server listening on: ${protocol}://${hostname}:${port}`);
-  },
+	Number(process.env.API_PORT) || 3000,
+	({ protocol, hostname, port }) => {
+		console.info(`Server listening on: ${protocol}://${hostname}:${port}`);
+	},
 );
 
 export type Server = typeof server;
