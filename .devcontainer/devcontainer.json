@@ -18,7 +18,6 @@
 				"redhat.vscode-yaml",
 				// Linting
 				"exiasr.hadolint",
-				"dbaeumer.vscode-eslint",
 				// Containers
 				"docker.docker",
 				"ms-azuretools.vscode-containers",
