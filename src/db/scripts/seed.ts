@@ -11,7 +11,7 @@ await seed(db, schema, { count }).refine((r) => ({
   vehicles: {
     columns: {
       plate: r.valuesFromArray({
-        values: f.helpers.uniqueArray(f.vehicle.vrm, 20),
+        values: f.helpers.uniqueArray(f.vehicle.vrm, count),
         isUnique: true,
       }),
       maker: r.valuesFromArray({
@@ -19,6 +19,16 @@ await seed(db, schema, { count }).refine((r) => ({
       }),
       model: r.valuesFromArray({
         values: Array.from({ length: count }, () => f.vehicle.model()),
+      }),
+      displacement: r.valuesFromArray({
+        values: Array.from({ length: count }, () =>
+          f.number.float({ min: 0.1, max: 8.0, fractionDigits: 1 }).toString(),
+        ),
+      }),
+      fuel_consumption: r.valuesFromArray({
+        values: Array.from({ length: count }, () =>
+          f.number.float({ min: 0.1, max: 20.0, fractionDigits: 2 }).toString(),
+        ),
       }),
     },
   },
