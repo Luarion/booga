@@ -1,4 +1,5 @@
 import { pgTable as table } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import * as t from "drizzle-orm/pg-core";
 import { id, timestamp } from "../common";
 
@@ -16,4 +17,7 @@ export default table("vehicles", {
   displacement: t.numeric({ precision: 4, scale: 2, mode: "string" }).notNull(),
   registration_date: t.timestamp().notNull(),
   timestamp: timestamp(),
-});
+}, (table) => [
+  t.check("displacement_positive", sql`${table.displacement} > '0'`),
+  t.check("fuel_consumption_positive", sql`${table.fuel_consumption} > '0'`)
+]);
