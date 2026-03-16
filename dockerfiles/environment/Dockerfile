@@ -5,6 +5,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Repositories
 RUN dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo
 
+# TODO: finish versioning all packages
 RUN microdnf makecache && \
     microdnf install -y \
     # General
@@ -28,8 +29,8 @@ RUN microdnf makecache && \
     hadolint-2.12.0-21.fc43 \
     # Jupyter
     pandoc \
-    texlive-xetex \
-    texlive-tcolorbox \
+    # texlive-xetex \
+    # texlive-tcolorbox \
     # Npm
     nodejs-npm-1:10.9.4-1.22.22.0.2.fc43 \
     # Cleanup
