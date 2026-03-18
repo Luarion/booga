@@ -23,7 +23,7 @@ const server = new Elysia({ precompile: false, aot: true, prefix: "/api" })
 // });
 
 server.listen(
-	Number(process.env.API_PORT) || 3000,
+	Number(process.env.API_PORT) || 8080,
 	({ protocol, hostname, port }) => {
 		console.info(`Server listening on: ${protocol}://${hostname}:${port}`);
 	},
