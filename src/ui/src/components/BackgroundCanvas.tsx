@@ -1,6 +1,6 @@
 "use client";
-import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense } from "react";
 
 const Model = () => {
@@ -61,7 +61,7 @@ export default function BackgroundCanvas() {
         <CameraRig radius={4} />
         <Model />
         <Suspense fallback={null}>
-          <Environment preset="sunset" background />
+          <Environment preset="dawn" background ground />
         </Suspense>
       </Canvas>
     </div>
