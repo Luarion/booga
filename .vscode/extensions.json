@@ -14,13 +14,13 @@
 		// Errors
 		"usernamehw.errorlens",
 		"yoavbls.pretty-ts-errors",
-		// Copilot
+		// GitHub
 		"github.copilot-chat",
+		"github.vscode-github-actions",
 		// Icons
 		"pkief.material-icon-theme",
 		// DB
 		"ms-ossdata.vscode-pgsql",
-		"cweijan.vscode-database-client2",
 		"matt-meyers.vscode-dbml",
 		// APIs
 		"postman.postman-for-vscode",
