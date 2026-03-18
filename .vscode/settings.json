@@ -1,4 +1,18 @@
 {
+	"remote.portsAttributes": {
+		"3000": {
+			"label": "NextJS",
+			"onAutoForward": "notify"
+		},
+		"4983": {
+			"label": "drizzle-kit studio",
+			"onAutoForward": "notify"
+		},
+		"8080": {
+			"label": "ElysiaJS",
+			"onAutoForward": "notify"
+		}
+	},
 	"[yaml]": {
 		"editor.defaultFormatter": "redhat.vscode-yaml",
 		"editor.formatOnSave": true
