@@ -19,7 +19,7 @@ const vehicles = table(
 		displacement: t
 			.numeric({ precision: 4, scale: 2, mode: "string" })
 			.notNull(),
-		registration_date: t.timestamp().notNull(),
+		registration_date: t.date().notNull(),
 		timestamp: timestamp(),
 	},
 	(table) => [
