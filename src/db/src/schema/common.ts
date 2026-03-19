@@ -13,9 +13,9 @@ export const bigreference = (ref: () => p.AnyPgColumn, config?: object) =>
 export const reference = (ref: () => p.AnyPgColumn, config?: object) =>
 	p.integer().notNull().references(ref, config);
 
-export function createSchemas(table: p.AnyPgTable) {
+export function createSchemas<T extends p.AnyPgTable>(table: T) {
 	return {
-		insert: createInsertSchema(table),
-		select: createSelectSchema(table),
+		insert: createInsertSchema<T>(table),
+		select: createSelectSchema<T>(table),
 	};
 }
