@@ -6,6 +6,7 @@
 		// Linting
 		"exiasr.hadolint",
 		"biomejs.biome",
+		"bradlc.vscode-tailwindcss",
 		// Containers
 		"docker.docker",
 		"ms-azuretools.vscode-containers",
