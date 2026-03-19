@@ -1,12 +1,12 @@
 import { sql } from "drizzle-orm";
 import * as t from "drizzle-orm/pg-core";
 import { pgTable as table } from "drizzle-orm/pg-core";
-import { id, timestamp } from "../common";
+import { id, timestamp, createSchemas } from "../common";
 
 export const fuelEnum = t.pgEnum("fuel", ["diesel", "gasoline", "other"]);
 export const driveEnum = t.pgEnum("drive", ["fwd", "rwd", "awd"]);
 
-export default table(
+const vehicles = table(
 	"vehicles",
 	{
 		id: id(),
@@ -27,3 +27,7 @@ export default table(
 		t.check("fuel_consumption_positive", sql`${table.fuel_consumption} > '0'`),
 	],
 );
+
+export default vehicles;
+
+export const schemas = createSchemas(vehicles);

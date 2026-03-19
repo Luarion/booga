@@ -1,10 +1,10 @@
 import * as t from "drizzle-orm/pg-core";
 import { pgTable as table } from "drizzle-orm/pg-core";
-import { reference, timestamp } from "../common";
+import { reference, timestamp, createSchemas } from "../common";
 import actuators from "./actuators";
 import objects from "./objects";
 
-export default table(
+const objects_to_actuators = table(
 	"objects_to_actuators",
 	{
 		object_id: reference(() => objects.id, { onDelete: "cascade" }),
@@ -13,3 +13,7 @@ export default table(
 	},
 	(table) => [t.primaryKey({ columns: [table.object_id, table.actuator_id] })],
 );
+
+export default objects_to_actuators;
+
+export const schemas = createSchemas(objects_to_actuators);

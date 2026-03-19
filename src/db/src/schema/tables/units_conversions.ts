@@ -1,9 +1,9 @@
 import * as t from "drizzle-orm/pg-core";
 import { pgTable as table } from "drizzle-orm/pg-core";
-import { reference } from "../common";
+import { reference, createSchemas } from "../common";
 import units from "./units";
 
-export default table(
+const units_conversions = table(
 	"units_conversions",
 	{
 		from: reference(() => units.id, { onDelete: "cascade" }),
@@ -12,3 +12,7 @@ export default table(
 	},
 	(table) => [t.primaryKey({ columns: [table.from, table.to] })],
 );
+
+export default units_conversions;
+
+export const schemas = createSchemas(units_conversions);

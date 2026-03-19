@@ -3,6 +3,9 @@
 	"module": "index.ts",
 	"type": "module",
 	"private": true,
+	"exports": {
+		"./tables/*": "./src/schema/tables/*.ts"
+	},
 	"scripts": {
 		"db:push": "drizzle-kit push",
 		"db:studio": "drizzle-kit studio",

@@ -1,10 +1,10 @@
 import * as t from "drizzle-orm/pg-core";
 import { pgTable as table } from "drizzle-orm/pg-core";
-import { reference, timestamp } from "../common";
+import { reference, timestamp, createSchemas } from "../common";
 import roles from "./roles";
 import users from "./users";
 
-export default table(
+const users_to_roles = table(
 	"users_to_roles",
 	{
 		user_id: reference(() => users.id, { onDelete: "cascade" }),
@@ -13,3 +13,7 @@ export default table(
 	},
 	(table) => [t.primaryKey({ columns: [table.user_id, table.role_id] })],
 );
+
+export default users_to_roles;
+
+export const schemas = createSchemas(users_to_roles);

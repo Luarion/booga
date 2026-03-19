@@ -1,9 +1,9 @@
 import * as t from "drizzle-orm/pg-core";
 import { pgTable as table } from "drizzle-orm/pg-core";
-import { reference, timestamp } from "../common";
+import { reference, timestamp, createSchemas } from "../common";
 import sensors from "./sensors";
 
-export default table(
+const sensors_readings = table(
 	"sensors_readings",
 	{
 		// id: id(),
@@ -13,3 +13,7 @@ export default table(
 	},
 	(table) => [t.primaryKey({ columns: [table.sensor_id, table.timestamp] })],
 );
+
+export default sensors_readings;
+
+export const schemas = createSchemas(sensors_readings);

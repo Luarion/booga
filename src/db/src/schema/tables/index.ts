@@ -14,5 +14,4 @@ export { default as units_categories } from "./units_categories";
 export { default as units_conversions } from "./units_conversions";
 export { default as users } from "./users";
 export { default as users_to_roles } from "./users_to_roles";
-export * from "./vehicles";
-export { default as vehicles } from "./vehicles";
+export { default as vehicles, fuelEnum, driveEnum } from "./vehicles";
