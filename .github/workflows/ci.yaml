@@ -7,17 +7,24 @@ on:
     branches: ["**"]
 
 jobs:
-  hadolint:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Hadolint Check
+        uses: hadolint/hadolint-action@v3.1.0
         with:
           recursive: true
 
-  biome:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: biomejs/setup-biome@v2
-      - run: biome ci .
+      - name: Biome Check
+        run: bunx @biomejs/biome ci .
+
+      - name: Drizzle-Kit Check
+        run: bun --cwd src/db run db:check
