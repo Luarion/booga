@@ -1,7 +1,7 @@
 import { faker as f } from "@faker-js/faker";
 import { seed } from "drizzle-seed";
 import db from "@/index";
-import * as schema from "@/schema/index";
+import * as schema from "@/schema";
 
 const count: number = 20;
 
