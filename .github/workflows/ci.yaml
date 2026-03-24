@@ -25,9 +25,13 @@ jobs:
         with:
           recursive: true
 
-      - name: Biome Check
+      - name: Biome CI
         if: always()
         run: bunx @biomejs/biome ci .
+
+      - name: TSC
+        if: always()
+        run: bun tsc --noEmit
 
       - name: Drizzle-Kit Check
         if: always()
