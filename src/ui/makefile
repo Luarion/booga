@@ -7,5 +7,4 @@ ENV_TEMPLATE := .env.template
 env: $(ENV_FILE)
 
 $(ENV_FILE):
-	@export JWT_SECRET="$(RANDOM)" && \
 	envsubst < $(ENV_TEMPLATE) > $(ENV_FILE)

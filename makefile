@@ -6,6 +6,7 @@ ENV_TEMPLATE := .env.template
 .PHONY: env clean
 env: $(ENV_FILE)
 	@$(MAKE) -C src/api env
+	@$(MAKE) -C src/ui env
 
 $(ENV_FILE):
 	@export POSTGRES_USER="$(RANDOM)" \
@@ -13,4 +14,4 @@ $(ENV_FILE):
 	envsubst < $(ENV_TEMPLATE) > $(ENV_FILE)
 
 clean:
-	git clean -fdX
+	git clean -fdX -e "*.env"
