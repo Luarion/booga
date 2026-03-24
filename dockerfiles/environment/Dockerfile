@@ -16,6 +16,7 @@ RUN microdnf makecache && \
     openssl-3.5.4 \
     make-1:4.4.1-11.fc43 \
     gettext-envsubst-0.25.1-2.fc43 \
+    ripgrep-14.1.1-3.fc43 \
     # Python3
     python3-3.14* \
     # Docker
