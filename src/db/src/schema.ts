@@ -50,7 +50,7 @@ export const vehicles = table(
 			.numeric({ precision: 4, scale: 2, mode: "string" })
 			.notNull(),
 		registration_date: p.date().notNull(),
-		owner_id: reference(() => users.id, { onDelete: "cascade" }),
+		owner_id: reference(() => users.id, { onDelete: "cascade" }).notNull(),
 		timestamp: timestamp(),
 	},
 	(current) => [
