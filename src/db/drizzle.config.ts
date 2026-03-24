@@ -6,7 +6,7 @@ config({ path: resolve(__dirname, "../../.env") });
 
 export default defineConfig({
 	out: "./drizzle",
-	schema: "./src/schema/index.ts",
+	schema: "./src/schema.ts",
 	dialect: "postgresql",
 	dbCredentials: {
 		host: "db",
