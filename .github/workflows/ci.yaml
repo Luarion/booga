@@ -35,4 +35,4 @@ jobs:
 
       - name: Drizzle-Kit Check
         if: always()
-        run: bun --cwd src/db run db:check
+        run: bun run --cwd src/db db:check
