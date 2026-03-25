@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: CI - Quality Gate
 
 on:
@@ -12,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
+
+      - name: Install Dependencies
+        run: |
           sudo apt update
           sudo apt install -y make gettext-base
           make env
