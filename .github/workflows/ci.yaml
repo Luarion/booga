@@ -8,6 +8,18 @@ on:
     branches: ["**"]
 
 jobs:
+  environment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt update
+          sudo apt install -y make gettext-base
+          make env
+
+      - name: Build Devcontainer
+        uses: devcontainers/ci@v0.3
+
   quality:
     runs-on: ubuntu-latest
     steps:
