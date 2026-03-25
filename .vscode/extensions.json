@@ -1,8 +1,5 @@
 {
 	"recommendations": [
-		// Language Support
-		"dotenv.dotenv-vscode",
-		"redhat.vscode-yaml",
 		// Linting
 		"exiasr.hadolint",
 		"biomejs.biome",
@@ -29,11 +26,6 @@
 		"oven.bun-vscode",
 		// Package versioning
 		"pflannery.vscode-versionlens",
-		// Python
-		"ms-python.black-formatter",
-		"ms-python.python",
-		// Jupyter
-		"ms-toolsai.jupyter",
 		// Diagrams
 		"mermaidchart.vscode-mermaid-chart",
 		// Utils

@@ -42,11 +42,6 @@
 				"oven.bun-vscode",
 				// Package versioning
 				"pflannery.vscode-versionlens",
-				// Python
-				"ms-python.black-formatter",
-				"ms-python.python",
-				// Jupyter
-				"ms-toolsai.jupyter",
 				// Diagrams
 				"mermaidchart.vscode-mermaid-chart",
 				// Utils
