@@ -45,8 +45,7 @@
 		"https://aka.ms": true,
 		"https://biomejs.dev": true
 	},
-	"python.analysis.typeCheckingMode": "strict",
-	"postman.settings.dotenv-detection-notification-visibility": false
+	"postman.settings.dotenv-detection-notification-visibility": false,
 	// "files.exclude": {
 	//   "**/.git": true,
 	//   "**/node_modules": false,

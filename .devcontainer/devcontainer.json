@@ -9,7 +9,9 @@
 		// Install dependencies
 		"bun install; make env; (cd src/db; bun run db:push)"
 	],
-	"postStartCommand": ["sh", "-c", "(cd src/db; bun run db:studio)"],
+	"postAttachCommand": ["sh", "-c", "(cd src/db; bun run db:studio)"],
+	"waitFor": "updateContentCommand",
+	"shutdownAction": "stopCompose",
 	"customizations": {
 		"vscode": {
 			"extensions": [
