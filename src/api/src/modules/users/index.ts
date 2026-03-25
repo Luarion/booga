@@ -7,7 +7,10 @@ import Service from "./service";
 export const model = new Model(users);
 export const service = new Service(db, users);
 
-const plugin = new Elysia({ prefix: "/users" })
+const plugin = new Elysia({
+	prefix: "/users",
+	detail: { tags: ["users"] },
+})
 	.post(
 		"/",
 		async ({ status, body }) => {
@@ -22,6 +25,7 @@ const plugin = new Elysia({ prefix: "/users" })
 				body.name = name.trim().toLowerCase();
 			},
 			response: { 201: t.Array(model.read) },
+			detail: { summary: "Create one or multiple users" },
 		},
 	)
 	.get(

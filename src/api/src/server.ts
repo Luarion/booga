@@ -4,14 +4,21 @@ import { Elysia } from "elysia";
 
 import * as modules from "./modules/index";
 
-const server = new Elysia({ precompile: false, aot: true, prefix: "/api" })
+export const server = new Elysia({
+	precompile: false,
+	aot: true,
+	prefix: "/api",
+})
 	.use(cors())
-	.use(openapi())
-	.use(modules.sign)
-	.use(modules.roles);
+	.use(
+		openapi({ documentation: { info: { title: "Booga", version: "0.0.0" } } }),
+	)
+	.get("/ping", "pong")
+	.use(modules.users)
+	.use(modules.vehicles);
 
 // Load modules dynamically
-// Object.values(modules).forEach((m) => {
+// Object.values(modules).forEach((m) => {w
 //   const def = m.default;
 //   if (def instanceof Elysia) {
 //     const prefix = def.config.prefix;
