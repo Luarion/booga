@@ -14,27 +14,33 @@ const plugin = new Elysia({
 	.post(
 		"/",
 		async ({ status, body }) => {
-			return status(201, await service.create(body));
+			const { email, phone, username, name, password } = body;
+			// TODO: Make the method create(), read(), etc, just return the needed columns, instead of using the spread operator
+			const { password_hash, ...record } = await service.create({
+				email,
+				phone,
+				username,
+				name,
+				password_hash: await Bun.password.hash(password),
+			});
+			return status(201, record);
 		},
 		{
 			body: model.create,
 			transform({ body }) {
-				const { email, username, name } = body;
+				const { email, phone, username, name } = body;
 				body.email = email.trim().toLowerCase();
+				body.phone = phone.trim();
 				body.username = username.trim();
 				body.name = name.trim().toLowerCase();
 			},
-			response: { 201: t.Array(model.read) },
+			response: { 201: model.read },
 			detail: { summary: "Create one or multiple users" },
 		},
 	)
-	.get(
-		"/",
-		async ({ status }) => {
-			return status(200, await service.read());
-		},
-		{ response: { 200: t.Array(model.read) } },
-	)
+	.get("/", async ({ status }) => status(200, await service.read()), {
+		response: { 200: t.Array(model.read) },
+	})
 	.group(
 		"/:user_id",
 		{
@@ -44,12 +50,18 @@ const plugin = new Elysia({
 		},
 		(pl) =>
 			pl
-				.get("/", async ({ status, params: { user_id } }) => {
-					return status(200, await service.read(user_id));
-				})
-				.delete("/", async ({ status, params: { user_id } }) => {
-					return status(200, await service.delete(user_id));
-				}),
+				.get(
+					"/",
+					async ({ status, params: { user_id } }) => {
+						const { password_hash, ...record } =
+							await service.readById(user_id);
+						return status(200, record);
+					},
+					{ response: { 200: model.read } },
+				)
+				.delete("/", async ({ status, params: { user_id } }) =>
+					status(200, await service.delete(user_id)),
+				),
 	);
 
 export default plugin;

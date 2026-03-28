@@ -1,26 +1,30 @@
-import type { SchemaTables } from "@booga/db";
-import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
-import { t } from "elysia";
+import type { SchemaTablesWithId } from "@booga/db";
+import {
+	createInsertSchema,
+	createSelectSchema,
+	createUpdateSchema,
+} from "drizzle-typebox";
+import type { TSchema } from "elysia";
 
-export class BaseSchemas<TTable extends SchemaTables> {
+export class BaseSchemas<TTable extends SchemaTablesWithId> {
 	readonly insert;
 	readonly select;
+	readonly update;
 
 	constructor(table: TTable) {
-		this.insert = createInsertSchema(table);
-		this.select = createSelectSchema(table);
+		this.insert = createInsertSchema<TTable>(table);
+		this.select = createSelectSchema<TTable>(table);
+		this.update = createUpdateSchema<TTable>(table);
 	}
 }
 
-class Model<TTable extends SchemaTables> {
+abstract class Model<TTable extends SchemaTablesWithId> {
 	readonly base: BaseSchemas<TTable>;
-	readonly create: ReturnType<typeof t.Object>;
-	readonly read: ReturnType<typeof t.Object>;
+	abstract readonly create: TSchema;
+	abstract readonly read: TSchema;
 
 	constructor(table: TTable) {
 		this.base = new BaseSchemas<TTable>(table);
-		this.create = t.Omit(this.base.insert, ["id"]);
-		this.read = t.Omit(this.base.select, []);
 	}
 }
 

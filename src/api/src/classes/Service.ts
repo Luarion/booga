@@ -1,10 +1,23 @@
-import type { Database, SchemaTables } from "@booga/db";
-import { eq, getTableColumns } from "drizzle-orm";
+import type { Database, SchemaTablesWithId } from "@booga/db";
+import {
+	eq,
+	getTableColumns,
+	type InferInsertModel,
+	type InferSelectModel,
+} from "drizzle-orm";
 import type Model from "./Model";
 
-class Service<TTable extends SchemaTables, TModel extends Model<TTable>>
-	implements CRUD
-{
+// interface CRUD<TTable extends SchemaTablesWithId> {
+// 	create(values: InferInsertModel<TTable>): Promise<InferSelectModel<TTable>>;
+// 	read(): Promise<InferSelectModel<TTable>[]>;
+// 	// update(): Promise<object[]>;
+// 	delete(id: number): unknown;
+// }
+
+abstract class Service<
+	TTable extends SchemaTablesWithId,
+	TModel extends Model<TTable>,
+> {
 	readonly db: Database;
 	readonly table: TTable;
 	readonly columns: TTable["_"]["columns"];
@@ -12,30 +25,58 @@ class Service<TTable extends SchemaTables, TModel extends Model<TTable>>
 	constructor(database: Database, table: TTable) {
 		this.db = database;
 		this.table = table;
-		this.columns = getTableColumns(table);
+		this.columns = getTableColumns<TTable>(table);
 	}
 
 	async create(
-		values: TModel["create"]["static"] | TModel["create"]["static"][],
-	) {
-		const records = await this.db
-			.insert(this.table)
-			.values(values)
-			.returning(this.columns);
-		return records;
+		values: InferInsertModel<TTable>,
+	): Promise<InferSelectModel<TTable>> {
+		try {
+			const [record] = await this.db
+				.insert(this.table)
+				.values(values)
+				.returning();
+			if (!record) throw new Error("Failed creating the specified resource");
+			return record as InferSelectModel<TTable>;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
 	}
 
-	async read(id?: number) {
-		const query = this.db.select(this.columns).from(this.table);
-		return !id ? query : query.where(eq(this.columns.id, id));
+	async read(): Promise<InferSelectModel<TTable>[]> {
+		try {
+			return (await this.db
+				.select()
+				.from(this.table)) as InferSelectModel<TTable>[];
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	}
+
+	async readById(id: number) {
+		try {
+			const [record] = await this.db
+				.select()
+				.from(this.table)
+				.where(eq(this.columns.id, id))
+				.limit(1);
+			if (!record) throw new Error("Failed getting the specified resource");
+			return record;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
 	}
 
 	async delete(id: number) {
-		const records = await this.db
-			.delete(this.table)
-			.where(eq(this.columns.id, id))
-			.returning();
-		return records;
+		try {
+			return await this.db.delete(this.table).where(eq(this.columns.id, id));
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
 	}
 }
 

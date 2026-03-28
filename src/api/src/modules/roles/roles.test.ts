@@ -3,7 +3,7 @@ import { treaty } from "@elysiajs/eden";
 import { faker } from "@faker-js/faker";
 import { server } from "@/server";
 
-const path = "users";
+const path = "roles";
 const api = treaty(server);
 
 let id: number;
@@ -11,11 +11,7 @@ let id: number;
 describe("/users", () => {
 	it("[POST]: /", async () => {
 		const { status, data } = await api.api[path].post({
-			email: faker.internet.email(),
-			phone: faker.phone.number({ style: "international" }),
-			username: faker.internet.username(),
-			name: faker.person.firstName(),
-			password: faker.internet.password(),
+			name: faker.person.jobTitle(),
 		});
 		if (data) id = data.id;
 
@@ -29,9 +25,9 @@ describe("/users", () => {
 		expect(status).toBe(200);
 	});
 
-	it("[GET]: /:user_id", async () => {
+	it("[GET]: /:role_id", async () => {
 		const api = treaty(server);
-		const { status } = await api.api[path]({ user_id: id }).get();
+		const { status } = await api.api[path]({ role_id: id }).get();
 
 		expect(status).toBe(200);
 	});

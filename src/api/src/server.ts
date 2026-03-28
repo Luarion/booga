@@ -15,6 +15,7 @@ export const server = new Elysia({
 	)
 	.get("/ping", "pong")
 	.use(modules.users)
+	.use(modules.roles)
 	.use(modules.vehicles);
 
 // Load modules dynamically

@@ -1,51 +1,50 @@
+import db from "@booga/db";
+import { roles } from "@booga/db/schema";
 import { Elysia, t } from "elysia";
+import Model from "./model";
+import Service from "./service";
 
-// General
-import db from "../../db/index";
-import * as tables from "../../db/schema";
-import * as middleware from "../../middleware";
+export const model = new Model(roles);
+export const service = new Service(db, roles);
 
-export default new Elysia({ prefix: "/roles" })
-	.use(middleware.auth)
-	.get("/", async ({ status }) => {
-		try {
-			const records = await db.select().from(tables.roles);
-			if (!records) return status(500, "Failed creating new roles");
-
-			return status(200, records);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	})
+const plugin = new Elysia({
+	prefix: "/roles",
+	detail: { tags: ["roles"] },
+})
 	.post(
 		"/",
-		async ({ status, body }) => {
-			try {
-				const payload = body.map(({ name }) => ({ name }));
-
-				const records = await db
-					.insert(tables.roles)
-					.values(payload)
-					.returning();
-				if (!records) return status(500, "Failed creating new roles");
-
-				return status(201, records);
-			} catch (error) {
-				console.error(error);
-				throw error;
-			}
-		},
+		async ({ status, body }) => status(201, await service.create(body)),
 		{
-			body: t.Array(
-				t.Object({ name: t.String({ minLength: 2, maxLength: 64 }) }),
-			),
+			body: model.create,
+			transform({ body }) {
+				const { name } = body;
+				body.name = name.trim().toLowerCase();
+			},
+			response: { 201: model.read },
+			detail: { summary: "Create one or multiple roles" },
 		},
 	)
-	.group("/:id", (a) =>
-		a
-			.get("/", (ctx) => ctx)
-			.put("/", (ctx) => ctx)
-			.patch("/", (ctx) => ctx)
-			.delete("/", (ctx) => ctx),
+	.get("/", async ({ status }) => status(200, await service.read()), {
+		response: { 200: t.Array(model.read) },
+	})
+	.group(
+		"/:role_id",
+		{
+			params: t.Object({
+				role_id: t.Integer({ minimum: 1 }),
+			}),
+		},
+		(pl) =>
+			pl
+				.get(
+					"/",
+					async ({ status, params: { role_id } }) =>
+						status(200, await service.readById(role_id)),
+					{ response: { 200: model.read } },
+				)
+				.delete("/", async ({ status, params: { role_id } }) => {
+					status(200, await service.delete(role_id));
+				}),
 	);
+
+export default plugin;
