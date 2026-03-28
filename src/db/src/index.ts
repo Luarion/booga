@@ -6,7 +6,7 @@ import * as schema from "./schema";
 
 config({ path: resolve(__dirname, "../../../.env") });
 
-export const db = drizzle(
+const db = drizzle(
 	postgres({
 		host: "db",
 		database: process.env.POSTGRES_DB,
@@ -15,5 +15,8 @@ export const db = drizzle(
 	}),
 	{ schema },
 );
+
+export type Database = typeof db;
+export type { SchemaTables, SchemaTablesWithId } from "./globals";
 
 export default db;
