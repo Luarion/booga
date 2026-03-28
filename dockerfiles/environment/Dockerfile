@@ -5,7 +5,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Repositories
 RUN dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo
 
-# TODO: finish versioning all packages
 RUN microdnf makecache && \
     microdnf install -y \
     # General
