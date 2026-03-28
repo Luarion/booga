@@ -13,7 +13,7 @@ import type Model from "./Model";
 // 	// update(): Promise<object[]>;
 // 	delete(id: number): unknown;
 // }
-
+// TODO: fix type errors
 abstract class Service<
 	TTable extends SchemaTablesWithId,
 	TModel extends Model<TTable>,
