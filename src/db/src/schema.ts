@@ -3,17 +3,23 @@ import * as p from "drizzle-orm/pg-core";
 
 import { alias, id, reference, timestamp } from "./common";
 
+// SCHEMAS
 const table = p.pgTable;
+export const unitsSchema = p.pgSchema("units");
+export const microcontrollersSchema = p.pgSchema("microcontrollers");
+export const usersSchema = p.pgSchema("users");
 
+// ENUMS
 export const fuelEnum = p.pgEnum("fuel", ["diesel", "gasoline", "other"]);
 export const driveEnum = p.pgEnum("drive", ["fwd", "rwd", "awd"]);
 
-export const units_categories = table("units_categories", {
+// TABLES
+export const categories = unitsSchema.table("categories", {
 	id: id(),
 	name: p.varchar({ length: 32 }).notNull().unique(),
 });
 
-export const users = table("users", {
+export const users = usersSchema.table("users", {
 	id: id(),
 	email: p.varchar({ length: 254 }).notNull().unique(),
 	phone: p.varchar({ length: 18 }).notNull().unique(),
@@ -24,7 +30,7 @@ export const users = table("users", {
 	timestamp: timestamp(),
 });
 
-export const roles = table("roles", {
+export const roles = usersSchema.table("roles", {
 	id: id(),
 	name: p.varchar({ length: 64 }).notNull().unique(),
 	timestamp: timestamp(),
@@ -62,22 +68,25 @@ export const vehicles = table(
 	],
 );
 
-export const microcontrollers = table("microcontrollers", {
-	id: id(),
-	mac: p.macaddr().notNull().unique(),
-	vehicle_id: reference(() => vehicles.id),
-	timestamp: timestamp(),
-});
+export const microcontrollers = microcontrollersSchema.table(
+	"microcontrollers",
+	{
+		id: id(),
+		mac: p.macaddr().notNull().unique(),
+		vehicle_id: reference(() => vehicles.id),
+		timestamp: timestamp(),
+	},
+);
 
-export const actuators = table("actuators", {
+export const actuators = microcontrollersSchema.table("actuators", {
 	id: id(),
-	category_id: reference(() => units_categories.id),
+	category_id: reference(() => categories.id),
 	controller_id: reference(() => microcontrollers.id, { onDelete: "cascade" }),
 	alias: alias().unique(),
 });
 
-export const actuators_actions = table(
-	"actuators_actions",
+export const actuators_readings = microcontrollersSchema.table(
+	"actuators_readings",
 	{
 		actuator_id: reference(() => actuators.id),
 		value: p.numeric().notNull(),
@@ -88,14 +97,14 @@ export const actuators_actions = table(
 	],
 );
 
-export const sensors = table("sensors", {
+export const sensors = microcontrollersSchema.table("sensors", {
 	id: id(),
-	category_id: reference(() => units_categories.id),
+	category_id: reference(() => categories.id),
 	controller_id: reference(() => microcontrollers.id, { onDelete: "cascade" }),
 	alias: alias().unique(),
 });
 
-export const sensors_readings = table(
+export const sensors_readings = microcontrollersSchema.table(
 	"sensors_readings",
 	{
 		sensor_id: reference(() => sensors.id),
@@ -138,14 +147,14 @@ export const trips = table("trips", {
 	ending_date: p.timestamp(),
 });
 
-export const units = table("units", {
+export const units = unitsSchema.table("units", {
 	id: id(),
-	category_id: reference(() => units_categories.id, { onDelete: "cascade" }),
+	category_id: reference(() => categories.id, { onDelete: "cascade" }),
 	ucum: p.varchar({ length: 16 }).notNull().unique(),
 });
 
-export const units_conversions = table(
-	"units_conversions",
+export const conversions = unitsSchema.table(
+	"conversions",
 	{
 		from: reference(() => units.id, { onDelete: "cascade" }),
 		to: reference(() => units.id, { onDelete: "cascade" }),
@@ -154,7 +163,7 @@ export const units_conversions = table(
 	(current) => [p.primaryKey({ columns: [current.from, current.to] })],
 );
 
-export const users_to_roles = table(
+export const users_to_roles = usersSchema.table(
 	"users_to_roles",
 	{
 		user_id: reference(() => users.id, { onDelete: "cascade" }),
@@ -164,8 +173,8 @@ export const users_to_roles = table(
 	(current) => [p.primaryKey({ columns: [current.user_id, current.role_id] })],
 );
 
-export const microcontrollers_connections = table(
-	"microcontrollers_connections",
+export const connections = microcontrollersSchema.table(
+	"connections",
 	{
 		controller_id: reference(() => microcontrollers.id, {
 			onDelete: "cascade",
@@ -180,14 +189,11 @@ export const microcontrollers_connections = table(
 	],
 );
 
-export const units_categories_relations = relations(
-	units_categories,
-	({ many }) => ({
-		units: many(units),
-		sensors: many(sensors),
-		actuators: many(actuators),
-	}),
-);
+export const units_categories_relations = relations(categories, ({ many }) => ({
+	units: many(units),
+	sensors: many(sensors),
+	actuators: many(actuators),
+}));
 
 export const users_relations = relations(users, ({ many }) => ({
 	vehicles: many(vehicles),
@@ -221,37 +227,37 @@ export const microcontrollers_relations = relations(
 		}),
 		actuators: many(actuators),
 		sensors: many(sensors),
-		microcontrollers_connections: many(microcontrollers_connections),
+		microcontrollers_connections: many(connections),
 	}),
 );
 
 export const actuators_relations = relations(actuators, ({ one, many }) => ({
-	category: one(units_categories, {
+	category: one(categories, {
 		fields: [actuators.category_id],
-		references: [units_categories.id],
+		references: [categories.id],
 	}),
 	controller: one(microcontrollers, {
 		fields: [actuators.controller_id],
 		references: [microcontrollers.id],
 	}),
-	actions: many(actuators_actions),
+	actions: many(actuators_readings),
 	objects_to_actuators: many(objects_to_actuators),
 }));
 
 export const actuators_actions_relations = relations(
-	actuators_actions,
+	actuators_readings,
 	({ one }) => ({
 		actuator: one(actuators, {
-			fields: [actuators_actions.actuator_id],
+			fields: [actuators_readings.actuator_id],
 			references: [actuators.id],
 		}),
 	}),
 );
 
 export const sensors_relations = relations(sensors, ({ one, many }) => ({
-	category: one(units_categories, {
+	category: one(categories, {
 		fields: [sensors.category_id],
-		references: [units_categories.id],
+		references: [categories.id],
 	}),
 	controller: one(microcontrollers, {
 		fields: [sensors.controller_id],
@@ -307,28 +313,28 @@ export const trips_relations = relations(trips, ({ one }) => ({
 }));
 
 export const units_relations = relations(units, ({ one, many }) => ({
-	category: one(units_categories, {
+	category: one(categories, {
 		fields: [units.category_id],
-		references: [units_categories.id],
+		references: [categories.id],
 	}),
-	from_conversions: many(units_conversions, {
+	from_conversions: many(conversions, {
 		relationName: "units_conversions_from",
 	}),
-	to_conversions: many(units_conversions, {
+	to_conversions: many(conversions, {
 		relationName: "units_conversions_to",
 	}),
 }));
 
 export const units_conversions_relations = relations(
-	units_conversions,
+	conversions,
 	({ one }) => ({
 		from_unit: one(units, {
-			fields: [units_conversions.from],
+			fields: [conversions.from],
 			references: [units.id],
 			relationName: "units_conversions_from",
 		}),
 		to_unit: one(units, {
-			fields: [units_conversions.to],
+			fields: [conversions.to],
 			references: [units.id],
 			relationName: "units_conversions_to",
 		}),
@@ -350,10 +356,10 @@ export const users_to_roles_relations = relations(
 );
 
 export const microcontrollers_connections_relations = relations(
-	microcontrollers_connections,
+	connections,
 	({ one }) => ({
 		controller: one(microcontrollers, {
-			fields: [microcontrollers_connections.controller_id],
+			fields: [connections.controller_id],
 			references: [microcontrollers.id],
 		}),
 	}),

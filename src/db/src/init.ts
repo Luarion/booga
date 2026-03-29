@@ -24,10 +24,10 @@ const units = [
 
 await db.transaction(async (tx) => {
 	await tx
-		.insert(s.units_categories)
+		.insert(s.categories)
 		.values(categories)
 		.onConflictDoUpdate({
-			target: s.units_categories.id,
+			target: s.categories.id,
 			set: { name: sql`excluded.name` },
 		});
 	await tx
