@@ -13,6 +13,7 @@
 			"onAutoForward": "notify"
 		}
 	},
+
 	"[yaml]": {
 		"editor.defaultFormatter": "redhat.vscode-yaml",
 		"editor.formatOnSave": true
@@ -41,15 +42,15 @@
 		"llms.txt": "markdown",
 		"*.dbml": "database"
 	},
+
 	"json.schemaDownload.trustedDomains": {
 		"https://aka.ms": true,
 		"https://biomejs.dev": true
 	},
-	"postman.settings.dotenv-detection-notification-visibility": false,
-	// "files.exclude": {
-	//   "**/.git": true,
-	//   "**/node_modules": false,
-	//   "**/dist": true,
-	//   "**/build": true
-	// },
+
+	"files.exclude": {
+		"**/node_modules": true
+	},
+
+	"postman.settings.dotenv-detection-notification-visibility": false
 }
