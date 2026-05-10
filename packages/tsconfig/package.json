@@ -1,0 +1,6 @@
+{
+  "name": "@repo/tsconfig",
+  "module": "index.ts",
+  "type": "module",
+  "private": true
+}
