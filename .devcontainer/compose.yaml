@@ -1,11 +1,11 @@
 services:
   environment:
     build:
-      context: dockerfiles/environment
+      context: environment
       dockerfile: Dockerfile
     container_name: environment
     volumes:
-      - .:/workspace:cached,rw
+      - ..:/workspace:cached,rw
       - /var/run/docker.sock:/var/run/docker.sock:cached
     working_dir: /workspace
     tty: true

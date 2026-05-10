@@ -8,25 +8,25 @@ RUN dnf config-manager addrepo --from-repofile https://download.docker.com/linux
 RUN microdnf makecache && \
     microdnf install -y \
     # General
-    curl-8.15.0 \
-    git-2.53.0 \
-    sudo-1.9.17 \
-    unzip-6.0 \
-    openssl-3.5.4 \
-    make-1:4.4.1-11.fc43 \
-    gettext-envsubst-0.25.1-2.fc43 \
-    ripgrep-14.1.1-3.fc43 \
+    curl \
+    git \
+    sudo \
+    unzip \
+    openssl \
+    make \
+    gettext-envsubst \
+    ripgrep \
     # Python3
-    python3-3.14* \
+    python3 \
     # Docker
-    containerd.io-2.2.1 \
-    docker-buildx-plugin-0.30.1 \
-    docker-ce-29.1.5 \
-    docker-ce-cli-29.1.5 \
-    docker-compose-plugin-5.0.1 \
-    hadolint-2.12.0-21.fc43 \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-ce \
+    docker-ce-cli \
+    docker-compose-plugin \
+    hadolint \
     # Npm
-    nodejs-npm-1:10.9.4-1.22.22.0.2.fc43 \
+    nodejs-npm \
     # Cleanup
     && microdnf clean all \
     && rm -rf /var/cache/dnf
