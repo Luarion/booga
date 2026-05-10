@@ -1,7 +1,8 @@
 {
 	"name": "booga",
 	"workspaces": [
-		"src/*"
+		"apps/*",
+		"packages/*"
 	],
 	"module": "index.ts",
 	"type": "module",

@@ -1,20 +1,10 @@
 {
-	"compilerOptions": {
-		// Best practices
-		"strict": true,
-		"skipLibCheck": true,
-		"noFallthroughCasesInSwitch": true,
-		"noUncheckedIndexedAccess": true,
-		"noImplicitOverride": true,
-		// Some stricter flags (disabled by default)
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noPropertyAccessFromIndexSignature": false,
-		"allowUnusedLabels": false,
-		"allowUnreachableCode": false,
-		"noUncheckedSideEffectImports": true,
-		"erasableSyntaxOnly": true,
-		"noErrorTruncation": false,
-		// "exactOptionalPropertyTypes": true,
-	}
+	"extends": [
+		"@repo/"
+	],
+	"references": [
+		{ "path": "src/api" },
+		{ "path": "src/db" },
+		{ "path": "src/ui" }
+	],
 }
