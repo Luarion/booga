@@ -1,11 +1,11 @@
-import { service as usersService } from "../users/index";
-import { service as vehiclesService } from "../vehicles/index";
-import type SetupModel from "./model";
+import { service as usersService } from '../users/index';
+import { service as vehiclesService } from '../vehicles/index';
+import type SetupModel from './model';
 
 class SetupService {
 	async create(
-		setup: SetupModel["create"]["static"],
-	): Promise<SetupModel["read"]["static"]> {
+		setup: SetupModel['create']['static'],
+	): Promise<SetupModel['read']['static']> {
 		const { password_hash, ...user } = await usersService.create(setup.user);
 
 		const vehicle = await vehiclesService.create({

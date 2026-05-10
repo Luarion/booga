@@ -1,15 +1,15 @@
-import { describe, expect, it } from "bun:test";
-import { treaty } from "@elysiajs/eden";
-import { faker } from "@faker-js/faker";
-import { server } from "@/server";
+import { describe, expect, it } from 'bun:test';
+import { treaty } from '@elysiajs/eden';
+import { faker } from '@faker-js/faker';
+import { server } from '@/server';
 
-const path = "roles";
+const path = 'roles';
 const api = treaty(server);
 
 let id: number;
 
-describe("/users", () => {
-	it("[POST]: /", async () => {
+describe('/users', () => {
+	it('[POST]: /', async () => {
 		const { status, data } = await api.api[path].post({
 			name: faker.person.jobTitle(),
 		});
@@ -18,14 +18,14 @@ describe("/users", () => {
 		expect(status).toBe(201);
 	});
 
-	it("[GET]: /", async () => {
+	it('[GET]: /', async () => {
 		const api = treaty(server);
 		const { status } = await api.api[path].get();
 
 		expect(status).toBe(200);
 	});
 
-	it("[GET]: /:role_id", async () => {
+	it('[GET]: /:role_id', async () => {
 		const api = treaty(server);
 		const { status } = await api.api[path]({ role_id: id }).get();
 

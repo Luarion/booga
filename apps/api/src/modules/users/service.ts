@@ -1,12 +1,12 @@
-import type { users } from "@booga/db/schema";
-import Service from "@/classes/Service";
-import type UsersModel from "./model";
+import type { users } from '@booga/db/schema';
+import Service from '@/classes/Service';
+import type UsersModel from './model';
 
 class UsersService extends Service<
 	typeof users,
-	UsersModel["create"]["static"]
+	UsersModel['create']['static']
 > {
-	override async create(values: UsersModel["create"]["static"]) {
+	override async create(values: UsersModel['create']['static']) {
 		const { password, pfp, ...rest } = values;
 		return await this.db.transaction(async (tx) => {
 			const [record] = await tx
@@ -16,7 +16,7 @@ class UsersService extends Service<
 					password_hash: await Bun.password.hash(password),
 				})
 				.returning();
-			if (!record) throw new Error("Failed creating the specified resource");
+			if (!record) throw new Error('Failed creating the specified resource');
 			return record;
 		});
 	}

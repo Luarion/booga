@@ -1,19 +1,19 @@
-import { cors } from "@elysiajs/cors";
-import { openapi } from "@elysiajs/openapi";
-import { Elysia } from "elysia";
+import { cors } from '@elysiajs/cors';
+import { openapi } from '@elysiajs/openapi';
+import { Elysia } from 'elysia';
 
-import * as modules from "./modules/index";
+import * as modules from './modules/index';
 
 export const server = new Elysia({
 	precompile: false,
 	aot: true,
-	prefix: "/api",
+	prefix: '/api',
 })
 	.use(cors())
 	.use(
-		openapi({ documentation: { info: { title: "Booga", version: "0.0.0" } } }),
+		openapi({ documentation: { info: { title: 'Booga', version: '0.0.0' } } }),
 	)
-	.get("/ping", "pong")
+	.get('/ping', 'pong')
 	.use(modules.users)
 	.use(modules.roles)
 	.use(modules.vehicles)

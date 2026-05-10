@@ -1,17 +1,17 @@
-import db from "@booga/db";
-import { Elysia } from "elysia";
-import Model from "./model";
-import Service from "./service";
+import db from '@booga/db';
+import { Elysia } from 'elysia';
+import Model from './model';
+import Service from './service';
 
 export const model = new Model();
 export const service = new Service(db);
 
 const plugin = new Elysia({
-	prefix: "/sign",
-	detail: { tags: ["sign"] },
+	prefix: '/sign',
+	detail: { tags: ['sign'] },
 })
 	.post(
-		"/in",
+		'/in',
 		async ({ status, body }) => {
 			return status(200, await service.signIn(body));
 		},
@@ -21,11 +21,11 @@ const plugin = new Elysia({
 				body.email = body.email.trim().toLowerCase();
 			},
 			response: { 200: model.read },
-			detail: { summary: "Sign in with email and password" },
+			detail: { summary: 'Sign in with email and password' },
 		},
 	)
 	.post(
-		"/up",
+		'/up',
 		async ({ status, body }) => {
 			return status(201, await service.signUp(body));
 		},
@@ -38,7 +38,7 @@ const plugin = new Elysia({
 				body.name = body.name.trim().toLowerCase();
 			},
 			response: { 201: model.read },
-			detail: { summary: "Register a new user" },
+			detail: { summary: 'Register a new user' },
 		},
 	);
 

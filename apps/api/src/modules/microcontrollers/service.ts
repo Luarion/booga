@@ -1,7 +1,7 @@
-import type { users } from "@booga/db/schema";
-import { eq } from "drizzle-orm";
-import Service from "@/classes/Service";
-import type UsersModel from "./model";
+import type { users } from '@booga/db/schema';
+import { eq } from 'drizzle-orm';
+import Service from '@/classes/Service';
+import type UsersModel from './model';
 
 class UsersService<
 	TTable extends typeof users,

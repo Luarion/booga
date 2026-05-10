@@ -1,10 +1,10 @@
-import type { Database, SchemaTablesWithId } from "@booga/db";
+import type { Database, SchemaTablesWithId } from '@booga/db';
 import {
 	eq,
 	getTableColumns,
 	type InferInsertModel,
 	type InferSelectModel,
-} from "drizzle-orm";
+} from 'drizzle-orm';
 
 // interface CRUD<TTable extends SchemaTablesWithId> {
 // 	create(values: TReadInput): Promise<InferSelectModel<TTable>>;
@@ -20,7 +20,7 @@ abstract class Service<
 > {
 	protected readonly db: Database;
 	protected readonly table: TTable;
-	protected readonly columns: TTable["_"]["columns"];
+	protected readonly columns: TTable['_']['columns'];
 
 	constructor(database: Database, table: TTable) {
 		this.db = database;
@@ -34,7 +34,7 @@ abstract class Service<
 				.insert(this.table)
 				.values(values as InferInsertModel<TTable>)
 				.returning();
-			if (!record) throw new Error("Failed creating the specified resource");
+			if (!record) throw new Error('Failed creating the specified resource');
 			return record as TReadInput;
 		});
 	}
@@ -52,7 +52,7 @@ abstract class Service<
 				.from(this.table)
 				.where(eq(this.columns.id, id))
 				.limit(1);
-			if (!record) throw new Error("Failed getting the specified resource");
+			if (!record) throw new Error('Failed getting the specified resource');
 			return record;
 		});
 	}

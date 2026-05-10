@@ -1,18 +1,18 @@
-import db from "@booga/db";
-import { users } from "@booga/db/schema";
-import { Elysia, t } from "elysia";
-import Model from "./model";
-import Service from "./service";
+import db from '@booga/db';
+import { users } from '@booga/db/schema';
+import { Elysia, t } from 'elysia';
+import Model from './model';
+import Service from './service';
 
 export const model = new Model(users);
 export const service = new Service(db, users);
 
 const plugin = new Elysia({
-	prefix: "/users",
-	detail: { tags: ["users"] },
+	prefix: '/users',
+	detail: { tags: ['users'] },
 })
 	.post(
-		"/",
+		'/',
 		async ({ status, body }) => {
 			// TODO: Make the method create(), read(), etc, just return the needed columns, instead of using the spread operator
 			const { password_hash, ...record } = await service.create(body);
@@ -28,14 +28,14 @@ const plugin = new Elysia({
 				body.name = name.trim().toLowerCase();
 			},
 			response: { 201: model.read },
-			detail: { summary: "Create one or multiple users" },
+			detail: { summary: 'Create one or multiple users' },
 		},
 	)
-	.get("/", async ({ status }) => status(200, await service.read()), {
+	.get('/', async ({ status }) => status(200, await service.read()), {
 		response: { 200: t.Array(model.read) },
 	})
 	.group(
-		"/:user_id",
+		'/:user_id',
 		{
 			params: t.Object({
 				user_id: t.Integer({ minimum: 1 }),
@@ -44,7 +44,7 @@ const plugin = new Elysia({
 		(pl) =>
 			pl
 				.get(
-					"/",
+					'/',
 					async ({ status, params: { user_id } }) => {
 						const { password_hash, ...record } =
 							await service.readById(user_id);
@@ -52,7 +52,7 @@ const plugin = new Elysia({
 					},
 					{ response: { 200: model.read } },
 				)
-				.delete("/", async ({ status, params: { user_id } }) =>
+				.delete('/', async ({ status, params: { user_id } }) =>
 					status(200, await service.delete(user_id)),
 				),
 	);

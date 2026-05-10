@@ -1,15 +1,15 @@
-import { Elysia } from "elysia";
-import Model from "./model";
-import Service from "./service";
+import { Elysia } from 'elysia';
+import Model from './model';
+import Service from './service';
 
 export const model = new Model();
 export const service = new Service();
 
 const plugin = new Elysia({
-	prefix: "/setup",
-	detail: { tags: ["setup"] },
+	prefix: '/setup',
+	detail: { tags: ['setup'] },
 }).post(
-	"/",
+	'/',
 	async ({ status, body }) => {
 		return status(201, await service.create(body));
 	},
@@ -23,7 +23,7 @@ const plugin = new Elysia({
 			body.vehicle.plate = body.vehicle.plate.trim().toUpperCase();
 		},
 		response: { 201: model.read },
-		detail: { summary: "Initial setup: create user and vehicle" },
+		detail: { summary: 'Initial setup: create user and vehicle' },
 	},
 );
 

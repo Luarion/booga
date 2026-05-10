@@ -1,21 +1,21 @@
-"use client";
-import { Environment, useGLTF } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Suspense, useRef } from "react";
-import { Timer } from "three";
+'use client';
+import { Environment, useGLTF } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Suspense, useRef } from 'react';
+import { Timer } from 'three';
 
 const Model = () => {
-  const { scene } = useGLTF("/models/mercedes190e_1k.glb");
+  const { scene } = useGLTF('/models/mercedes190e_1k.glb');
   return <primitive object={scene} scale={1} />;
 };
 
-const animation: "ROTATE" | "DRIVER" = "ROTATE";
+const animation: 'ROTATE' | 'DRIVER' = 'ROTATE';
 
 function CameraRig({ radius = 5 }) {
   const timer = useRef(new Timer());
   useFrame((state) => {
     switch (animation) {
-      case "ROTATE": {
+      case 'ROTATE': {
         timer.current.update();
 
         const speed: number = 0.01;
@@ -31,7 +31,7 @@ function CameraRig({ radius = 5 }) {
         break;
       }
 
-      case "DRIVER": {
+      case 'DRIVER': {
         state.camera.position.set(0.2, 1.1, 0);
         state.camera.lookAt(0, 0, 4.5);
         break;
@@ -48,15 +48,15 @@ export default function BackgroundCanvas() {
   return (
     <div
       style={{
-        position: "fixed",
+        position: 'fixed',
         top: 0,
         left: 0,
-        width: "100vw",
-        height: "100vh",
+        width: '100vw',
+        height: '100vh',
         zIndex: -1,
         // IMPORTANTE: Para detectar el ratón, pointerEvents NO debe ser "none"
         // Si necesita interactuar con elementos superiores, use una capa invisible
-        pointerEvents: "auto",
+        pointerEvents: 'auto',
       }}
     >
       <Canvas camera={{ position: [0, 0, 0], fov: 45 }}>

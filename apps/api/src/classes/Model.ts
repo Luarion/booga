@@ -1,10 +1,10 @@
-import type { SchemaTablesWithId } from "@booga/db";
+import type { SchemaTablesWithId } from '@booga/db';
 import {
 	createInsertSchema,
 	createSelectSchema,
 	createUpdateSchema,
-} from "drizzle-typebox";
-import type { TSchema } from "elysia";
+} from 'drizzle-typebox';
+import type { TSchema } from 'elysia';
 
 export class BaseSchemas<TTable extends SchemaTablesWithId> {
 	readonly insert;
