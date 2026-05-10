@@ -1,5 +1,5 @@
 {
-	"name": "Dev Environment",
+	"name": "environment",
 	"dockerComposeFile": "../compose.yaml",
 	"service": "environment",
 	"workspaceFolder": "/workspace",
