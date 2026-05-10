@@ -1,6 +1,9 @@
 {
-  "name": "@repo/tsconfig",
-  "module": "index.ts",
-  "type": "module",
-  "private": true
+	"name": "@repo/tsconfig",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"devDependencies": {
+		"@repo/biomejs": "workspace:*"
+	}
 }

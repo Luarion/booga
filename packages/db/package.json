@@ -35,6 +35,7 @@
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
+		"@repo/biomejs": "workspace:*",
 		"drizzle-docs-generator": "^0.7.1",
 		"drizzle-erd": "^0.0.1-alpha.11",
 		"drizzle-kit": "^0.31.10",
