@@ -7,9 +7,9 @@
 		"sh",
 		"-c",
 		// Install dependencies
-		"bun install; make env;",
+		"bun install"
 		// DB
-		"(cd src/db; bun run db:generate && bun db:migrate)"
+		// "(cd packages/db; bun run db:generate && bun db:migrate)"
 	],
 	"postAttachCommand": ["sh", "-c", "(cd packages/db; bun run db:studio)"],
 	"waitFor": "updateContentCommand",
@@ -33,8 +33,8 @@
 				"usernamehw.errorlens",
 				"yoavbls.pretty-ts-errors",
 				// GitHub
-				"github.copilot-chat",
 				"github.vscode-github-actions",
+				"github.vscode-pull-request-github",
 				// Icons
 				"pkief.material-icon-theme",
 				// DB
@@ -50,8 +50,6 @@
 				"mermaidchart.vscode-mermaid-chart",
 				// Utils
 				"ms-vscode.live-server"
-				// Testing
-				// "orta.vscode-jest"
 			]
 		}
 	}
