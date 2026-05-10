@@ -5,8 +5,8 @@ ENV_TEMPLATE := .env.template
 
 .PHONY: env clean
 env: $(ENV_FILE)
-	@$(MAKE) -C src/api env
-	@$(MAKE) -C src/ui env
+	@$(MAKE) -C apps/api env
+	@$(MAKE) -C apps/ui env
 
 $(ENV_FILE):
 	@export POSTGRES_USER="$(RANDOM)" \
