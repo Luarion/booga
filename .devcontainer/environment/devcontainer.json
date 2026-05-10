@@ -11,7 +11,7 @@
 		// DB
 		"(cd src/db; bun run db:generate && bun db:migrate)"
 	],
-	"postAttachCommand": ["sh", "-c", "(cd src/db; bun run db:studio)"],
+	"postAttachCommand": ["sh", "-c", "(cd packages/db; bun run db:studio)"],
 	"waitFor": "updateContentCommand",
 	"shutdownAction": "stopCompose",
 	"customizations": {
