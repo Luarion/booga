@@ -1,38 +1,57 @@
+import db from '@booga/db';
+import { microcontrollers } from '@booga/db/schema';
 import { Elysia, t } from 'elysia';
-import { Microcontroller } from '@/classes/test';
+import Model from './model';
+import Service from './service';
 
-const microcontrollers: Microcontroller[] = [];
+export const model = new Model(microcontrollers);
+export const service = new Service(db, microcontrollers);
 
 const plugin = new Elysia({
 	prefix: '/microcontrollers',
 	detail: { tags: ['microcontrollers'] },
-}).post(
-	'/manifest',
-	async ({ request, server, body }) => {
-		const IP = server?.requestIP(request)?.address;
-		if (!IP) throw new Error('Failed obtaining client IP');
-
-		microcontrollers.push(new Microcontroller(IP, body.mac));
-	},
-	{
-		body: t.Object({
-			mac: t.String(),
-			sensors: t.Array(
-				t.Object({
-					id: t.Integer({ minimum: 1 }),
-					type: t.String(),
-					name: t.String(),
-				}),
-			),
-			actuators: t.Array(
-				t.Object({
-					id: t.Integer({ minimum: 1 }),
-					type: t.String(),
-					name: t.String(),
-				}),
-			),
-		}),
-	},
-);
+})
+	.post(
+		'/',
+		async ({ status, body }) => status(201, await service.create(body)),
+		{
+			body: model.create,
+			response: { 201: model.read },
+			detail: { summary: 'Register a microcontroller from manifest JSON' },
+		},
+	)
+	.get('/', async ({ status }) => status(200, await service.read()), {
+		response: { 200: t.Array(model.read) },
+	})
+	.group(
+		'/:microcontroller_id',
+		{
+			params: t.Object({
+				microcontroller_id: t.Integer({ minimum: 1 }),
+			}),
+		},
+		(pl) =>
+			pl
+				.get(
+					'/',
+					async ({ status, params: { microcontroller_id } }) =>
+						status(200, await service.readById(microcontroller_id)),
+					{
+						response: { 200: model.read },
+					},
+				)
+				.patch(
+					'/',
+					async ({ status, params: { microcontroller_id }, body }) =>
+						status(200, await service.update(microcontroller_id, body)),
+					{
+						body: model.update,
+						response: { 200: model.read },
+					},
+				)
+				.delete('/', async ({ status, params: { microcontroller_id } }) =>
+					status(200, await service.delete(microcontroller_id)),
+				),
+	);
 
 export default plugin;

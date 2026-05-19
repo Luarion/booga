@@ -17,6 +17,7 @@ abstract class Service<
 	TTable extends SchemaTablesWithId,
 	TCreateInput = InferInsertModel<TTable>,
 	TReadInput = InferSelectModel<TTable>,
+	TUpdateInput = Partial<InferInsertModel<TTable>>,
 > {
 	protected readonly db: Database;
 	protected readonly table: TTable;
@@ -54,6 +55,18 @@ abstract class Service<
 				.limit(1);
 			if (!record) throw new Error('Failed getting the specified resource');
 			return record;
+		});
+	}
+
+	async update(id: number, values: TUpdateInput): Promise<TReadInput> {
+		return await this.db.transaction(async (tx) => {
+			const [record] = await tx
+				.update(this.table)
+				.set(values as Partial<InferInsertModel<TTable>>)
+				.where(eq(this.columns.id, id))
+				.returning();
+			if (!record) throw new Error('Failed updating the specified resource');
+			return record as TReadInput;
 		});
 	}
 

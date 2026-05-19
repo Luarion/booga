@@ -17,7 +17,7 @@ describe(`/${path}`, () => {
 				password: faker.internet.password(),
 			},
 			vehicle: {
-				maker: faker.vehicle.manufacturer(),
+				make: faker.vehicle.manufacturer(),
 				drive: 'awd',
 				displacement: '5.2',
 				fuel: 'diesel',

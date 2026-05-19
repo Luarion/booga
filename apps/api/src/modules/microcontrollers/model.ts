@@ -1,21 +1,31 @@
-import type { SchemaTablesWithId } from '@booga/db';
+import type { microcontrollers } from '@booga/db/schema';
 import { t } from 'elysia';
 import Model from '@/classes/Model';
 
-class UsersModel<TTable extends SchemaTablesWithId> extends Model<TTable> {
+class MicrocontrollersModel extends Model<typeof microcontrollers> {
 	override create = t.Composite([
-		t.Omit(this.base.insert, ['id', 'password_hash', 'pfp_hash', 'timestamp']),
+		t.Omit(this.base.insert, ['id', 'timestamp']),
 		t.Object({
-			password: t.String(),
-			pfp: t.Optional(
-				t.File({
-					type: ['image/jpeg', 'image/png', 'image/webp'],
-					maxSize: '100m',
-				}),
+			sensors: t.Optional(
+				t.Array(
+					t.Object({
+						alias: t.String(),
+						category_id: t.Integer({ minimum: 1 }),
+					}),
+				),
+			),
+			actuators: t.Optional(
+				t.Array(
+					t.Object({
+						alias: t.String(),
+						category_id: t.Integer({ minimum: 1 }),
+					}),
+				),
 			),
 		}),
 	]);
-	override read = t.Omit(this.base.select, ['password_hash']);
+	override read = t.Object(this.base.select.properties);
+	override update = t.Partial(t.Omit(this.base.insert, ['id', 'timestamp']));
 }
 
-export default UsersModel;
+export default MicrocontrollersModel;

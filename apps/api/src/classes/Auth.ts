@@ -1,5 +1,9 @@
 import jwt from '@elysiajs/jwt';
 import { type Context, t } from 'elysia';
+import { config } from 'dotenv';
+import { resolve } from 'node:path';
+
+config({ path: resolve(process.cwd(), 'apps/api/.env') });
 
 const JWT_SECRET: string = process.env.JWT_SECRET as string;
 if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is not set');

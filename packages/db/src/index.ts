@@ -4,7 +4,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
 
-config({ path: resolve(__dirname, '../../../.env') });
+config({ path: resolve(__dirname, '../../../.devcontainer/.env') });
 
 const db = drizzle(
 	postgres({
