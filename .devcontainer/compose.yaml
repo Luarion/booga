@@ -4,6 +4,9 @@ services:
       context: environment
       dockerfile: Dockerfile
     container_name: environment
+    # ports:
+    #   - 3000:3000
+    #   - 8080:8080
     volumes:
       - ..:/workspace:cached,rw
       - /var/run/docker.sock:/var/run/docker.sock:cached

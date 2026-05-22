@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs';
 import { resolve } from 'node:path';
 
-const CONFIG_PATH = resolve(process.cwd(), 'apps/api/config/server.json');
+const CONFIG_PATH = resolve(process.cwd(), 'src/config/server.json');
 
 export type SetupConfig = {
 	completed: boolean;
@@ -68,7 +68,7 @@ async function readRaw(): Promise<ServerConfig> {
 
 async function writeRaw(cfg: ServerConfig): Promise<void> {
 	const content = JSON.stringify(cfg, null, 2);
-	await fs.mkdir(resolve(process.cwd(), 'apps/api/config'), {
+	await fs.mkdir(resolve(process.cwd(), 'src/config'), {
 		recursive: true,
 	});
 	await fs.writeFile(CONFIG_PATH, content, 'utf-8');

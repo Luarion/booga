@@ -1,4 +1,4 @@
-import type { Server } from '@booga/api/src/server';
 import { edenTreaty } from '@elysiajs/eden';
+import { getApiBaseUrl } from './apiBaseUrl';
 
-export default edenTreaty<Server>('http://localhost:3000');
+export default edenTreaty(getApiBaseUrl());

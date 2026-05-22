@@ -1,6 +1,7 @@
-import { Elysia } from 'elysia';
+import { Elysia, t } from 'elysia';
 import Model from './model';
 import Service from './service';
+import serverConfig from '@/lib/serverConfig';
 
 export const model = new Model();
 export const service = new Service();
@@ -8,7 +9,16 @@ export const service = new Service();
 const plugin = new Elysia({
 	prefix: '/setup',
 	detail: { tags: ['setup'] },
-}).post(
+})
+	.get(
+		'/',
+		async ({ status }) => status(200, await serverConfig.getSetupCompleted()),
+		{
+			response: { 200: t.Boolean() },
+			detail: { summary: 'Check whether the initial setup is completed' },
+		},
+	)
+	.post(
 	'/',
 	async ({ status, body }) => {
 		return status(201, await service.create(body));

@@ -1,7 +1,7 @@
 'use client';
 import { Environment, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Suspense, useRef } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Timer } from 'three';
 
 const Model = () => {
@@ -45,6 +45,16 @@ function CameraRig({ radius = 5 }) {
 }
 
 export default function BackgroundCanvas() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <div
       style={{
@@ -63,9 +73,9 @@ export default function BackgroundCanvas() {
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1.5} />
         <CameraRig radius={4} />
-        <Model />
         <Suspense fallback={null}>
-          <Environment preset="dawn" background />
+          <Model />
+          <Environment preset="city" background />
         </Suspense>
       </Canvas>
     </div>

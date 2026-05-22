@@ -43,7 +43,27 @@ form label {
   text-transform: capitalize;
 } */
 
-form input {
-  background-color: white;
-  border-radius: 5px;
+/* Avoid forcing a white background on all inputs so theme and Tailwind classes win */
+/* Improve input contrast and readability inside the app's dark backgrounds.
+   Use stronger, specific rules so they are not overridden by other styles. */
+form input,
+form textarea,
+form select {
+  background-color: rgba(3, 7, 18, 0.9) !important;
+  color: #ffffff !important;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+form input::placeholder,
+form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1; /* ensure visibility */
+}
+
+/* Keep reduced transparency for disabled/readonly states */
+form input:disabled,
+form textarea:disabled {
+  background-color: rgba(3, 7, 18, 0.65) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
 }

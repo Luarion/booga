@@ -3,14 +3,16 @@ import Image from 'next/image';
 
 export default function Page() {
   return (
-    <div className="flex w-fit h-fit items-center gap-10 p-8 rounded-2xl bg-gray-900/80 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-pink-500/30">
-      <div className="relative group">
+    <>
+      <div className="relative group w-40">
         <Image
-          src="/download.png"
+          src="/wireless.svg"
           alt="QR Code"
           width={180}
           height={180}
+          unoptimized
           className="rounded-lg shadow-inner brightness-90 group-hover:brightness-110 transition-all"
+          loading="eager"
         />
         <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/5 group-hover:ring-pink-400/20" />
       </div>
@@ -57,6 +59,6 @@ export default function Page() {
           </button>
         </form>
       </div>
-    </div>
+    </>
   );
 }

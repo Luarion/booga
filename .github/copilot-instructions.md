@@ -57,4 +57,7 @@
 - When a request forces a compromise against best practice, state the tradeoff clearly.
 - When a better pattern exists, suggest it briefly and concretely.
 - Do not expand scope unnecessarily, but do not preserve poor patterns without calling them out.
+- Do not touch any code outside the logical branch explicitly requested by the user unless that change is strictly necessary to complete the objective safely and correctly.
+- Do not modify unrelated code preemptively, incidentally, or for opportunistic cleanup.
+- If a potentially useful change affects code that is not directly related to the requested task, stop and ask for confirmation first using `vscode_askQuestions` before making that change.
 - Do not read or load unrelated instruction files or tool-specific guidance unless the prompt, relevant context, or the code changes clearly require that tool or workflow. For example, do not read Postman instruction files unless the task actually involves Postman.
