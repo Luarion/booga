@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
 import api from '@/lib/eden';
@@ -221,12 +223,12 @@ export default function SignUpPage() {
 
             <p className="text-center text-sm text-white/50">
               ¿Ya tienes cuenta?{' '}
-              <a
+              <Link
                 href="/sign/in"
                 className="text-white/80 transition hover:text-white"
               >
                 Inicia sesión
-              </a>
+              </Link>
             </p>
           </>
         ) : (
@@ -306,12 +308,12 @@ export default function SignUpPage() {
 
             <p className="text-center text-sm text-white/50">
               ¿Ya tienes cuenta?{' '}
-              <a
+              <Link
                 href="/sign/in"
                 className="text-white/80 transition hover:text-white"
               >
                 Inicia sesión
-              </a>
+              </Link>
             </p>
           </>
         )}

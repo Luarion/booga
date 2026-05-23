@@ -22,9 +22,6 @@ export default new Elysia({ name: 'auth.middleware' })
 				path === '/api/setup' || path.startsWith('/api/setup/');
 
 			if (isSignRoute) {
-				if (!token) return;
-				const payload = await jwt.verify(token).catch(() => false);
-				if (payload) return status(401);
 				return;
 			}
 

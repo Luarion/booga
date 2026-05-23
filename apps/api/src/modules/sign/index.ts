@@ -69,6 +69,25 @@ const plugin = new Elysia({
 			response: { 201: model.read, 409: t.String(), 500: t.String() },
 			detail: { summary: 'Register a new user' },
 		},
+	)
+	.post(
+		'/out',
+		({ status, cookie }) => {
+			if (cookie.auth) {
+				cookie.auth.set({
+					value: '',
+					httpOnly: true,
+					secure: false,
+					path: '/',
+					maxAge: 0,
+				});
+			}
+			return status(200, 'Signed out');
+		},
+		{
+			response: { 200: t.String() },
+			detail: { summary: 'Sign out user by clearing cookie' },
+		},
 	);
 
 export default plugin;

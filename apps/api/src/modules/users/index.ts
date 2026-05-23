@@ -31,14 +31,22 @@ const plugin = new Elysia({
 			detail: { summary: 'Create one or multiple users' },
 		},
 	)
-	.get('/', async ({ status }) => status(200, await service.read()), {
-		response: { 200: t.Array(model.read) },
-	})
+	.get(
+		'/',
+		async ({ status }) => {
+			const records = await service.read();
+			const safeRecords = records.map(({ password_hash, ...rest }) => rest);
+			return status(200, safeRecords);
+		},
+		{
+			response: { 200: t.Array(model.read) },
+		},
+	)
 	.group(
 		'/:user_id',
 		{
 			params: t.Object({
-				user_id: t.Integer({ minimum: 1 }),
+				user_id: t.Numeric({ minimum: 1 }),
 			}),
 		},
 		(pl) =>
@@ -63,9 +71,10 @@ const plugin = new Elysia({
 					},
 					{ body: model.update, response: { 200: model.read } },
 				)
-				.delete('/', async ({ status, params: { user_id } }) =>
-					status(200, await service.delete(user_id)),
-				),
+				.delete('/', async ({ status, params: { user_id } }) => {
+					await service.delete(user_id);
+					return status(200, 'User deleted');
+				}),
 	);
 
 export default plugin;

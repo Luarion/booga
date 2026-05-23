@@ -289,14 +289,14 @@ export default function MusicPlayer() {
       <div
         ref={containerRef}
         onClick={() => setIsExpanded(true)}
-        className="w-full flex flex-col rounded-2xl bg-black/20 backdrop-blur-xl shadow-2xl border border-white/10 border-t-white/20 border-b-black/50 p-3 cursor-default transition-all"
+        className="w-full flex flex-col rounded-2xl bg-white/12 backdrop-blur-xl backdrop-invert shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.2)] border border-white/15 border-t-white/30 border-b-black/20 p-3 cursor-default transition-all"
       >
         {/* Top row: cover + info + controls */}
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={openAlbums}
-            className="relative size-14 shrink-0 rounded-xl bg-white/10 overflow-hidden cursor-pointer shadow-lg"
+            className="relative size-14 shrink-0 rounded-xl bg-white/10 overflow-hidden cursor-pointer shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-200 hover:shadow-[0_6px_16px_rgba(255,255,255,0.15)] active:scale-90"
           >
             {current?.coverSrc ? (
               <Image
@@ -322,7 +322,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={prevTrack}
-              className="hover:text-white transition-colors p-1"
+              className="hover:text-white transition-all duration-200 p-1 active:scale-75"
               aria-label="Anterior"
             >
               <svg
@@ -338,7 +338,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={togglePlay}
-              className="hover:text-white transition-colors p-1.5 rounded-full bg-white/10 hover:bg-white/20"
+              className="hover:text-white transition-all duration-200 p-1.5 rounded-full bg-white/10 hover:bg-white/25 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] active:scale-90"
               aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
             >
               {isPlaying ? (
@@ -366,7 +366,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={nextTrack}
-              className="hover:text-white transition-colors p-1"
+              className="hover:text-white transition-all duration-200 p-1 active:scale-75"
               aria-label="Siguiente"
             >
               <svg
@@ -413,7 +413,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={toggleMute}
-              className="text-white/50 hover:text-white/80 transition-colors shrink-0"
+              className="text-white/50 hover:text-white/80 transition-all duration-200 shrink-0 active:scale-90"
               aria-label={volume === 0 ? 'Activar sonido' : 'Silenciar'}
             >
               <VolumeIcon level={volume} />
@@ -446,7 +446,7 @@ export default function MusicPlayer() {
                 className="absolute inset-0 z-0 cursor-default bg-transparent"
               />
               <div
-                className={`relative z-10 w-[min(92vw,900px)] max-h-[86vh] bg-white/12 backdrop-blur-md shadow-2xl border border-white/15 border-t-white/25 border-b-white/5 rounded-4xl p-6 flex flex-col items-stretch transition-all duration-300 ease-out ${
+                className={`relative z-10 w-[min(92vw,900px)] max-h-[86vh] bg-white/12 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.2)] border border-white/15 border-t-white/30 border-b-black/20 rounded-4xl p-6 flex flex-col items-stretch transition-all duration-300 ease-out ${
                   openDialog
                     ? 'translate-y-0 scale-100 opacity-100'
                     : 'translate-y-4 scale-95 opacity-0'
@@ -464,7 +464,7 @@ export default function MusicPlayer() {
                   <button
                     type="button"
                     onClick={closeAlbums}
-                    className="shrink-0 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+                    className="shrink-0 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-white/15 hover:text-white hover:shadow-lg active:scale-90"
                   >
                     X
                   </button>
@@ -489,7 +489,7 @@ export default function MusicPlayer() {
                         key={al.slug}
                         type="button"
                         onClick={() => selectAlbum(al)}
-                        className={`flex flex-col items-stretch gap-2 rounded-2xl bg-white/8 border p-3 text-left transition-all hover:bg-white/12 hover:border-white/30 ${current?.slug === al.slug ? 'border-white/40 ring-1 ring-white/20' : 'border-white/10'}`}
+                        className={`flex flex-col items-stretch gap-2 rounded-2xl bg-white/8 border p-3 text-left transition-all duration-200 hover:bg-white/12 hover:border-white/30 hover:shadow-lg hover:-translate-y-1 active:scale-95 active:translate-y-0 ${current?.slug === al.slug ? 'border-white/40 ring-2 ring-white/20 shadow-[0_0_15px_rgba(255,255,255,0.15)]' : 'border-white/10'}`}
                       >
                         <div className="relative h-36 w-full overflow-hidden rounded-lg bg-white/5">
                           {al.coverSrc ? (

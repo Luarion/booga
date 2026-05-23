@@ -18,7 +18,7 @@ const plugin = new Elysia({
 		'/:sensor_id',
 		{
 			params: t.Object({
-				sensor_id: t.Integer({ minimum: 1 }),
+				sensor_id: t.Numeric({ minimum: 1 }),
 			}),
 		},
 		(pl) =>
@@ -38,6 +38,22 @@ const plugin = new Elysia({
 					{
 						body: model.update,
 						response: { 200: model.read },
+					},
+				)
+				.get(
+					'/readings',
+					async ({ status, params: { sensor_id } }) =>
+						status(200, await service.getReadings(sensor_id)),
+					{
+						response: {
+							200: t.Array(
+								t.Object({
+									sensor_id: t.Numeric(),
+									value: t.String(),
+									timestamp: t.Date(),
+								})
+							),
+						},
 					},
 				)
 				.delete('/', async ({ status, params: { sensor_id } }) =>
