@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { type FormEvent, useState } from 'react';
 import api from '@/lib/eden';
 
 type FormData = {
@@ -24,68 +24,82 @@ export default function SignUpPage() {
     passwordConfirm: '',
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(1);
 
   function handleInputChange(field: keyof FormData, value: string) {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    setError(null);
   }
 
-  function validateStepOne(): string | null {
-    if (!formData.name.trim()) return 'Nombre es requerido';
-    if (!formData.username.trim()) return 'Usuario es requerido';
-    if (formData.username.length < 3)
-      return 'Usuario debe tener al menos 3 caracteres';
-    if (!formData.email.trim()) return 'Email es requerido';
-    if (!formData.email.includes('@')) return 'Email inválido';
-    return null;
-  }
-
-  function validateStepTwo(): string | null {
-    if (!formData.phone.trim()) return 'Teléfono es requerido';
-    if (!formData.password) return 'Contraseña es requerida';
-    if (formData.password.length < 6)
-      return 'Contraseña debe tener al menos 6 caracteres';
-    if (formData.password !== formData.passwordConfirm)
-      return 'Las contraseñas no coinciden';
-    return null;
-  }
-
-  function validateForm(): string | null {
-    return validateStepOne() ?? validateStepTwo();
-  }
+  // Use native HTML validation for required fields. Password equality is
+  // checked using the Constraint Validation API at submit time.
 
   function handleNextStep() {
-    const validationError = validateStepOne();
-    if (validationError) {
-      setError(validationError);
+    const form = document.getElementById(
+      'signup-form',
+    ) as HTMLFormElement | null;
+    if (!form) {
+      setStep(2);
       return;
     }
 
-    setStep(2);
-    setError(null);
+    const nameEl = form.querySelector('#name') as HTMLInputElement | null;
+    const usernameEl = form.querySelector(
+      '#username',
+    ) as HTMLInputElement | null;
+    const emailEl = form.querySelector('#email') as HTMLInputElement | null;
+
+    if (nameEl && usernameEl && emailEl) {
+      if (
+        nameEl.checkValidity() &&
+        usernameEl.checkValidity() &&
+        emailEl.checkValidity()
+      ) {
+        setStep(2);
+      } else {
+        // Show native validation messages in order
+        if (!nameEl.checkValidity()) nameEl.reportValidity();
+        else if (!usernameEl.checkValidity()) usernameEl.reportValidity();
+        else emailEl.reportValidity();
+      }
+    } else {
+      setStep(2);
+    }
   }
 
   function handlePreviousStep() {
     setStep(1);
-    setError(null);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError(null);
-
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
+    const form = event.currentTarget as HTMLFormElement;
+    // Let browser run its native validation first
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      event.preventDefault();
       return;
     }
 
+    event.preventDefault();
     setLoading(true);
 
+    // Additional check: password equality
+    if (formData.password !== formData.passwordConfirm) {
+      const passwordConfirmEl = form.querySelector(
+        '#passwordConfirm',
+      ) as HTMLInputElement | null;
+      if (passwordConfirmEl) {
+        passwordConfirmEl.setCustomValidity('Las contraseñas no coinciden');
+        passwordConfirmEl.reportValidity();
+        passwordConfirmEl.setCustomValidity('');
+      } else {
+        window.alert('Las contraseñas no coinciden');
+      }
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await api.api.sign.up.post({
+      const { status, error } = await api.api.sign.up.post({
         email: formData.email.toLowerCase(),
         phone: formData.phone,
         username: formData.username,
@@ -93,14 +107,19 @@ export default function SignUpPage() {
         password: formData.password,
       });
 
-      if (response.status === 201) {
-        // Successful registration, redirect to login
-        router.push('/sign/in?registered=true');
+      if (status === 201) {
+        router.push('/');
+        return;
       }
+
+      const errorMsg =
+        typeof error?.value === 'string' ? error.value : 'Error al registrarse';
+      window.alert(errorMsg);
     } catch (err) {
       const errorMsg =
         err instanceof Error ? err.message : 'Error al registrarse';
-      setError(errorMsg);
+      // Use native alert for server errors to avoid custom error blocks
+      window.alert(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -127,13 +146,11 @@ export default function SignUpPage() {
         />
       </div>
 
-      {error && (
-        <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/20 p-3 text-sm text-red-200">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <form
+        id="signup-form"
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-3"
+      >
         {step === 1 ? (
           <>
             <div className="flex flex-col gap-1.5">
@@ -149,6 +166,7 @@ export default function SignUpPage() {
                 name="name"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
+                required
                 className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
                 placeholder="Juan Pérez"
                 disabled={loading}
@@ -168,6 +186,8 @@ export default function SignUpPage() {
                 name="username"
                 value={formData.username}
                 onChange={(e) => handleInputChange('username', e.target.value)}
+                required
+                minLength={3}
                 className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
                 placeholder="juanperez"
                 disabled={loading}
@@ -187,6 +207,7 @@ export default function SignUpPage() {
                 name="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
+                required
                 className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
                 placeholder="juan@company.com"
                 disabled={loading}
@@ -227,6 +248,7 @@ export default function SignUpPage() {
                 name="phone"
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
+                required
                 className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
                 style={{ color: '#ffffff' }}
                 placeholder="+56912345678"
@@ -247,6 +269,8 @@ export default function SignUpPage() {
                 name="password"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
+                required
+                minLength={6}
                 className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
                 style={{ color: '#ffffff' }}
                 placeholder="••••••"
@@ -269,6 +293,7 @@ export default function SignUpPage() {
                 onChange={(e) =>
                   handleInputChange('passwordConfirm', e.target.value)
                 }
+                required
                 className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
                 placeholder="••••••"
                 disabled={loading}

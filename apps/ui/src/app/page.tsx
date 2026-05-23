@@ -2,15 +2,16 @@
 
 import Image from 'next/image';
 import {
+  type FormEvent,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
-  type FormEvent,
 } from 'react';
-import api from '@/lib/eden';
 import MusicPlayer from '@/components/MusicPlayer';
+import api from '@/lib/eden';
+import { redirectToSignInIfUnauthorized } from '@/lib/redirectToSignIn';
 
 type DatasetKey = 'microcontrollers' | 'sensors' | 'actuators';
 type Row = Record<string, unknown>;
@@ -20,6 +21,13 @@ type UserFormData = {
   password: string;
   name: string;
   phone: string;
+};
+type UserRow = {
+  id: number;
+  email?: string | null;
+  username?: string | null;
+  name?: string | null;
+  phone?: string | null;
 };
 
 const datasetConfig: Record<DatasetKey, { label: string; icon: string }> = {
@@ -131,7 +139,15 @@ function UserField({
   );
 }
 
-function UsersTable({ rows }: { rows: Row[] }) {
+function UsersTable({
+  rows,
+  onEdit,
+  onDelete,
+}: {
+  rows: Row[];
+  onEdit: (row: UserRow) => void;
+  onDelete: (row: UserRow) => void;
+}) {
   const columns = ['id', 'name', 'username', 'email', 'phone', 'timestamp'];
 
   if (rows.length === 0) {
@@ -143,40 +159,102 @@ function UsersTable({ rows }: { rows: Row[] }) {
   }
 
   return (
-    <div className="overflow-auto rounded-2xl border border-white/10 bg-black/10">
-      <table className="min-w-152 border-separate border-spacing-0 text-left text-sm">
-        <thead className="sticky top-0 z-10 bg-black/30 backdrop-blur-md">
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column}
-                className="border-b border-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/60"
-              >
-                {titleCase(column)}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr
-              key={row.id ? String(row.id) : `${rowIndex}`}
-              className="odd:bg-white/5"
-            >
+    <div className="flex flex-col gap-3">
+      <div className="hidden overflow-hidden overflow-x-auto rounded-2xl border border-white/10 bg-black/10 sm:block">
+        <table className="min-w-full overflow-hidden rounded-2xl border-separate border-spacing-0 text-left text-sm">
+          <thead className="sticky top-0 z-10 rounded-t-2xl bg-black/30 backdrop-blur-md">
+            <tr>
               {columns.map((column) => (
-                <td
+                <th
                   key={column}
-                  className="border-b border-white/5 px-4 py-3 align-top text-white/85"
+                  className="whitespace-nowrap border-b border-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/60 first:rounded-tl-2xl last:rounded-tr-2xl"
                 >
-                  <span className="block max-w-[16rem] truncate">
-                    {formatValue(row[column])}
-                  </span>
-                </td>
+                  {titleCase(column)}
+                </th>
               ))}
+              <th className="whitespace-nowrap border-b border-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/60">
+                Acciones
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row, rowIndex) => (
+              <tr
+                key={row.id ? String(row.id) : `${rowIndex}`}
+                className="odd:bg-white/5"
+              >
+                {columns.map((column) => (
+                  <td
+                    key={column}
+                    className="border-b border-white/5 px-4 py-3 align-top text-white/85"
+                  >
+                    <span className="block max-w-[16rem] truncate">
+                      {formatValue(row[column])}
+                    </span>
+                  </td>
+                ))}
+                <td className="border-b border-white/5 px-4 py-3 align-top">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => onEdit(toUserRow(row))}
+                      className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(toUserRow(row))}
+                      className="rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1.5 text-xs text-red-100 transition-colors hover:bg-red-500/20"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="grid gap-3 sm:hidden">
+        {rows.map((row, rowIndex) => (
+          <div
+            key={row.id ? String(row.id) : `${rowIndex}`}
+            className="rounded-2xl border border-white/10 bg-black/10 p-4"
+          >
+            {columns.map((column) => (
+              <div
+                key={column}
+                className="flex items-start justify-between gap-3 py-1"
+              >
+                <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/55">
+                  {titleCase(column)}
+                </span>
+                <span className="text-right text-sm text-white/85 break-all">
+                  {formatValue(row[column])}
+                </span>
+              </div>
+            ))}
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => onEdit(toUserRow(row))}
+                className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+              >
+                Editar
+              </button>
+              <button
+                type="button"
+                onClick={() => onDelete(toUserRow(row))}
+                className="rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1.5 text-xs text-red-100 transition-colors hover:bg-red-500/20"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -231,6 +309,8 @@ function UsersDialog({
   error,
   onClose,
   onCreate,
+  onEdit,
+  onDelete,
 }: {
   mounted: boolean;
   open: boolean;
@@ -239,6 +319,8 @@ function UsersDialog({
   error: string | null;
   onClose: () => void;
   onCreate: () => void;
+  onEdit: (row: UserRow) => void;
+  onDelete: (row: UserRow) => void;
 }) {
   if (!mounted) return null;
 
@@ -298,7 +380,7 @@ function UsersDialog({
               {error}
             </div>
           ) : (
-            <UsersTable rows={users} />
+            <UsersTable rows={users} onEdit={onEdit} onDelete={onDelete} />
           )}
         </div>
 
@@ -451,6 +533,146 @@ function UserFormModal({
   );
 }
 
+function EditUserModal({
+  mounted,
+  open,
+  submitting,
+  error,
+  formData,
+  onChange,
+  onClose,
+  onSubmit,
+}: {
+  mounted: boolean;
+  open: boolean;
+  submitting: boolean;
+  error: string | null;
+  formData: UserFormData;
+  onChange: <K extends keyof UserFormData>(
+    key: K,
+    value: UserFormData[K],
+  ) => void;
+  onClose: () => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}) {
+  if (!mounted) return null;
+
+  return (
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center px-4 py-6 backdrop-blur-md transition-all duration-300 ease-out ${
+        open ? 'bg-slate-950/45 opacity-100' : 'bg-slate-950/0 opacity-0'
+      }`}
+    >
+      <button
+        type="button"
+        aria-label="Cerrar edición"
+        onClick={onClose}
+        className="absolute inset-0 z-0 cursor-default bg-transparent"
+      />
+      <Something
+        className={`relative z-10 w-[min(92vw,560px)] max-h-[86vh] flex-col items-stretch rounded-4xl p-6 transition-all duration-300 ease-out ${
+          open
+            ? 'translate-y-0 scale-100 opacity-100'
+            : 'translate-y-4 scale-95 opacity-0'
+        }`}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-[0.35em] text-white/45">
+              Usuarios
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">
+              Editar usuario
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+          >
+            X
+          </button>
+        </div>
+
+        <form className="mt-5 flex flex-col gap-5" onSubmit={onSubmit}>
+          {error ? (
+            <div className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+              {error}
+            </div>
+          ) : null}
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <UserField
+              id="name"
+              label="Nombre"
+              type="text"
+              value={formData.name}
+              onChange={(value) => onChange('name', value)}
+              placeholder="Nombre completo"
+              autoComplete="name"
+            />
+            <UserField
+              id="username"
+              label="Usuario"
+              type="text"
+              value={formData.username}
+              onChange={(value) => onChange('username', value)}
+              placeholder="nombredeusuario"
+              autoComplete="username"
+            />
+            <UserField
+              id="email"
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={(value) => onChange('email', value)}
+              placeholder="usuario@correo.com"
+              autoComplete="email"
+            />
+            <UserField
+              id="phone"
+              label="Teléfono"
+              type="tel"
+              value={formData.phone}
+              onChange={(value) => onChange('phone', value)}
+              placeholder="+34 600 000 000"
+              autoComplete="tel"
+            />
+            <div className="sm:col-span-2">
+              <UserField
+                id="password"
+                label="Nueva contraseña (opcional)"
+                type="password"
+                value={formData.password}
+                onChange={(value) => onChange('password', value)}
+                placeholder="Deja en blanco para mantenerla"
+                autoComplete="new-password"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-1">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="rounded-full border border-white/20 bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitting ? 'Guardando...' : 'Guardar cambios'}
+            </button>
+          </div>
+        </form>
+      </Something>
+    </div>
+  );
+}
+
 function formatValue(value: unknown) {
   if (value === null || value === undefined || value === '') return '—';
   if (
@@ -463,6 +685,17 @@ function formatValue(value: unknown) {
   return JSON.stringify(value);
 }
 
+function toUserRow(row: Row): UserRow {
+  const id = Number(row.id);
+  return {
+    id: Number.isFinite(id) ? id : 0,
+    email: typeof row.email === 'string' ? row.email : null,
+    username: typeof row.username === 'string' ? row.username : null,
+    name: typeof row.name === 'string' ? row.name : null,
+    phone: typeof row.phone === 'string' ? row.phone : null,
+  };
+}
+
 function titleCase(value: string) {
   return value
     .split('_')
@@ -473,7 +706,8 @@ function titleCase(value: string) {
 async function loadDataset(key: DatasetKey) {
   switch (key) {
     case 'microcontrollers': {
-      const { data, error } = await api.api.microcontrollers.get();
+      const { data, error, status } = await api.api.microcontrollers.get();
+      if (redirectToSignInIfUnauthorized(status)) return [] as Row[];
       if (error)
         throw new Error(
           typeof error.value === 'string'
@@ -483,7 +717,8 @@ async function loadDataset(key: DatasetKey) {
       return (data ?? []) as Row[];
     }
     case 'sensors': {
-      const { data, error } = await api.api.sensors.get();
+      const { data, error, status } = await api.api.sensors.get();
+      if (redirectToSignInIfUnauthorized(status)) return [] as Row[];
       if (error)
         throw new Error(
           typeof error.value === 'string'
@@ -493,7 +728,8 @@ async function loadDataset(key: DatasetKey) {
       return (data ?? []) as Row[];
     }
     case 'actuators': {
-      const { data, error } = await api.api.actuators.get();
+      const { data, error, status } = await api.api.actuators.get();
+      if (redirectToSignInIfUnauthorized(status)) return [] as Row[];
       if (error)
         throw new Error(
           typeof error.value === 'string'
@@ -583,6 +819,20 @@ export default function Page() {
     name: '',
     phone: '',
   });
+  const [mountedEditUserForm, setMountedEditUserForm] = useState(false);
+  const [isEditUserFormOpen, setIsEditUserFormOpen] = useState(false);
+  const [editUserFormSubmitting, setEditUserFormSubmitting] = useState(false);
+  const [editUserFormError, setEditUserFormError] = useState<string | null>(
+    null,
+  );
+  const [editUserId, setEditUserId] = useState<number | null>(null);
+  const [editUserFormData, setEditUserFormData] = useState<UserFormData>({
+    email: '',
+    username: '',
+    password: '',
+    name: '',
+    phone: '',
+  });
   const [mountedDataset, setMountedDataset] = useState<DatasetKey | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [recordsByDataset, setRecordsByDataset] = useState<
@@ -607,6 +857,9 @@ export default function Page() {
     actuators: null,
   });
   const userFormTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const editUserFormTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clearUsersDialogTimer = useCallback(() => {
@@ -623,6 +876,13 @@ export default function Page() {
     }
   }, []);
 
+  const clearEditUserFormTimer = useCallback(() => {
+    if (editUserFormTimerRef.current) {
+      clearTimeout(editUserFormTimerRef.current);
+      editUserFormTimerRef.current = null;
+    }
+  }, []);
+
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
       clearTimeout(closeTimerRef.current);
@@ -635,7 +895,9 @@ export default function Page() {
     setUsersError(null);
 
     try {
-      const { data, error } = await api.api.users.get();
+      const { data, error, status } = await api.api.users.get();
+
+      if (redirectToSignInIfUnauthorized(status)) return;
 
       if (error) {
         throw new Error(
@@ -673,6 +935,35 @@ export default function Page() {
       userFormTimerRef.current = null;
     }, 260);
   }, [clearUserFormTimer]);
+
+  const openEditUserForm = useCallback(
+    (user: UserRow) => {
+      clearEditUserFormTimer();
+      setEditUserFormError(null);
+      setEditUserId(user.id);
+      setEditUserFormData({
+        email: user.email ?? '',
+        username: user.username ?? '',
+        password: '',
+        name: user.name ?? '',
+        phone: user.phone ?? '',
+      });
+      setMountedEditUserForm(true);
+      setIsEditUserFormOpen(true);
+    },
+    [clearEditUserFormTimer],
+  );
+
+  const closeEditUserForm = useCallback(() => {
+    setIsEditUserFormOpen(false);
+    clearEditUserFormTimer();
+    editUserFormTimerRef.current = setTimeout(() => {
+      setMountedEditUserForm(false);
+      setEditUserFormError(null);
+      setEditUserId(null);
+      editUserFormTimerRef.current = null;
+    }, 260);
+  }, [clearEditUserFormTimer]);
 
   const openUsersDialog = useCallback(() => {
     clearUsersDialogTimer();
@@ -742,12 +1033,33 @@ export default function Page() {
 
   useEffect(() => () => clearUserFormTimer(), [clearUserFormTimer]);
 
+  useEffect(() => {
+    if (!mountedEditUserForm) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeEditUserForm();
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [closeEditUserForm, mountedEditUserForm]);
+
+  useEffect(() => () => clearEditUserFormTimer(), [clearEditUserFormTimer]);
+
   function updateUserForm<K extends keyof UserFormData>(
     key: K,
     value: UserFormData[K],
   ) {
     setUserFormData((current) => ({ ...current, [key]: value }));
     setUserFormError(null);
+  }
+
+  function updateEditUserForm<K extends keyof UserFormData>(
+    key: K,
+    value: UserFormData[K],
+  ) {
+    setEditUserFormData((current) => ({ ...current, [key]: value }));
+    setEditUserFormError(null);
   }
 
   function validateUserForm() {
@@ -766,6 +1078,28 @@ export default function Page() {
     }
 
     if (password.length < 8) {
+      return 'La contraseña debe tener al menos 8 caracteres.';
+    }
+
+    return null;
+  }
+
+  function validateEditUserForm() {
+    const name = editUserFormData.name.trim();
+    const username = editUserFormData.username.trim();
+    const email = editUserFormData.email.trim().toLowerCase();
+    const phone = editUserFormData.phone.trim();
+    const password = editUserFormData.password;
+
+    if (!name || !username || !email || !phone) {
+      return 'Completa todos los campos antes de guardar.';
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return 'Introduce un email válido.';
+    }
+
+    if (password && password.length < 8) {
       return 'La contraseña debe tener al menos 8 caracteres.';
     }
 
@@ -799,6 +1133,8 @@ export default function Page() {
         body: JSON.stringify(payload),
       });
 
+      if (redirectToSignInIfUnauthorized(res.status)) return;
+
       if (res.status === 201) {
         setUserFormData({
           email: '',
@@ -822,6 +1158,98 @@ export default function Page() {
       setUserFormError('Error de conexión al crear el usuario');
     } finally {
       setUserFormSubmitting(false);
+    }
+  }
+
+  async function submitEditUserForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!editUserId) {
+      setEditUserFormError('No se pudo determinar el usuario a editar.');
+      return;
+    }
+
+    const validationError = validateEditUserForm();
+    if (validationError) {
+      setEditUserFormError(validationError);
+      return;
+    }
+
+    setEditUserFormSubmitting(true);
+    setEditUserFormError(null);
+
+    const payload: Partial<UserFormData> = {
+      email: editUserFormData.email.trim().toLowerCase(),
+      username: editUserFormData.username.trim(),
+      name: editUserFormData.name.trim(),
+      phone: editUserFormData.phone.trim(),
+      password: editUserFormData.password,
+    };
+
+    if (!payload.password) {
+      delete payload.password;
+    }
+
+    try {
+      const { status, error } = await api.api
+        .users({
+          user_id: editUserId,
+        })
+        .put(payload);
+
+      if (redirectToSignInIfUnauthorized(status)) return;
+
+      if (status === 200) {
+        closeEditUserForm();
+        await loadUsers();
+        return;
+      }
+
+      setEditUserFormError(
+        typeof error?.value === 'string'
+          ? error.value
+          : 'No se pudo actualizar el usuario',
+      );
+    } catch (error) {
+      setEditUserFormError(
+        error instanceof Error
+          ? error.message
+          : 'Error de conexión al actualizar el usuario',
+      );
+    } finally {
+      setEditUserFormSubmitting(false);
+    }
+  }
+
+  async function deleteUser(row: UserRow) {
+    if (!row.id) return;
+    if (!window.confirm('¿Seguro que quieres eliminar este usuario?')) return;
+
+    try {
+      const { status, error } = await api.api
+        .users({
+          user_id: row.id,
+        })
+        .delete();
+
+      if (redirectToSignInIfUnauthorized(status)) return;
+
+      if (status === 200) {
+        await loadUsers();
+        return;
+      }
+
+      setUsersError(
+        typeof error?.value === 'string'
+          ? error.value
+          : 'No se pudo eliminar el usuario',
+      );
+    } catch (error) {
+      setUsersError(
+        error instanceof Error
+          ? error.message
+          : 'Error de conexión al eliminar el usuario',
+      );
     }
   }
 
@@ -856,6 +1284,7 @@ export default function Page() {
   const hasDialog = mountedDataset !== null;
   const hasUsersDialog = mountedUsersDialog;
   const hasUserForm = mountedUserForm;
+  const hasEditUserForm = mountedEditUserForm;
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -943,6 +1372,8 @@ export default function Page() {
         error={usersError}
         onClose={closeUsersDialog}
         onCreate={openUserForm}
+        onEdit={openEditUserForm}
+        onDelete={deleteUser}
       />
 
       <UserFormModal
@@ -954,6 +1385,17 @@ export default function Page() {
         onChange={updateUserForm}
         onClose={closeUserForm}
         onSubmit={submitUserForm}
+      />
+
+      <EditUserModal
+        mounted={hasEditUserForm}
+        open={isEditUserFormOpen}
+        submitting={editUserFormSubmitting}
+        error={editUserFormError}
+        formData={editUserFormData}
+        onChange={updateEditUserForm}
+        onClose={closeEditUserForm}
+        onSubmit={submitEditUserForm}
       />
 
       {hasDialog ? (

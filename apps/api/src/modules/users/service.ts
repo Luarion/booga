@@ -1,4 +1,5 @@
 import type { users } from '@booga/db/schema';
+import { eq } from 'drizzle-orm';
 import Service from '@/classes/Service';
 import type UsersModel from './model';
 
@@ -17,6 +18,27 @@ class UsersService extends Service<
 				})
 				.returning();
 			if (!record) throw new Error('Failed creating the specified resource');
+			return record;
+		});
+	}
+
+	override async update(
+		id: number,
+		values: Partial<UsersModel['create']['static']>,
+	) {
+		const { password, pfp, ...rest } = values;
+		const payload = {
+			...rest,
+			...(password ? { password_hash: await Bun.password.hash(password) } : {}),
+		};
+
+		return await this.db.transaction(async (tx) => {
+			const [record] = await tx
+				.update(this.table)
+				.set(payload)
+				.where(eq(this.columns.id, id))
+				.returning();
+			if (!record) throw new Error('Failed updating the specified resource');
 			return record;
 		});
 	}

@@ -1,4 +1,8 @@
 import { edenTreaty } from '@elysiajs/eden';
 import { getApiBaseUrl } from './apiBaseUrl';
 
-export default edenTreaty(getApiBaseUrl());
+export default edenTreaty(getApiBaseUrl(), {
+  $fetch: {
+    credentials: 'include',
+  },
+});

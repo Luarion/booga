@@ -1,6 +1,6 @@
 {
 	"files": [],
-	"extends": ["@repo/tsconfig/base.json"],
+	"extends": ["@repo/tsconfig/base.json"]
 	// "references": [
 	// 	{ "path": "apps/api" },
 	// 	{ "path": "packages/db" },

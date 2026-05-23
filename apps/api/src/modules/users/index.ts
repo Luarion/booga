@@ -52,6 +52,17 @@ const plugin = new Elysia({
 					},
 					{ response: { 200: model.read } },
 				)
+				.put(
+					'/',
+					async ({ status, params: { user_id }, body }) => {
+						const { password_hash, ...record } = await service.update(
+							user_id,
+							body,
+						);
+						return status(200, record);
+					},
+					{ body: model.update, response: { 200: model.read } },
+				)
 				.delete('/', async ({ status, params: { user_id } }) =>
 					status(200, await service.delete(user_id)),
 				),

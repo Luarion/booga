@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import api from '@/lib/eden';
+import { redirectToSignInIfUnauthorized } from '@/lib/redirectToSignIn';
 
 type FormData = {
   email: string;
@@ -361,6 +362,8 @@ export default function SetupPage() {
           registration_date: formData.registration_date,
         },
       });
+
+      if (redirectToSignInIfUnauthorized(status)) return;
 
       if (status === 201) {
         router.push('/');

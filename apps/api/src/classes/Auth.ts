@@ -1,7 +1,7 @@
-import jwt from '@elysiajs/jwt';
-import { type Context, t } from 'elysia';
-import { config } from 'dotenv';
 import { resolve } from 'node:path';
+import jwt from '@elysiajs/jwt';
+import { config } from 'dotenv';
+import { type Context, t } from 'elysia';
 
 config({ path: resolve(process.cwd(), 'apps/api/.env') });
 

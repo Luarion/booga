@@ -1,8 +1,8 @@
-import { service as usersService } from '../users/index';
-import { service as vehiclesService } from '../vehicles/index';
 import db from '@booga/db';
 import { app_setup } from '@booga/db/schema';
 import serverConfig from '@/lib/serverConfig';
+import { service as usersService } from '../users/index';
+import { service as vehiclesService } from '../vehicles/index';
 import type SetupModel from './model';
 
 class SetupService {

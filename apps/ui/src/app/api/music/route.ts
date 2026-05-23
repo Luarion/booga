@@ -110,5 +110,5 @@ async function readMusicLibrary(): Promise<MusicAlbum[]> {
 
 export async function GET() {
   const albums = await readMusicLibrary();
-  return Response.json({ albums });
+  return Response.json(albums);
 }

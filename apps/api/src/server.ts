@@ -1,24 +1,36 @@
+import db from '@booga/db';
+import { vehicles } from '@booga/db/schema';
 import { cors } from '@elysiajs/cors';
 import { openapi } from '@elysiajs/openapi';
 import { Elysia } from 'elysia';
-
-import * as modules from './modules/index';
-import * as middleware from './middleware/index';
-import { service as tripsService } from './modules/trips';
-import db from '@booga/db';
-import { vehicles } from '@booga/db/schema';
 import serverConfig from './lib/serverConfig';
+import * as middleware from './middleware/index';
+import * as modules from './modules/index';
+import { service as tripsService } from './modules/trips';
+
+const uiOrigin = process.env.UI_ORIGIN?.trim() || 'http://localhost:3000';
+const corsOrigins = uiOrigin
+	.split(',')
+	.map((origin) => origin.trim())
+	.filter(Boolean);
+const corsOrigin = corsOrigins.length === 1 ? corsOrigins[0] : corsOrigins;
 
 export const server = new Elysia({
 	precompile: false,
 	aot: true,
 	prefix: '/api',
 })
-	.use(cors())
+	.use(
+		cors({
+			origin: corsOrigin,
+			credentials: true,
+		}),
+	)
 	.use(
 		openapi({ documentation: { info: { title: 'Booga', version: '0.0.0' } } }),
 	)
 	.use(middleware.setup)
+	.use(middleware.auth)
 	.get('/ping', 'pong')
 	.use(modules.users)
 	.use(modules.roles)
