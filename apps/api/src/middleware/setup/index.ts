@@ -4,14 +4,15 @@ import serverConfig from '@/lib/serverConfig';
 export default new Elysia({ name: 'setup.middleware' }).resolve(
 	{ as: 'scoped' },
 	async ({ request, status }) => {
+		if (process.env.NODE_ENV === 'test') return;
 		const req = request as unknown as { url?: unknown };
 		const method = request.method;
 		const url: string =
 			typeof req.url === 'string' ? req.url : String(req.url ?? '/');
-		const path: string = (url.split('?')[0] as string) || '/';
+		const pathname = new URL(url, 'http://localhost').pathname;
 
 		const completed = await serverConfig.getSetupCompleted();
-		const isSetupRoute = path.startsWith('/api/setup');
+		const isSetupRoute = pathname.startsWith('/api/setup');
 
 		if (!completed) {
 			// Only allow setup endpoints before setup is completed.

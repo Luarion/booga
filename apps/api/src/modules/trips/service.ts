@@ -33,12 +33,13 @@ class TripsService extends Service<typeof trips> {
 		}
 
 		const tripId = currentTrip.id;
-		currentTrip = await this.update(tripId, {
+		const endedTrip = await this.update(tripId, {
 			end: new Date(),
 		});
+		currentTrip = null;
 
 		console.info(`Trip ended: ${tripId}`);
-		return currentTrip;
+		return endedTrip;
 	}
 
 	getCurrentTrip(): InferSelectModel<typeof trips> | null {

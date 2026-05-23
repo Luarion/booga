@@ -5,7 +5,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "bun --watch src/index.ts",
-		"build": "bun build.ts"
+		"build": "bun build.ts",
+		"test": "bun test"
 	},
 	"dependencies": {
 		"@booga/db": "workspace:*",

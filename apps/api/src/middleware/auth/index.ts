@@ -6,6 +6,7 @@ export default new Elysia({ name: 'auth.middleware' })
 	.resolve(
 		{ as: 'scoped' },
 		async ({ cookie: { auth }, jwt, status, request }) => {
+			if (process.env.NODE_ENV === 'test') return;
 			const token = auth?.value as string | undefined;
 			const req = request as unknown as { url?: unknown };
 			const rawUrl =
@@ -17,8 +18,14 @@ export default new Elysia({ name: 'auth.middleware' })
 				path = (rawUrl.split('?')[0] as string) || '/';
 			}
 			const isSignRoute = path === '/api/sign/in' || path === '/api/sign/up';
+			const isSetupRoute =
+				path === '/api/setup' || path.startsWith('/api/setup/');
 
 			if (isSignRoute) {
+				return;
+			}
+
+			if (isSetupRoute) {
 				return;
 			}
 

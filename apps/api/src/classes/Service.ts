@@ -5,6 +5,7 @@ import {
 	type InferInsertModel,
 	type InferSelectModel,
 } from 'drizzle-orm';
+import type { PgTable } from 'drizzle-orm/pg-core';
 
 // interface CRUD<TTable extends SchemaTablesWithId> {
 // 	create(values: TReadInput): Promise<InferSelectModel<TTable>>;
@@ -32,7 +33,7 @@ abstract class Service<
 	async create(values: TCreateInput): Promise<TReadInput> {
 		return await this.db.transaction(async (tx) => {
 			const [record] = await tx
-				.insert(this.table as any)
+				.insert(this.table as unknown as PgTable)
 				.values(values as InferInsertModel<TTable>)
 				.returning();
 			if (!record) throw new Error('Failed creating the specified resource');
@@ -44,7 +45,7 @@ abstract class Service<
 		return await this.db.transaction(async (tx) => {
 			return (await tx
 				.select()
-				.from(this.table as any)) as InferSelectModel<TTable>[];
+				.from(this.table as unknown as PgTable)) as InferSelectModel<TTable>[];
 		});
 	}
 
@@ -52,7 +53,7 @@ abstract class Service<
 		return await this.db.transaction(async (tx) => {
 			const [record] = await tx
 				.select()
-				.from(this.table as any)
+				.from(this.table as unknown as PgTable)
 				.where(eq(this.columns.id, id))
 				.limit(1);
 			if (!record) throw new Error('Failed getting the specified resource');
@@ -62,9 +63,8 @@ abstract class Service<
 
 	async update(id: number, values: TUpdateInput): Promise<TReadInput> {
 		return await this.db.transaction(async (tx) => {
-			// biome-ignore lint/suspicious/noExplicitAny: Drizzle generic type requirement
 			const [record] = await tx
-				.update(this.table as any)
+				.update(this.table as unknown as PgTable)
 				.set(values as Partial<InferInsertModel<TTable>>)
 				.where(eq(this.columns.id, id))
 				.returning();
@@ -75,8 +75,9 @@ abstract class Service<
 
 	async delete(id: number) {
 		return await this.db.transaction(async (tx) => {
-			// biome-ignore lint/suspicious/noExplicitAny: Drizzle generic type requirement
-			return await tx.delete(this.table as any).where(eq(this.columns.id, id));
+			return await tx
+				.delete(this.table as unknown as PgTable)
+				.where(eq(this.columns.id, id));
 		});
 	}
 }
