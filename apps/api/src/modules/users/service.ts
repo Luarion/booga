@@ -1,4 +1,4 @@
-import type { users } from '@booga/db/schema';
+import { users } from '@booga/db/schema';
 import { eq } from 'drizzle-orm';
 import Service from '@/classes/Service';
 import type UsersModel from './model';

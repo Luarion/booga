@@ -1,4 +1,4 @@
-import type { microcontrollers } from '@booga/db/schema';
+import { microcontrollers } from '@booga/db/schema';
 import { t } from 'elysia';
 import Model from '@/classes/Model';
 

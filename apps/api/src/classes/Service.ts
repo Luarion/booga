@@ -32,7 +32,7 @@ abstract class Service<
 	async create(values: TCreateInput): Promise<TReadInput> {
 		return await this.db.transaction(async (tx) => {
 			const [record] = await tx
-				.insert(this.table)
+				.insert(this.table as any)
 				.values(values as InferInsertModel<TTable>)
 				.returning();
 			if (!record) throw new Error('Failed creating the specified resource');
@@ -42,26 +42,28 @@ abstract class Service<
 
 	async read(): Promise<InferSelectModel<TTable>[]> {
 		return await this.db.transaction(async (tx) => {
-			return (await tx.select().from(this.table)) as InferSelectModel<TTable>[];
+			return (await tx
+				.select()
+				.from(this.table as any)) as InferSelectModel<TTable>[];
 		});
 	}
 
-	async readById(id: number) {
+	async readById(id: number): Promise<TReadInput> {
 		return await this.db.transaction(async (tx) => {
 			const [record] = await tx
 				.select()
-				.from(this.table)
+				.from(this.table as any)
 				.where(eq(this.columns.id, id))
 				.limit(1);
 			if (!record) throw new Error('Failed getting the specified resource');
-			return record;
+			return record as TReadInput;
 		});
 	}
 
 	async update(id: number, values: TUpdateInput): Promise<TReadInput> {
 		return await this.db.transaction(async (tx) => {
 			const [record] = await tx
-				.update(this.table)
+				.update(this.table as any)
 				.set(values as Partial<InferInsertModel<TTable>>)
 				.where(eq(this.columns.id, id))
 				.returning();
@@ -72,7 +74,7 @@ abstract class Service<
 
 	async delete(id: number) {
 		return await this.db.transaction(async (tx) => {
-			return await tx.delete(this.table).where(eq(this.columns.id, id));
+			return await tx.delete(this.table as any).where(eq(this.columns.id, id));
 		});
 	}
 }

@@ -1,4 +1,4 @@
-import type { users } from '@booga/db/schema';
+import { users } from '@booga/db/schema';
 import { t } from 'elysia';
 import Model from '@/classes/Model';
 

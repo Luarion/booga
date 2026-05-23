@@ -1,4 +1,4 @@
-import type { trips } from '@booga/db/schema';
+import { trips } from '@booga/db/schema';
 import type { InferSelectModel } from 'drizzle-orm';
 import Service from '@/classes/Service';
 

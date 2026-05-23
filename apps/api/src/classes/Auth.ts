@@ -22,12 +22,16 @@ export default class Auth {
 		schema: schema,
 	});
 
+	private readonly cookie: Context['cookie'];
+	private readonly jwt: (typeof Auth.jwt)['decorator']['jwt'];
 	token: string | undefined;
 
 	constructor(
-		private readonly cookie: Context['cookie'],
-		private readonly jwt: (typeof Auth.jwt)['decorator']['jwt'],
+		cookie: Context['cookie'],
+		jwt: (typeof Auth.jwt)['decorator']['jwt'],
 	) {
+		this.cookie = cookie;
+		this.jwt = jwt;
 		this.token = this.cookie.auth?.value as string | undefined;
 	}
 
