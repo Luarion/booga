@@ -3,7 +3,9 @@
 	"compilerOptions": {
 		"paths": {
 			"@/*": ["./src/*"]
-		}
+		},
+		"declaration": false,
+		"composite": false
 	}
 	// "references": [{ "path": "@booga/db" }]
 }

@@ -1,6 +1,4 @@
-import type { id } from '@booga/db/schema';
-
-export const idType = (n: id) => {
+export const idType = (n: number | bigint | string) => {
 	switch (typeof n) {
 		case 'bigint':
 			return BigInt(n);

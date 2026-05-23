@@ -1191,6 +1191,7 @@ export default function Page() {
     }
 
     try {
+      // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
       const { status, error } = await api.api.users[editUserId]!.put(payload);
 
       if (redirectToSignInIfUnauthorized(status)) return;
