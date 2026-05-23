@@ -1,1168 +1,1034 @@
 {
-  "id": "2fab0559-110a-4e75-8d64-ccfc0bd62d31",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "7",
-  "dialect": "postgresql",
-  "tables": {
-    "microcontrollers.actuators": {
-      "name": "actuators",
-      "schema": "microcontrollers",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "category_id": {
-          "name": "category_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "controller_id": {
-          "name": "controller_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "alias": {
-          "name": "alias",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "actuators_category_id_categories_id_fk": {
-          "name": "actuators_category_id_categories_id_fk",
-          "tableFrom": "actuators",
-          "tableTo": "categories",
-          "schemaTo": "units",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "actuators_controller_id_microcontrollers_id_fk": {
-          "name": "actuators_controller_id_microcontrollers_id_fk",
-          "tableFrom": "actuators",
-          "tableTo": "microcontrollers",
-          "schemaTo": "microcontrollers",
-          "columnsFrom": [
-            "controller_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "actuators_alias_unique": {
-          "name": "actuators_alias_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "alias"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "microcontrollers.actuators_readings": {
-      "name": "actuators_readings",
-      "schema": "microcontrollers",
-      "columns": {
-        "actuator_id": {
-          "name": "actuator_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "value": {
-          "name": "value",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "actuators_readings_actuator_id_actuators_id_fk": {
-          "name": "actuators_readings_actuator_id_actuators_id_fk",
-          "tableFrom": "actuators_readings",
-          "tableTo": "actuators",
-          "schemaTo": "microcontrollers",
-          "columnsFrom": [
-            "actuator_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "actuators_readings_actuator_id_timestamp_pk": {
-          "name": "actuators_readings_actuator_id_timestamp_pk",
-          "columns": [
-            "actuator_id",
-            "timestamp"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "units.categories": {
-      "name": "categories",
-      "schema": "units",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "categories_name_unique": {
-          "name": "categories_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "microcontrollers.connections": {
-      "name": "connections",
-      "schema": "microcontrollers",
-      "columns": {
-        "controller_id": {
-          "name": "controller_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "start": {
-          "name": "start",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "end": {
-          "name": "end",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "connections_controller_id_microcontrollers_id_fk": {
-          "name": "connections_controller_id_microcontrollers_id_fk",
-          "tableFrom": "connections",
-          "tableTo": "microcontrollers",
-          "schemaTo": "microcontrollers",
-          "columnsFrom": [
-            "controller_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "connections_controller_id_start_end_pk": {
-          "name": "connections_controller_id_start_end_pk",
-          "columns": [
-            "controller_id",
-            "start",
-            "end"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "units.conversions": {
-      "name": "conversions",
-      "schema": "units",
-      "columns": {
-        "from": {
-          "name": "from",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "to": {
-          "name": "to",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "factor": {
-          "name": "factor",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "conversions_from_units_id_fk": {
-          "name": "conversions_from_units_id_fk",
-          "tableFrom": "conversions",
-          "tableTo": "units",
-          "schemaTo": "units",
-          "columnsFrom": [
-            "from"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "conversions_to_units_id_fk": {
-          "name": "conversions_to_units_id_fk",
-          "tableFrom": "conversions",
-          "tableTo": "units",
-          "schemaTo": "units",
-          "columnsFrom": [
-            "to"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "conversions_from_to_pk": {
-          "name": "conversions_from_to_pk",
-          "columns": [
-            "from",
-            "to"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "microcontrollers.microcontrollers": {
-      "name": "microcontrollers",
-      "schema": "microcontrollers",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "mac": {
-          "name": "mac",
-          "type": "macaddr",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "vehicle_id": {
-          "name": "vehicle_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "microcontrollers_vehicle_id_vehicles_id_fk": {
-          "name": "microcontrollers_vehicle_id_vehicles_id_fk",
-          "tableFrom": "microcontrollers",
-          "tableTo": "vehicles",
-          "columnsFrom": [
-            "vehicle_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "microcontrollers_mac_unique": {
-          "name": "microcontrollers_mac_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "mac"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.objects": {
-      "name": "objects",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "alias": {
-          "name": "alias",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "objects_alias_unique": {
-          "name": "objects_alias_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "alias"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.objects_to_actuators": {
-      "name": "objects_to_actuators",
-      "schema": "",
-      "columns": {
-        "object_id": {
-          "name": "object_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "actuator_id": {
-          "name": "actuator_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "objects_to_actuators_object_id_objects_id_fk": {
-          "name": "objects_to_actuators_object_id_objects_id_fk",
-          "tableFrom": "objects_to_actuators",
-          "tableTo": "objects",
-          "columnsFrom": [
-            "object_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "objects_to_actuators_actuator_id_actuators_id_fk": {
-          "name": "objects_to_actuators_actuator_id_actuators_id_fk",
-          "tableFrom": "objects_to_actuators",
-          "tableTo": "actuators",
-          "schemaTo": "microcontrollers",
-          "columnsFrom": [
-            "actuator_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "objects_to_actuators_object_id_actuator_id_pk": {
-          "name": "objects_to_actuators_object_id_actuator_id_pk",
-          "columns": [
-            "object_id",
-            "actuator_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.objects_to_sensors": {
-      "name": "objects_to_sensors",
-      "schema": "",
-      "columns": {
-        "object_id": {
-          "name": "object_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sensor_id": {
-          "name": "sensor_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "objects_to_sensors_object_id_objects_id_fk": {
-          "name": "objects_to_sensors_object_id_objects_id_fk",
-          "tableFrom": "objects_to_sensors",
-          "tableTo": "objects",
-          "columnsFrom": [
-            "object_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "objects_to_sensors_sensor_id_sensors_id_fk": {
-          "name": "objects_to_sensors_sensor_id_sensors_id_fk",
-          "tableFrom": "objects_to_sensors",
-          "tableTo": "sensors",
-          "schemaTo": "microcontrollers",
-          "columnsFrom": [
-            "sensor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "objects_to_sensors_object_id_sensor_id_pk": {
-          "name": "objects_to_sensors_object_id_sensor_id_pk",
-          "columns": [
-            "object_id",
-            "sensor_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "users.roles": {
-      "name": "roles",
-      "schema": "users",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "roles_name_unique": {
-          "name": "roles_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "microcontrollers.sensors": {
-      "name": "sensors",
-      "schema": "microcontrollers",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "category_id": {
-          "name": "category_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "controller_id": {
-          "name": "controller_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "alias": {
-          "name": "alias",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "sensors_category_id_categories_id_fk": {
-          "name": "sensors_category_id_categories_id_fk",
-          "tableFrom": "sensors",
-          "tableTo": "categories",
-          "schemaTo": "units",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "sensors_controller_id_microcontrollers_id_fk": {
-          "name": "sensors_controller_id_microcontrollers_id_fk",
-          "tableFrom": "sensors",
-          "tableTo": "microcontrollers",
-          "schemaTo": "microcontrollers",
-          "columnsFrom": [
-            "controller_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "sensors_alias_unique": {
-          "name": "sensors_alias_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "alias"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "microcontrollers.sensors_readings": {
-      "name": "sensors_readings",
-      "schema": "microcontrollers",
-      "columns": {
-        "sensor_id": {
-          "name": "sensor_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "value": {
-          "name": "value",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "sensors_readings_sensor_id_sensors_id_fk": {
-          "name": "sensors_readings_sensor_id_sensors_id_fk",
-          "tableFrom": "sensors_readings",
-          "tableTo": "sensors",
-          "schemaTo": "microcontrollers",
-          "columnsFrom": [
-            "sensor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "sensors_readings_sensor_id_timestamp_pk": {
-          "name": "sensors_readings_sensor_id_timestamp_pk",
-          "columns": [
-            "sensor_id",
-            "timestamp"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "users.sessions": {
-      "name": "sessions",
-      "schema": "users",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "start": {
-          "name": "start",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "end": {
-          "name": "end",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "sessions_user_id_users_id_fk": {
-          "name": "sessions_user_id_users_id_fk",
-          "tableFrom": "sessions",
-          "tableTo": "users",
-          "schemaTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "sessions_user_id_pk": {
-          "name": "sessions_user_id_pk",
-          "columns": [
-            "user_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.trips": {
-      "name": "trips",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "vehicle_id": {
-          "name": "vehicle_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "start": {
-          "name": "start",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "end": {
-          "name": "end",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "trips_vehicle_id_vehicles_id_fk": {
-          "name": "trips_vehicle_id_vehicles_id_fk",
-          "tableFrom": "trips",
-          "tableTo": "vehicles",
-          "columnsFrom": [
-            "vehicle_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "units.units": {
-      "name": "units",
-      "schema": "units",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "category_id": {
-          "name": "category_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "ucum": {
-          "name": "ucum",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "units_category_id_categories_id_fk": {
-          "name": "units_category_id_categories_id_fk",
-          "tableFrom": "units",
-          "tableTo": "categories",
-          "schemaTo": "units",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "units_ucum_unique": {
-          "name": "units_ucum_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "ucum"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "users.users": {
-      "name": "users",
-      "schema": "users",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar(254)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "phone": {
-          "name": "phone",
-          "type": "varchar(18)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "username": {
-          "name": "username",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "password_hash": {
-          "name": "password_hash",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "pfp_reference": {
-          "name": "pfp_reference",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "users_email_unique": {
-          "name": "users_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        },
-        "users_phone_unique": {
-          "name": "users_phone_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "phone"
-          ]
-        },
-        "users_username_unique": {
-          "name": "users_username_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "username"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "users.users_to_roles": {
-      "name": "users_to_roles",
-      "schema": "users",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role_id": {
-          "name": "role_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "users_to_roles_user_id_users_id_fk": {
-          "name": "users_to_roles_user_id_users_id_fk",
-          "tableFrom": "users_to_roles",
-          "tableTo": "users",
-          "schemaTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "users_to_roles_role_id_roles_id_fk": {
-          "name": "users_to_roles_role_id_roles_id_fk",
-          "tableFrom": "users_to_roles",
-          "tableTo": "roles",
-          "schemaTo": "users",
-          "columnsFrom": [
-            "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "users_to_roles_user_id_role_id_pk": {
-          "name": "users_to_roles_user_id_role_id_pk",
-          "columns": [
-            "user_id",
-            "role_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.vehicles": {
-      "name": "vehicles",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "plate": {
-          "name": "plate",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "make": {
-          "name": "make",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "model": {
-          "name": "model",
-          "type": "varchar(32)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "fuel": {
-          "name": "fuel",
-          "type": "fuel",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "fuel_consumption": {
-          "name": "fuel_consumption",
-          "type": "numeric(4, 2)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "drive": {
-          "name": "drive",
-          "type": "drive",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "displacement": {
-          "name": "displacement",
-          "type": "numeric(4, 2)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "registration_date": {
-          "name": "registration_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "3dmodel": {
-          "name": "3dmodel",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "owner_id": {
-          "name": "owner_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "timestamp": {
-          "name": "timestamp",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "vehicles_owner_id_users_id_fk": {
-          "name": "vehicles_owner_id_users_id_fk",
-          "tableFrom": "vehicles",
-          "tableTo": "users",
-          "schemaTo": "users",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "vehicles_plate_unique": {
-          "name": "vehicles_plate_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "plate"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {
-        "displacement_positive": {
-          "name": "displacement_positive",
-          "value": "\"vehicles\".\"displacement\" > '0'"
-        },
-        "fuel_consumption_positive": {
-          "name": "fuel_consumption_positive",
-          "value": "\"vehicles\".\"fuel_consumption\" > '0'"
-        }
-      },
-      "isRLSEnabled": false
-    }
-  },
-  "enums": {
-    "public.drive": {
-      "name": "drive",
-      "schema": "public",
-      "values": [
-        "fwd",
-        "rwd",
-        "awd"
-      ]
-    },
-    "public.fuel": {
-      "name": "fuel",
-      "schema": "public",
-      "values": [
-        "diesel",
-        "gasoline",
-        "other"
-      ]
-    }
-  },
-  "schemas": {
-    "microcontrollers": "microcontrollers",
-    "units": "units",
-    "users": "users"
-  },
-  "sequences": {},
-  "roles": {},
-  "policies": {},
-  "views": {},
-  "_meta": {
-    "columns": {},
-    "schemas": {},
-    "tables": {}
-  }
+	"id": "2fab0559-110a-4e75-8d64-ccfc0bd62d31",
+	"prevId": "00000000-0000-0000-0000-000000000000",
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"microcontrollers.actuators": {
+			"name": "actuators",
+			"schema": "microcontrollers",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"category_id": {
+					"name": "category_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"controller_id": {
+					"name": "controller_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"alias": {
+					"name": "alias",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"actuators_category_id_categories_id_fk": {
+					"name": "actuators_category_id_categories_id_fk",
+					"tableFrom": "actuators",
+					"tableTo": "categories",
+					"schemaTo": "units",
+					"columnsFrom": ["category_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"actuators_controller_id_microcontrollers_id_fk": {
+					"name": "actuators_controller_id_microcontrollers_id_fk",
+					"tableFrom": "actuators",
+					"tableTo": "microcontrollers",
+					"schemaTo": "microcontrollers",
+					"columnsFrom": ["controller_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"actuators_alias_unique": {
+					"name": "actuators_alias_unique",
+					"nullsNotDistinct": false,
+					"columns": ["alias"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"microcontrollers.actuators_readings": {
+			"name": "actuators_readings",
+			"schema": "microcontrollers",
+			"columns": {
+				"actuator_id": {
+					"name": "actuator_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"value": {
+					"name": "value",
+					"type": "numeric",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"actuators_readings_actuator_id_actuators_id_fk": {
+					"name": "actuators_readings_actuator_id_actuators_id_fk",
+					"tableFrom": "actuators_readings",
+					"tableTo": "actuators",
+					"schemaTo": "microcontrollers",
+					"columnsFrom": ["actuator_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"actuators_readings_actuator_id_timestamp_pk": {
+					"name": "actuators_readings_actuator_id_timestamp_pk",
+					"columns": ["actuator_id", "timestamp"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"units.categories": {
+			"name": "categories",
+			"schema": "units",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"categories_name_unique": {
+					"name": "categories_name_unique",
+					"nullsNotDistinct": false,
+					"columns": ["name"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"microcontrollers.connections": {
+			"name": "connections",
+			"schema": "microcontrollers",
+			"columns": {
+				"controller_id": {
+					"name": "controller_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"start": {
+					"name": "start",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"end": {
+					"name": "end",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"connections_controller_id_microcontrollers_id_fk": {
+					"name": "connections_controller_id_microcontrollers_id_fk",
+					"tableFrom": "connections",
+					"tableTo": "microcontrollers",
+					"schemaTo": "microcontrollers",
+					"columnsFrom": ["controller_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"connections_controller_id_start_end_pk": {
+					"name": "connections_controller_id_start_end_pk",
+					"columns": ["controller_id", "start", "end"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"units.conversions": {
+			"name": "conversions",
+			"schema": "units",
+			"columns": {
+				"from": {
+					"name": "from",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"to": {
+					"name": "to",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"factor": {
+					"name": "factor",
+					"type": "numeric",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"conversions_from_units_id_fk": {
+					"name": "conversions_from_units_id_fk",
+					"tableFrom": "conversions",
+					"tableTo": "units",
+					"schemaTo": "units",
+					"columnsFrom": ["from"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"conversions_to_units_id_fk": {
+					"name": "conversions_to_units_id_fk",
+					"tableFrom": "conversions",
+					"tableTo": "units",
+					"schemaTo": "units",
+					"columnsFrom": ["to"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"conversions_from_to_pk": {
+					"name": "conversions_from_to_pk",
+					"columns": ["from", "to"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"microcontrollers.microcontrollers": {
+			"name": "microcontrollers",
+			"schema": "microcontrollers",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"mac": {
+					"name": "mac",
+					"type": "macaddr",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"vehicle_id": {
+					"name": "vehicle_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"microcontrollers_vehicle_id_vehicles_id_fk": {
+					"name": "microcontrollers_vehicle_id_vehicles_id_fk",
+					"tableFrom": "microcontrollers",
+					"tableTo": "vehicles",
+					"columnsFrom": ["vehicle_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"microcontrollers_mac_unique": {
+					"name": "microcontrollers_mac_unique",
+					"nullsNotDistinct": false,
+					"columns": ["mac"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.objects": {
+			"name": "objects",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"alias": {
+					"name": "alias",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"objects_alias_unique": {
+					"name": "objects_alias_unique",
+					"nullsNotDistinct": false,
+					"columns": ["alias"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.objects_to_actuators": {
+			"name": "objects_to_actuators",
+			"schema": "",
+			"columns": {
+				"object_id": {
+					"name": "object_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"actuator_id": {
+					"name": "actuator_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"objects_to_actuators_object_id_objects_id_fk": {
+					"name": "objects_to_actuators_object_id_objects_id_fk",
+					"tableFrom": "objects_to_actuators",
+					"tableTo": "objects",
+					"columnsFrom": ["object_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"objects_to_actuators_actuator_id_actuators_id_fk": {
+					"name": "objects_to_actuators_actuator_id_actuators_id_fk",
+					"tableFrom": "objects_to_actuators",
+					"tableTo": "actuators",
+					"schemaTo": "microcontrollers",
+					"columnsFrom": ["actuator_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"objects_to_actuators_object_id_actuator_id_pk": {
+					"name": "objects_to_actuators_object_id_actuator_id_pk",
+					"columns": ["object_id", "actuator_id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.objects_to_sensors": {
+			"name": "objects_to_sensors",
+			"schema": "",
+			"columns": {
+				"object_id": {
+					"name": "object_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"sensor_id": {
+					"name": "sensor_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"objects_to_sensors_object_id_objects_id_fk": {
+					"name": "objects_to_sensors_object_id_objects_id_fk",
+					"tableFrom": "objects_to_sensors",
+					"tableTo": "objects",
+					"columnsFrom": ["object_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"objects_to_sensors_sensor_id_sensors_id_fk": {
+					"name": "objects_to_sensors_sensor_id_sensors_id_fk",
+					"tableFrom": "objects_to_sensors",
+					"tableTo": "sensors",
+					"schemaTo": "microcontrollers",
+					"columnsFrom": ["sensor_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"objects_to_sensors_object_id_sensor_id_pk": {
+					"name": "objects_to_sensors_object_id_sensor_id_pk",
+					"columns": ["object_id", "sensor_id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"users.roles": {
+			"name": "roles",
+			"schema": "users",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(64)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"roles_name_unique": {
+					"name": "roles_name_unique",
+					"nullsNotDistinct": false,
+					"columns": ["name"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"microcontrollers.sensors": {
+			"name": "sensors",
+			"schema": "microcontrollers",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"category_id": {
+					"name": "category_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"controller_id": {
+					"name": "controller_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"alias": {
+					"name": "alias",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"sensors_category_id_categories_id_fk": {
+					"name": "sensors_category_id_categories_id_fk",
+					"tableFrom": "sensors",
+					"tableTo": "categories",
+					"schemaTo": "units",
+					"columnsFrom": ["category_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"sensors_controller_id_microcontrollers_id_fk": {
+					"name": "sensors_controller_id_microcontrollers_id_fk",
+					"tableFrom": "sensors",
+					"tableTo": "microcontrollers",
+					"schemaTo": "microcontrollers",
+					"columnsFrom": ["controller_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"sensors_alias_unique": {
+					"name": "sensors_alias_unique",
+					"nullsNotDistinct": false,
+					"columns": ["alias"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"microcontrollers.sensors_readings": {
+			"name": "sensors_readings",
+			"schema": "microcontrollers",
+			"columns": {
+				"sensor_id": {
+					"name": "sensor_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"value": {
+					"name": "value",
+					"type": "numeric",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"sensors_readings_sensor_id_sensors_id_fk": {
+					"name": "sensors_readings_sensor_id_sensors_id_fk",
+					"tableFrom": "sensors_readings",
+					"tableTo": "sensors",
+					"schemaTo": "microcontrollers",
+					"columnsFrom": ["sensor_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"sensors_readings_sensor_id_timestamp_pk": {
+					"name": "sensors_readings_sensor_id_timestamp_pk",
+					"columns": ["sensor_id", "timestamp"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"users.sessions": {
+			"name": "sessions",
+			"schema": "users",
+			"columns": {
+				"user_id": {
+					"name": "user_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"start": {
+					"name": "start",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"end": {
+					"name": "end",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"sessions_user_id_users_id_fk": {
+					"name": "sessions_user_id_users_id_fk",
+					"tableFrom": "sessions",
+					"tableTo": "users",
+					"schemaTo": "users",
+					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"sessions_user_id_pk": {
+					"name": "sessions_user_id_pk",
+					"columns": ["user_id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.trips": {
+			"name": "trips",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"vehicle_id": {
+					"name": "vehicle_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"start": {
+					"name": "start",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"end": {
+					"name": "end",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"trips_vehicle_id_vehicles_id_fk": {
+					"name": "trips_vehicle_id_vehicles_id_fk",
+					"tableFrom": "trips",
+					"tableTo": "vehicles",
+					"columnsFrom": ["vehicle_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"units.units": {
+			"name": "units",
+			"schema": "units",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"category_id": {
+					"name": "category_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"ucum": {
+					"name": "ucum",
+					"type": "varchar(16)",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"units_category_id_categories_id_fk": {
+					"name": "units_category_id_categories_id_fk",
+					"tableFrom": "units",
+					"tableTo": "categories",
+					"schemaTo": "units",
+					"columnsFrom": ["category_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"units_ucum_unique": {
+					"name": "units_ucum_unique",
+					"nullsNotDistinct": false,
+					"columns": ["ucum"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"users.users": {
+			"name": "users",
+			"schema": "users",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"email": {
+					"name": "email",
+					"type": "varchar(254)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"phone": {
+					"name": "phone",
+					"type": "varchar(18)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"username": {
+					"name": "username",
+					"type": "varchar(64)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"password_hash": {
+					"name": "password_hash",
+					"type": "varchar(128)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"pfp_reference": {
+					"name": "pfp_reference",
+					"type": "varchar(256)",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"users_email_unique": {
+					"name": "users_email_unique",
+					"nullsNotDistinct": false,
+					"columns": ["email"]
+				},
+				"users_phone_unique": {
+					"name": "users_phone_unique",
+					"nullsNotDistinct": false,
+					"columns": ["phone"]
+				},
+				"users_username_unique": {
+					"name": "users_username_unique",
+					"nullsNotDistinct": false,
+					"columns": ["username"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"users.users_to_roles": {
+			"name": "users_to_roles",
+			"schema": "users",
+			"columns": {
+				"user_id": {
+					"name": "user_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"role_id": {
+					"name": "role_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"users_to_roles_user_id_users_id_fk": {
+					"name": "users_to_roles_user_id_users_id_fk",
+					"tableFrom": "users_to_roles",
+					"tableTo": "users",
+					"schemaTo": "users",
+					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"users_to_roles_role_id_roles_id_fk": {
+					"name": "users_to_roles_role_id_roles_id_fk",
+					"tableFrom": "users_to_roles",
+					"tableTo": "roles",
+					"schemaTo": "users",
+					"columnsFrom": ["role_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"users_to_roles_user_id_role_id_pk": {
+					"name": "users_to_roles_user_id_role_id_pk",
+					"columns": ["user_id", "role_id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.vehicles": {
+			"name": "vehicles",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"plate": {
+					"name": "plate",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"make": {
+					"name": "make",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"model": {
+					"name": "model",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"fuel": {
+					"name": "fuel",
+					"type": "fuel",
+					"typeSchema": "public",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"fuel_consumption": {
+					"name": "fuel_consumption",
+					"type": "numeric(4, 2)",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"drive": {
+					"name": "drive",
+					"type": "drive",
+					"typeSchema": "public",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"displacement": {
+					"name": "displacement",
+					"type": "numeric(4, 2)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"registration_date": {
+					"name": "registration_date",
+					"type": "date",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"3dmodel": {
+					"name": "3dmodel",
+					"type": "varchar(64)",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"owner_id": {
+					"name": "owner_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"timestamp": {
+					"name": "timestamp",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"vehicles_owner_id_users_id_fk": {
+					"name": "vehicles_owner_id_users_id_fk",
+					"tableFrom": "vehicles",
+					"tableTo": "users",
+					"schemaTo": "users",
+					"columnsFrom": ["owner_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"vehicles_plate_unique": {
+					"name": "vehicles_plate_unique",
+					"nullsNotDistinct": false,
+					"columns": ["plate"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {
+				"displacement_positive": {
+					"name": "displacement_positive",
+					"value": "\"vehicles\".\"displacement\" > '0'"
+				},
+				"fuel_consumption_positive": {
+					"name": "fuel_consumption_positive",
+					"value": "\"vehicles\".\"fuel_consumption\" > '0'"
+				}
+			},
+			"isRLSEnabled": false
+		}
+	},
+	"enums": {
+		"public.drive": {
+			"name": "drive",
+			"schema": "public",
+			"values": ["fwd", "rwd", "awd"]
+		},
+		"public.fuel": {
+			"name": "fuel",
+			"schema": "public",
+			"values": ["diesel", "gasoline", "other"]
+		}
+	},
+	"schemas": {
+		"microcontrollers": "microcontrollers",
+		"units": "units",
+		"users": "users"
+	},
+	"sequences": {},
+	"roles": {},
+	"policies": {},
+	"views": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
 }
