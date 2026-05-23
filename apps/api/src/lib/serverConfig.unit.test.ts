@@ -1,20 +1,30 @@
-import { describe, expect, it, mock, beforeEach } from 'bun:test';
-import { promises as fs } from 'node:fs';
+import { afterAll, beforeEach, describe, expect, it, mock } from 'bun:test';
+import * as originalFs from 'node:fs';
 
 // ── Mock fs before importing serverConfig ───────────────────────────────
 const mockWriteFile = mock(async () => {});
-const mockMkdir = mock(async () => undefined as any);
+const mockMkdir = mock(async () => undefined as unknown as string | undefined);
 
 describe('serverConfig', () => {
 	beforeEach(() => {
 		mock.restore();
 	});
 
+	afterAll(() => {
+		// Restore node:fs module to prevent test contamination
+		mock.module('node:fs', () => originalFs);
+	});
+
 	it('normalizeConfig() should return default config when input is null', async () => {
 		// Arrange — mock fs to return invalid JSON so it falls back to defaults
 		mock.module('node:fs', () => ({
+			...originalFs,
+			default: (originalFs as Record<string, unknown>).default || originalFs,
 			promises: {
-				readFile: mock(async () => { throw new Error('ENOENT'); }),
+				...originalFs.promises,
+				readFile: mock(async () => {
+					throw new Error('ENOENT');
+				}),
 				writeFile: mockWriteFile,
 				mkdir: mockMkdir,
 			},
@@ -39,7 +49,10 @@ describe('serverConfig', () => {
 		});
 
 		mock.module('node:fs', () => ({
+			...originalFs,
+			default: (originalFs as Record<string, unknown>).default || originalFs,
 			promises: {
+				...originalFs.promises,
 				readFile: mock(async () => configJson),
 				writeFile: mockWriteFile,
 				mkdir: mockMkdir,
@@ -59,9 +72,16 @@ describe('serverConfig', () => {
 		// Arrange
 		const writtenData: string[] = [];
 		mock.module('node:fs', () => ({
+			...originalFs,
+			default: (originalFs as Record<string, unknown>).default || originalFs,
 			promises: {
-				readFile: mock(async () => JSON.stringify({ setup: { completed: false, completedAt: null } })),
-				writeFile: mock(async (_path: string, content: string) => { writtenData.push(content); }),
+				...originalFs.promises,
+				readFile: mock(async () =>
+					JSON.stringify({ setup: { completed: false, completedAt: null } }),
+				),
+				writeFile: mock(async (_path: string, content: string) => {
+					writtenData.push(content);
+				}),
 				mkdir: mockMkdir,
 			},
 		}));
@@ -73,7 +93,11 @@ describe('serverConfig', () => {
 
 		// Assert
 		expect(writtenData.length).toBeGreaterThan(0);
-		const lastWrite = JSON.parse(writtenData[writtenData.length - 1]!);
+		const lastContent = writtenData[writtenData.length - 1];
+		if (!lastContent) {
+			throw new Error('No data written');
+		}
+		const lastWrite = JSON.parse(lastContent);
 		expect(lastWrite.setup.completed).toBe(true);
 		expect(lastWrite.setup.completedAt).toBeDefined();
 		expect(typeof lastWrite.setup.completedAt).toBe('string');

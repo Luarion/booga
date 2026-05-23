@@ -28,6 +28,9 @@ describe(`/${path}`, () => {
 			},
 		});
 
+		if (status !== 201) {
+			console.log('Error response data:', data);
+		}
 		expect(status).toBe(201);
 		expect(data).toHaveProperty('user');
 		expect(data).toHaveProperty('vehicle');

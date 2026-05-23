@@ -8,7 +8,7 @@ config({ path: resolve(__dirname, '../../../.devcontainer/.env') });
 
 const db = drizzle(
 	postgres({
-		host: 'db',
+		host: process.env.DB_HOST || 'db',
 		database: process.env.POSTGRES_DB,
 		user: process.env.POSTGRES_USER,
 		password: process.env.POSTGRES_PASSWORD,

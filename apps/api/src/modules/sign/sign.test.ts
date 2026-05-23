@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeAll } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 import { faker } from '@faker-js/faker';
 import { server } from '@/server';
 

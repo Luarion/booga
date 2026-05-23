@@ -20,6 +20,9 @@ export const server = new Elysia({
 	aot: true,
 	prefix: '/api',
 })
+	.onError(({ error }) => {
+		console.error('SERVER ERROR STACK:', error);
+	})
 	.use(
 		cors({
 			origin: corsOrigin,

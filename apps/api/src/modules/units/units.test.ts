@@ -11,7 +11,10 @@ describe('/units', () => {
 		const req = new Request(BASE, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ ucum: `test-${Date.now()}`, category_id: 1 }),
+			body: JSON.stringify({
+				ucum: `t-${Date.now().toString().slice(-8)}`,
+				category_id: 1,
+			}),
 		});
 
 		// Act

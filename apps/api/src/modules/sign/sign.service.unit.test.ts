@@ -1,4 +1,6 @@
-import { describe, expect, it, mock, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, it, mock } from 'bun:test';
+import type { Database } from '@booga/db';
+import type SignModel from './model';
 
 // ── Seed data ───────────────────────────────────────────────────────────
 const TEST_USER_RECORD = {
@@ -45,13 +47,15 @@ describe('SignService', () => {
 
 		// Mock Bun.password.verify to return true
 		const originalVerify = Bun.password.verify;
-		Bun.password.verify = mock(async () => true) as any;
+		Bun.password.verify = mock(async () => true) as typeof Bun.password.verify;
 
 		const { default: SignService } = await import('./service');
-		const service = new SignService(db as any);
+		const service = new SignService(db as unknown as Database);
 
 		// Act
-		const result = await service.signIn(SIGN_IN_INPUT as any);
+		const result = await service.signIn(
+			SIGN_IN_INPUT as SignModel['signIn']['static'],
+		);
 
 		// Assert
 		expect(result).toBeDefined();
@@ -68,10 +72,12 @@ describe('SignService', () => {
 		const db = makeMockDb([]);
 
 		const { default: SignService } = await import('./service');
-		const service = new SignService(db as any);
+		const service = new SignService(db as unknown as Database);
 
 		// Act & Assert
-		expect(service.signIn(SIGN_IN_INPUT as any)).rejects.toThrow('Invalid credentials');
+		expect(
+			service.signIn(SIGN_IN_INPUT as SignModel['signIn']['static']),
+		).rejects.toThrow('Invalid credentials');
 	});
 
 	it('signIn() should throw "Invalid credentials" when password is incorrect', async () => {
@@ -79,13 +85,15 @@ describe('SignService', () => {
 		const db = makeMockDb([TEST_USER_RECORD]);
 
 		const originalVerify = Bun.password.verify;
-		Bun.password.verify = mock(async () => false) as any;
+		Bun.password.verify = mock(async () => false) as typeof Bun.password.verify;
 
 		const { default: SignService } = await import('./service');
-		const service = new SignService(db as any);
+		const service = new SignService(db as unknown as Database);
 
 		// Act & Assert
-		expect(service.signIn(SIGN_IN_INPUT as any)).rejects.toThrow('Invalid credentials');
+		expect(
+			service.signIn(SIGN_IN_INPUT as SignModel['signIn']['static']),
+		).rejects.toThrow('Invalid credentials');
 
 		// Cleanup
 		Bun.password.verify = originalVerify;
@@ -99,10 +107,12 @@ describe('SignService', () => {
 		}));
 
 		const { default: SignService } = await import('./service');
-		const service = new SignService({} as any);
+		const service = new SignService({} as unknown as Database);
 
 		// Act
-		const result = await service.signUp(SIGN_UP_INPUT as any);
+		const result = await service.signUp(
+			SIGN_UP_INPUT as SignModel['signUp']['static'],
+		);
 
 		// Assert
 		expect(result).toBeDefined();

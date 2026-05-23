@@ -1,4 +1,6 @@
-import { describe, expect, it, mock, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, it, mock } from 'bun:test';
+import type { Database } from '@booga/db';
+import type TripsService from './service';
 
 // ── Seed data ───────────────────────────────────────────────────────────
 const FAKE_TRIP = {
@@ -22,23 +24,26 @@ function makeMockDb() {
 	const set = mock(() => ({ where }));
 	const update = mock(() => ({ set }));
 	return {
-		transaction: mock(async (fn: (tx: any) => Promise<any>) => fn({ insert, update })),
+		transaction: mock(async (fn: (tx: unknown) => Promise<unknown>) =>
+			fn({ insert, update }),
+		),
 	};
 }
 
 describe('TripsService', () => {
-	beforeEach(() => {
+	let service: TripsService;
+
+	beforeEach(async () => {
 		mock.restore();
+		const db = makeMockDb();
+		const { trips } = await import('@booga/db/schema');
+		const { default: LoadedTripsService } = await import('./service');
+		service = new LoadedTripsService(db as unknown as Database, trips);
+		// Reset active trip if any exists from previous tests
+		await service.endTrip();
 	});
 
 	it('startTrip() should create a trip with a valid vehicleId', async () => {
-		// Arrange
-		const db = makeMockDb();
-		const { trips } = await import('@booga/db/schema');
-		// Fresh import to reset module-level currentTrip
-		const { default: TripsService } = await import('./service');
-		const service = new TripsService(db as any, trips);
-
 		// Act
 		const result = await service.startTrip(5);
 
@@ -49,24 +54,16 @@ describe('TripsService', () => {
 	});
 
 	it('startTrip() should throw when vehicleId is invalid (≤ 0)', async () => {
-		// Arrange
-		const db = makeMockDb();
-		const { trips } = await import('@booga/db/schema');
-		const { default: TripsService } = await import('./service');
-		const service = new TripsService(db as any, trips);
-
 		// Act & Assert
-		expect(service.startTrip(0)).rejects.toThrow('Invalid vehicleId provided to startTrip');
-		expect(service.startTrip(-1)).rejects.toThrow('Invalid vehicleId provided to startTrip');
+		expect(service.startTrip(0)).rejects.toThrow(
+			'Invalid vehicleId provided to startTrip',
+		);
+		expect(service.startTrip(-1)).rejects.toThrow(
+			'Invalid vehicleId provided to startTrip',
+		);
 	});
 
 	it('startTrip() should return the existing trip when one is already active', async () => {
-		// Arrange
-		const db = makeMockDb();
-		const { trips } = await import('@booga/db/schema');
-		const { default: TripsService } = await import('./service');
-		const service = new TripsService(db as any, trips);
-
 		// Act — start twice
 		const first = await service.startTrip(5);
 		const second = await service.startTrip(5);
@@ -77,10 +74,6 @@ describe('TripsService', () => {
 
 	it('endTrip() should update the trip with an end date', async () => {
 		// Arrange
-		const db = makeMockDb();
-		const { trips } = await import('@booga/db/schema');
-		const { default: TripsService } = await import('./service');
-		const service = new TripsService(db as any, trips);
 		await service.startTrip(5);
 
 		// Act
@@ -88,16 +81,10 @@ describe('TripsService', () => {
 
 		// Assert
 		expect(result).toBeDefined();
-		expect(result!.end).toBeDefined();
+		expect(result?.end).toBeDefined();
 	});
 
 	it('endTrip() should return null when no trip is active', async () => {
-		// Arrange
-		const db = makeMockDb();
-		const { trips } = await import('@booga/db/schema');
-		const { default: TripsService } = await import('./service');
-		const service = new TripsService(db as any, trips);
-
 		// Act
 		const result = await service.endTrip();
 

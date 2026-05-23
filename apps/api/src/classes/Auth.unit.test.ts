@@ -1,11 +1,17 @@
-import { describe, expect, it, mock, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, it, mock } from 'bun:test';
+import type { Context } from 'elysia';
 
 // ── Seed data ───────────────────────────────────────────────────────────
 const VALID_PAYLOAD = { id: 1 };
 const FAKE_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.fake-token';
 
 // ── Mock factories ──────────────────────────────────────────────────────
-function makeMockJwt(overrides: { signReturn?: string | false; verifyReturn?: object | false } = {}) {
+function makeMockJwt(
+	overrides: {
+		signReturn?: string | false;
+		verifyReturn?: object | false;
+	} = {},
+) {
 	return {
 		sign: mock(async () => overrides.signReturn ?? FAKE_TOKEN),
 		verify: mock(async () => overrides.verifyReturn ?? VALID_PAYLOAD),
@@ -37,7 +43,10 @@ describe('Auth class', () => {
 		mock.restore();
 		cookie = makeMockCookie();
 		jwt = makeMockJwt();
-		auth = new Auth(cookie as any, jwt as any);
+		auth = new Auth(
+			cookie as unknown as Context['cookie'],
+			jwt as unknown as (typeof Auth.jwt)['decorator']['jwt'],
+		);
 	});
 
 	// ─── sign() ──────────────────────────────────────────────────────────
@@ -56,11 +65,16 @@ describe('Auth class', () => {
 
 		it('should throw when jwt.sign returns a falsy value', async () => {
 			// Arrange
-			jwt = makeMockJwt({ signReturn: false as any });
-			auth = new Auth(cookie as any, jwt as any);
+			jwt = makeMockJwt({ signReturn: false as unknown as string });
+			auth = new Auth(
+				cookie as unknown as Context['cookie'],
+				jwt as unknown as (typeof Auth.jwt)['decorator']['jwt'],
+			);
 
 			// Act & Assert
-			expect(auth.sign(VALID_PAYLOAD)).rejects.toThrow('Failed signing the JWT');
+			expect(auth.sign(VALID_PAYLOAD)).rejects.toThrow(
+				'Failed signing the JWT',
+			);
 		});
 	});
 
@@ -105,7 +119,10 @@ describe('Auth class', () => {
 		it('should throw when jwt.verify returns false', async () => {
 			// Arrange
 			jwt = makeMockJwt({ verifyReturn: false });
-			auth = new Auth(cookie as any, jwt as any);
+			auth = new Auth(
+				cookie as unknown as Context['cookie'],
+				jwt as unknown as (typeof Auth.jwt)['decorator']['jwt'],
+			);
 			auth.token = FAKE_TOKEN;
 
 			// Act & Assert
