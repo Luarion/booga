@@ -62,6 +62,7 @@ abstract class Service<
 
 	async update(id: number, values: TUpdateInput): Promise<TReadInput> {
 		return await this.db.transaction(async (tx) => {
+			// biome-ignore lint/suspicious/noExplicitAny: Drizzle generic type requirement
 			const [record] = await tx
 				.update(this.table as any)
 				.set(values as Partial<InferInsertModel<TTable>>)
@@ -74,6 +75,7 @@ abstract class Service<
 
 	async delete(id: number) {
 		return await this.db.transaction(async (tx) => {
+			// biome-ignore lint/suspicious/noExplicitAny: Drizzle generic type requirement
 			return await tx.delete(this.table as any).where(eq(this.columns.id, id));
 		});
 	}

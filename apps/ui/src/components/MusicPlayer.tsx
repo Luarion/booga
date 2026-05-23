@@ -286,7 +286,7 @@ export default function MusicPlayer() {
       )}
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: expandable container */}
       {/* biome-ignore lint/a11y/noStaticElementInteractions: expandable container */}
-      <div 
+      <div
         ref={containerRef}
         onClick={() => setIsExpanded(true)}
         className="w-full flex flex-col rounded-2xl bg-black/20 backdrop-blur-xl shadow-2xl border border-white/10 border-t-white/20 border-b-black/50 p-3 cursor-default transition-all"
