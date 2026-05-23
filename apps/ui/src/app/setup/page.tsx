@@ -363,7 +363,7 @@ export default function SetupPage() {
         },
       });
 
-      if (redirectToSignInIfUnauthorized(status)) return;
+      if (redirectToSignInIfUnauthorized(status, router)) return;
 
       if (status === 201) {
         router.push('/');

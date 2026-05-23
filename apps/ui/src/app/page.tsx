@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   type FormEvent,
   useCallback,
@@ -10,6 +11,7 @@ import {
   useState,
 } from 'react';
 import MusicPlayer from '@/components/MusicPlayer';
+import { SensorChartDialog } from '@/components/SensorChartDialog';
 import api from '@/lib/eden';
 import { redirectToSignInIfUnauthorized } from '@/lib/redirectToSignIn';
 
@@ -53,7 +55,7 @@ const Something = ({
   children: React.ReactNode;
 }) => (
   <div
-    className={`min-h-25 min-w-25 bg-white/12 backdrop-blur-md shadow-2xl border border-white/15 border-t-white/25 border-b-white/5 p-4 flex gap-3 items-center overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className}`}
+    className={`min-h-25 min-w-25 bg-white/12 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.2)] border border-white/15 border-t-white/30 border-b-black/20 p-4 flex gap-3 items-center overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className}`}
   >
     {children}
   </div>
@@ -82,7 +84,13 @@ const DatasetIconButton = ({
         : 'border-white/15 bg-white/20 hover:border-white/30 hover:bg-white/30'
     }`}
   >
-    <Image src={icon} alt="" fill sizes="68px" className="p-2.5 opacity-90" />
+    <Image
+      src={icon}
+      alt={label}
+      fill
+      sizes="68px"
+      className="p-2.5 opacity-90"
+    />
   </button>
 );
 
@@ -133,7 +141,7 @@ function UserField({
         onChange={(event) => onChange(event.target.value)}
         autoComplete={autoComplete}
         placeholder={placeholder}
-        className="rounded-2xl border border-white/12 bg-black/20 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30"
+        className="rounded-2xl border border-white/12 bg-black/20 px-4 py-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-white/40 focus:bg-black/40 focus:ring-4 focus:ring-white/10"
       />
     </label>
   );
@@ -198,14 +206,14 @@ function UsersTable({
                     <button
                       type="button"
                       onClick={() => onEdit(toUserRow(row))}
-                      className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+                      className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80 transition-all duration-200 hover:bg-white/20 hover:text-white hover:shadow-lg active:scale-90"
                     >
                       Editar
                     </button>
                     <button
                       type="button"
                       onClick={() => onDelete(toUserRow(row))}
-                      className="rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1.5 text-xs text-red-100 transition-colors hover:bg-red-500/20"
+                      className="rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1.5 text-xs text-red-100 transition-all duration-200 hover:bg-red-500/20 hover:shadow-lg active:scale-90"
                     >
                       Eliminar
                     </button>
@@ -240,14 +248,14 @@ function UsersTable({
               <button
                 type="button"
                 onClick={() => onEdit(toUserRow(row))}
-                className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+                className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80 transition-all duration-200 hover:bg-white/20 hover:text-white hover:shadow-lg active:scale-90"
               >
                 Editar
               </button>
               <button
                 type="button"
                 onClick={() => onDelete(toUserRow(row))}
-                className="rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1.5 text-xs text-red-100 transition-colors hover:bg-red-500/20"
+                className="rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1.5 text-xs text-red-100 transition-all duration-200 hover:bg-red-500/20 hover:shadow-lg active:scale-90"
               >
                 Eliminar
               </button>
@@ -356,14 +364,14 @@ function UsersDialog({
             <button
               type="button"
               onClick={onCreate}
-              className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+              className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white transition-all duration-200 hover:bg-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95"
             >
               Crear usuario nuevo
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-white/15 hover:text-white hover:shadow-lg active:scale-90"
             >
               X
             </button>
@@ -515,14 +523,14 @@ function UserFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-white/15 hover:text-white hover:shadow-lg active:scale-95"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-full border border-white/20 bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-full border border-white/20 bg-white px-5 py-2 text-sm font-semibold text-slate-950 shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-white/90 hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
             >
               {submitting ? 'Creando...' : 'Crear usuario'}
             </button>
@@ -588,7 +596,7 @@ function EditUserModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-white/15 hover:text-white hover:shadow-lg active:scale-90"
           >
             X
           </button>
@@ -655,14 +663,14 @@ function EditUserModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-white/15 hover:text-white hover:shadow-lg active:scale-95"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-full border border-white/20 bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-full border border-white/20 bg-white px-5 py-2 text-sm font-semibold text-slate-950 shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-white/90 hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
             >
               {submitting ? 'Guardando...' : 'Guardar cambios'}
             </button>
@@ -703,11 +711,14 @@ function titleCase(value: string) {
     .join(' ');
 }
 
-async function loadDataset(key: DatasetKey) {
+async function loadDataset(
+  key: DatasetKey,
+  router: { push: (href: string) => void },
+) {
   switch (key) {
     case 'microcontrollers': {
       const { data, error, status } = await api.api.microcontrollers.get();
-      if (redirectToSignInIfUnauthorized(status)) return [] as Row[];
+      if (redirectToSignInIfUnauthorized(status, router)) return [] as Row[];
       if (error)
         throw new Error(
           typeof error.value === 'string'
@@ -718,7 +729,7 @@ async function loadDataset(key: DatasetKey) {
     }
     case 'sensors': {
       const { data, error, status } = await api.api.sensors.get();
-      if (redirectToSignInIfUnauthorized(status)) return [] as Row[];
+      if (redirectToSignInIfUnauthorized(status, router)) return [] as Row[];
       if (error)
         throw new Error(
           typeof error.value === 'string'
@@ -729,7 +740,7 @@ async function loadDataset(key: DatasetKey) {
     }
     case 'actuators': {
       const { data, error, status } = await api.api.actuators.get();
-      if (redirectToSignInIfUnauthorized(status)) return [] as Row[];
+      if (redirectToSignInIfUnauthorized(status, router)) return [] as Row[];
       if (error)
         throw new Error(
           typeof error.value === 'string'
@@ -743,7 +754,15 @@ async function loadDataset(key: DatasetKey) {
   }
 }
 
-function DataTable({ rows }: { rows: Row[] }) {
+function DataTable({
+  rows,
+  datasetType,
+  onSensorChartClick,
+}: {
+  rows: Row[];
+  datasetType?: string;
+  onSensorChartClick?: (sensorId: number, sensorAlias: string) => void;
+}) {
   const columns = useMemo(() => {
     const keys = new Set<string>();
     for (const row of rows) {
@@ -773,6 +792,11 @@ function DataTable({ rows }: { rows: Row[] }) {
                 {titleCase(column)}
               </th>
             ))}
+            {datasetType === 'sensors' && (
+              <th className="border-b border-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/60">
+                Acciones
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -791,6 +815,37 @@ function DataTable({ rows }: { rows: Row[] }) {
                   </span>
                 </td>
               ))}
+              {datasetType === 'sensors' && (
+                <td className="border-b border-white/5 px-4 py-3 align-top text-white/85">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onSensorChartClick?.(
+                        row.id as number,
+                        String(row.alias || row.name || `Sensor ${row.id}`),
+                      )
+                    }
+                    className="flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-semibold text-purple-300 transition-colors hover:bg-purple-500/20 active:scale-95"
+                  >
+                    <svg
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+                      />
+                    </svg>
+                    Ver Gráfica
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -800,6 +855,13 @@ function DataTable({ rows }: { rows: Row[] }) {
 }
 
 export default function Page() {
+  const router = useRouter();
+  const [isSignoutOpen, setIsSignoutOpen] = useState(false);
+  const [isChartOpen, setIsChartOpen] = useState(false);
+  const [selectedSensor, setSelectedSensor] = useState<{
+    id: number | null;
+    alias: string;
+  }>({ id: null, alias: '' });
   const [users, setUsers] = useState<Row[]>([]);
   const [usersLoading, setUsersLoading] = useState(true);
   const [usersError, setUsersError] = useState<string | null>(null);
@@ -897,7 +959,7 @@ export default function Page() {
     try {
       const { data, error, status } = await api.api.users.get();
 
-      if (redirectToSignInIfUnauthorized(status)) return;
+      if (redirectToSignInIfUnauthorized(status, router)) return;
 
       if (error) {
         throw new Error(
@@ -917,7 +979,7 @@ export default function Page() {
     } finally {
       setUsersLoading(false);
     }
-  }, []);
+  }, [router]);
 
   const openUserForm = useCallback(() => {
     clearUserFormTimer();
@@ -1127,15 +1189,11 @@ export default function Page() {
     };
 
     try {
-      const res = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      const { status, error } = await api.api.users.post(payload);
 
-      if (redirectToSignInIfUnauthorized(res.status)) return;
+      if (redirectToSignInIfUnauthorized(status, router)) return;
 
-      if (res.status === 201) {
+      if (status === 201) {
         setUserFormData({
           email: '',
           username: '',
@@ -1148,10 +1206,9 @@ export default function Page() {
         return;
       }
 
-      const body = await res.json().catch(() => null);
       setUserFormError(
-        body && typeof body.error === 'string'
-          ? body.error
+        typeof error?.value === 'string'
+          ? error.value
           : 'No se pudo crear el usuario',
       );
     } catch {
@@ -1194,7 +1251,7 @@ export default function Page() {
       // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
       const { status, error } = await api.api.users[editUserId]!.put(payload);
 
-      if (redirectToSignInIfUnauthorized(status)) return;
+      if (redirectToSignInIfUnauthorized(status, router)) return;
 
       if (status === 200) {
         closeEditUserForm();
@@ -1226,7 +1283,7 @@ export default function Page() {
       // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
       const { status, error } = await api.api.users[row.id]!.delete();
 
-      if (redirectToSignInIfUnauthorized(status)) return;
+      if (redirectToSignInIfUnauthorized(status, router)) return;
 
       if (status === 200) {
         await loadUsers();
@@ -1258,7 +1315,7 @@ export default function Page() {
     setErrorByDataset((current) => ({ ...current, [key]: null }));
 
     try {
-      const rows = await loadDataset(key);
+      const rows = await loadDataset(key, router);
       setRecordsByDataset((current) => ({ ...current, [key]: rows }));
     } catch (error) {
       setErrorByDataset((current) => ({
@@ -1312,6 +1369,59 @@ export default function Page() {
             <MusicPlayer />
           </div>
         </div>
+        {/* Top Right */}
+        <Something className="absolute right-0 top-0 max-w-1/3 justify-end rounded-bl-2xl animate-in-right delay-200">
+          <button
+            type="button"
+            onClick={async () => {
+              if (!isSignoutOpen) {
+                setIsSignoutOpen(true);
+                return;
+              }
+              try {
+                const { status } = await api.api.sign.out.post();
+                if (status === 200) {
+                  router.push('/sign/in');
+                }
+              } catch (e) {
+                console.error(e);
+              }
+            }}
+            className={`relative flex items-center justify-center overflow-hidden rounded-full border bg-white/10 transition-all duration-300 hover:shadow-lg active:scale-95 ${
+              isSignoutOpen
+                ? 'w-32 h-10 px-4 border-red-400/30 bg-red-500/20 text-red-100 hover:bg-red-500/30'
+                : 'w-10 h-10 border-white/15 hover:bg-white/20'
+            }`}
+          >
+            {/* Icon mode */}
+            <svg
+              aria-hidden="true"
+              className={`absolute size-5 text-white/80 transition-all duration-300 ${
+                isSignoutOpen ? 'opacity-0 scale-50' : 'opacity-100 scale-100'
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+            {/* Text mode */}
+            <span
+              className={`absolute whitespace-nowrap text-sm font-semibold transition-all duration-300 ${
+                isSignoutOpen
+                  ? 'opacity-100 scale-100'
+                  : 'opacity-0 scale-50 pointer-events-none'
+              }`}
+            >
+              Sign out
+            </span>
+          </button>
+        </Something>
         {/* Left */}
         <Something className="absolute left-0 top-1/2 max-h-[80%] w-25 -translate-y-1/2 flex-col items-center justify-start rounded-r-2xl animate-in-left delay-300">
           <UsersRailButton
@@ -1440,12 +1550,26 @@ export default function Page() {
                   {modalError}
                 </div>
               ) : (
-                <DataTable rows={modalRows} />
+                <DataTable
+                  rows={modalRows}
+                  datasetType={mountedDataset}
+                  onSensorChartClick={(id, alias) => {
+                    setSelectedSensor({ id, alias });
+                    setIsChartOpen(true);
+                  }}
+                />
               )}
             </div>
           </Something>
         </div>
       ) : null}
+
+      <SensorChartDialog
+        isOpen={isChartOpen}
+        onClose={() => setIsChartOpen(false)}
+        sensorId={selectedSensor.id}
+        sensorAlias={selectedSensor.alias}
+      />
     </div>
   );
 }
