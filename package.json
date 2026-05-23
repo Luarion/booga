@@ -21,7 +21,7 @@
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
 		"@repo/biomejs": "workspace:*",
-		"@biomejs/biome": "2.4.7",
+		"@biomejs/biome": "2.4.15",
 		"@devcontainers/cli": "^0.84.1",
 		"@faker-js/faker": "^10.3.0",
 		"@mermaid-js/mermaid-cli": "^11.12.0",
