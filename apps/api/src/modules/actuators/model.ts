@@ -1,4 +1,4 @@
-import { actuators } from '@booga/db/schema';
+import type { actuators } from '@booga/db/schema';
 import { t } from 'elysia';
 import Model from '@/classes/Model';
 

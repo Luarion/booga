@@ -1,4 +1,4 @@
-import type { id } from '@/db/schema/common';
+import type { id } from '@booga/db/schema';
 
 export const idType = (n: id) => {
 	switch (typeof n) {

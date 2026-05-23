@@ -125,23 +125,28 @@ export default function SignUpPage() {
     }
   }
 
+  const inputClass =
+    'rounded-2xl border border-white/12 bg-black/20 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30';
+  const labelClass =
+    'ml-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white/45';
+
   return (
-    <div className="flex w-fit h-fit flex-col gap-6 rounded-2xl border border-white/10 bg-gray-900/80 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-300 hover:border-pink-500/30 sm:p-8">
+    <div className="flex w-fit h-fit flex-col gap-6 rounded-4xl border border-white/15 border-t-white/25 border-b-white/5 bg-white/12 p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-white/30 sm:p-8">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white">
             Crear Cuenta
           </h1>
-          <p className="text-sm text-white/60">Regístrate para empezar</p>
+          <p className="text-sm text-white/50">Regístrate para empezar</p>
         </div>
-        <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">
+        <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">
           Paso {step} de 2
         </div>
       </div>
 
       <div className="mb-6 h-1.5 overflow-hidden rounded-full bg-white/10">
         <div
-          className="h-full rounded-full bg-linear-to-r from-pink-500 to-fuchsia-500 transition-all duration-300"
+          className="h-full rounded-full bg-white/60 transition-all duration-300"
           style={{ width: step === 1 ? '50%' : '100%' }}
         />
       </div>
@@ -154,10 +159,7 @@ export default function SignUpPage() {
         {step === 1 ? (
           <>
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="name"
-                className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400"
-              >
+              <label htmlFor="name" className={labelClass}>
                 Nombre Completo
               </label>
               <input
@@ -167,17 +169,14 @@ export default function SignUpPage() {
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 required
-                className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
+                className={inputClass}
                 placeholder="Juan Pérez"
                 disabled={loading}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="username"
-                className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400"
-              >
+              <label htmlFor="username" className={labelClass}>
                 Usuario
               </label>
               <input
@@ -188,17 +187,14 @@ export default function SignUpPage() {
                 onChange={(e) => handleInputChange('username', e.target.value)}
                 required
                 minLength={3}
-                className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
+                className={inputClass}
                 placeholder="juanperez"
                 disabled={loading}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="email"
-                className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400"
-              >
+              <label htmlFor="email" className={labelClass}>
                 Email
               </label>
               <input
@@ -208,7 +204,7 @@ export default function SignUpPage() {
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 required
-                className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
+                className={inputClass}
                 placeholder="juan@company.com"
                 disabled={loading}
               />
@@ -217,17 +213,17 @@ export default function SignUpPage() {
             <button
               type="button"
               onClick={handleNextStep}
-              className="mt-2 w-full rounded-lg bg-pink-600 py-2.5 font-semibold text-white shadow-lg shadow-pink-900/20 transition-all active:scale-[0.98] hover:bg-pink-500 disabled:bg-pink-600/50"
+              className="mt-2 w-full rounded-full border border-white/20 bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={loading}
             >
               Continuar
             </button>
 
-            <p className="text-center text-sm text-white/60">
+            <p className="text-center text-sm text-white/50">
               ¿Ya tienes cuenta?{' '}
               <a
                 href="/sign/in"
-                className="text-pink-400 transition hover:text-pink-300"
+                className="text-white/80 transition hover:text-white"
               >
                 Inicia sesión
               </a>
@@ -236,10 +232,7 @@ export default function SignUpPage() {
         ) : (
           <>
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="phone"
-                className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400"
-              >
+              <label htmlFor="phone" className={labelClass}>
                 Teléfono
               </label>
               <input
@@ -249,18 +242,14 @@ export default function SignUpPage() {
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
                 required
-                className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
-                style={{ color: '#ffffff' }}
+                className={inputClass}
                 placeholder="+56912345678"
                 disabled={loading}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="password"
-                className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400"
-              >
+              <label htmlFor="password" className={labelClass}>
                 Contraseña
               </label>
               <input
@@ -271,18 +260,14 @@ export default function SignUpPage() {
                 onChange={(e) => handleInputChange('password', e.target.value)}
                 required
                 minLength={6}
-                className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
-                style={{ color: '#ffffff' }}
+                className={inputClass}
                 placeholder="••••••"
                 disabled={loading}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="passwordConfirm"
-                className="ml-1 text-[10px] font-bold uppercase tracking-widest text-gray-400"
-              >
+              <label htmlFor="passwordConfirm" className={labelClass}>
                 Confirmar Contraseña
               </label>
               <input
@@ -294,7 +279,7 @@ export default function SignUpPage() {
                   handleInputChange('passwordConfirm', e.target.value)
                 }
                 required
-                className="rounded-lg border border-gray-700 bg-gray-950/90 px-4 py-2.5 text-white font-medium outline-none transition-all placeholder:text-white/60 focus:border-pink-500 focus:ring-2 focus:ring-pink-600/50"
+                className={inputClass}
                 placeholder="••••••"
                 disabled={loading}
               />
@@ -304,7 +289,7 @@ export default function SignUpPage() {
               <button
                 type="button"
                 onClick={handlePreviousStep}
-                className="w-full rounded-lg border border-white/10 bg-white/5 py-2.5 font-semibold text-white transition-all hover:bg-white/10 active:scale-[0.98] disabled:opacity-60"
+                className="w-full rounded-full border border-white/15 bg-white/5 py-2.5 text-sm font-semibold text-white/70 transition-all hover:bg-white/10 hover:text-white active:scale-[0.98] disabled:opacity-60"
                 disabled={loading}
               >
                 Volver
@@ -312,18 +297,18 @@ export default function SignUpPage() {
 
               <button
                 type="submit"
-                className="w-full rounded-lg bg-pink-600 py-2.5 font-semibold text-white shadow-lg shadow-pink-900/20 transition-all active:scale-[0.98] hover:bg-pink-500 disabled:bg-pink-600/50"
+                className="w-full rounded-full border border-white/20 bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={loading}
               >
                 {loading ? 'Registrando...' : 'Crear Cuenta'}
               </button>
             </div>
 
-            <p className="text-center text-sm text-white/60">
+            <p className="text-center text-sm text-white/50">
               ¿Ya tienes cuenta?{' '}
               <a
                 href="/sign/in"
-                className="text-pink-400 transition hover:text-pink-300"
+                className="text-white/80 transition hover:text-white"
               >
                 Inicia sesión
               </a>

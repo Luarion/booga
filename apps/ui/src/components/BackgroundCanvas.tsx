@@ -1,6 +1,7 @@
 'use client';
 import { Environment, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { usePathname } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { Timer } from 'three';
 
@@ -46,6 +47,8 @@ function CameraRig({ radius = 5 }) {
 
 export default function BackgroundCanvas() {
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  const isSignRoute = pathname.startsWith('/sign');
 
   useEffect(() => {
     setMounted(true);
@@ -67,6 +70,8 @@ export default function BackgroundCanvas() {
         // IMPORTANTE: Para detectar el ratón, pointerEvents NO debe ser "none"
         // Si necesita interactuar con elementos superiores, use una capa invisible
         pointerEvents: 'auto',
+        filter: isSignRoute ? 'blur(8px) brightness(0.7)' : 'none',
+        transition: 'filter 0.5s ease-out',
       }}
     >
       <Canvas camera={{ position: [0, 0, 0], fov: 45 }}>
@@ -75,7 +80,7 @@ export default function BackgroundCanvas() {
         <CameraRig radius={4} />
         <Suspense fallback={null}>
           <Model />
-          <Environment preset="city" background />
+          <Environment files={'/modern_evening_street_4k.exr'} background />
         </Suspense>
       </Canvas>
     </div>

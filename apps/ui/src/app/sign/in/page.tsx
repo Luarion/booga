@@ -60,7 +60,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex w-fit h-fit items-center gap-10 p-8 rounded-2xl bg-gray-900/80 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-pink-500/30">
+    <div className="flex w-fit h-fit items-center gap-10 p-8 rounded-4xl bg-white/12 backdrop-blur-md border border-white/15 border-t-white/25 border-b-white/5 shadow-2xl transition-all duration-300 hover:border-white/30">
       <div className="relative group">
         <Image
           src="/wireless.svg"
@@ -71,7 +71,7 @@ export default function Page() {
           className="rounded-lg shadow-inner brightness-90 group-hover:brightness-110 transition-all"
           loading="eager"
         />
-        <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/5 group-hover:ring-pink-400/20" />
+        <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/5 group-hover:ring-white/20" />
       </div>
 
       <div className="flex flex-col w-64">
@@ -86,7 +86,7 @@ export default function Page() {
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="email"
-              className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1"
+              className="text-[10px] font-bold text-white/45 uppercase tracking-[0.3em] ml-1"
             >
               Email Address
             </label>
@@ -101,7 +101,7 @@ export default function Page() {
                 handleInputChange('email', event.target.value)
               }
               disabled={loading}
-              className="bg-gray-950/50 border border-gray-700 text-gray-100 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-pink-600/50 focus:border-pink-500 transition-all placeholder:text-gray-600"
+              className="rounded-2xl border border-white/12 bg-black/20 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30"
               placeholder="name@company.com"
             />
           </div>
@@ -109,7 +109,7 @@ export default function Page() {
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="password"
-              className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1"
+              className="text-[10px] font-bold text-white/45 uppercase tracking-[0.3em] ml-1"
             >
               Password
             </label>
@@ -124,19 +124,22 @@ export default function Page() {
                 handleInputChange('password', event.target.value)
               }
               disabled={loading}
-              className="bg-gray-950/50 border border-gray-700 text-gray-100 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-pink-600/50 focus:border-pink-500 transition-all"
+              className="rounded-2xl border border-white/12 bg-black/20 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30"
             />
           </div>
 
           {error ? (
-            <p className="text-sm text-pink-300" role="alert">
+            <div
+              className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100"
+              role="alert"
+            >
               {error}
-            </p>
+            </div>
           ) : null}
 
           <button
             type="submit"
-            className="mt-4 w-full py-2.5 bg-pink-600 hover:bg-pink-500 text-white font-semibold rounded-lg shadow-lg shadow-pink-900/20 active:scale-[0.98] transition-all disabled:bg-pink-600/50"
+            className="mt-4 w-full rounded-full border border-white/20 bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             disabled={loading}
           >
             {loading ? 'Ingresando...' : 'Continue'}

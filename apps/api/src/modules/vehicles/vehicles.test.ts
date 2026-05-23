@@ -11,7 +11,7 @@ let id: number;
 describe(`/${path}`, () => {
 	it('[POST]: /', async () => {
 		const { status, data } = await api.api[path].post({
-			maker: faker.vehicle.manufacturer(),
+			make: faker.vehicle.manufacturer(),
 			drive: 'awd',
 			displacement: '5.2',
 			fuel: 'diesel',

@@ -76,13 +76,13 @@ const DatasetIconButton = ({
     aria-label={label}
     aria-pressed={active}
     title={label}
-    className={`relative size-17 shrink-0 overflow-hidden rounded-2xl border transition-all ${
+    className={`relative size-17 shrink-0 overflow-hidden rounded-2xl border transition-all animate-pop-in ${
       active
         ? 'border-white/45 bg-white/30 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]'
         : 'border-white/15 bg-white/20 hover:border-white/30 hover:bg-white/30'
     }`}
   >
-    <Image src={icon} alt="" fill className="p-2.5 opacity-90" />
+    <Image src={icon} alt="" fill sizes="68px" className="p-2.5 opacity-90" />
   </button>
 );
 
@@ -97,9 +97,9 @@ const QuickLink = ({
 }) => (
   <a
     href={href}
-    className="relative shrink-0 size-17 overflow-hidden rounded-2xl bg-white/20 backdrop-blur-md shadow-2xl"
+    className="relative shrink-0 size-17 overflow-hidden rounded-2xl bg-white/20 backdrop-blur-md shadow-2xl animate-pop-in"
   >
-    <Image src={src} alt={alt} fill className="p-2.5" />
+    <Image src={src} alt={alt} fill sizes="68px" className="p-2.5" />
   </a>
 );
 
@@ -273,7 +273,7 @@ function UsersRailButton({
       aria-label="Usuarios"
       aria-pressed={active}
       title="Usuarios"
-      className={`relative size-17 shrink-0 overflow-hidden rounded-2xl border transition-all ${
+      className={`relative size-17 shrink-0 overflow-hidden rounded-2xl border transition-all animate-pop-in delay-300 ${
         active
           ? 'border-white/45 bg-white/30 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]'
           : 'border-white/15 bg-white/20 hover:border-white/30 hover:bg-white/30'
@@ -1191,11 +1191,7 @@ export default function Page() {
     }
 
     try {
-      const { status, error } = await api.api
-        .users({
-          user_id: editUserId,
-        })
-        .put(payload);
+      const { status, error } = await api.api.users[editUserId]!.put(payload);
 
       if (redirectToSignInIfUnauthorized(status)) return;
 
@@ -1226,11 +1222,8 @@ export default function Page() {
     if (!window.confirm('¿Seguro que quieres eliminar este usuario?')) return;
 
     try {
-      const { status, error } = await api.api
-        .users({
-          user_id: row.id,
-        })
-        .delete();
+      // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
+      const { status, error } = await api.api.users[row.id]!.delete();
 
       if (redirectToSignInIfUnauthorized(status)) return;
 
@@ -1296,8 +1289,8 @@ export default function Page() {
         }
       >
         {/* Up */}
-        <div className="absolute left-1/2 top-0 flex w-1/2 max-w-1/2 -translate-x-1/2 flex-col items-center gap-3">
-          <Something className="w-fit rounded-b-2xl">
+        <div className="absolute left-1/2 top-0 flex w-1/2 max-w-1/2 -translate-x-1/2 flex-col items-center gap-3 animate-in-down delay-100">
+          <Something className="w-fit rounded-b-2xl animate-pop-in delay-100">
             <QuickLink
               href="https://www.youtube.com"
               src="/maps.svg"
@@ -1314,17 +1307,19 @@ export default function Page() {
               alt="Discord"
             />
           </Something>
-          <MusicPlayer />
+          <div className="animate-pop-in delay-200">
+            <MusicPlayer />
+          </div>
         </div>
         {/* Left */}
-        <Something className="absolute left-0 top-1/2 max-h-[80%] w-25 -translate-y-1/2 flex-col items-center justify-start rounded-r-2xl">
+        <Something className="absolute left-0 top-1/2 max-h-[80%] w-25 -translate-y-1/2 flex-col items-center justify-start rounded-r-2xl animate-in-left delay-300">
           <UsersRailButton
             active={isUsersDialogOpen}
             onClick={openUsersDialog}
           />
         </Something>
         {/* Right */}
-        <Something className="absolute right-0 top-1/2 max-h-[80%] w-25 -translate-y-1/2 flex-col items-center justify-start rounded-l-2xl">
+        <Something className="absolute right-0 top-1/2 max-h-[80%] w-25 -translate-y-1/2 flex-col items-center justify-start rounded-l-2xl animate-in-right delay-400">
           <DatasetIconButton
             label={datasetConfig.microcontrollers.label}
             icon={datasetConfig.microcontrollers.icon}
@@ -1345,7 +1340,7 @@ export default function Page() {
           />
         </Something>
         {/* Bottom */}
-        <Something className="absolute bottom-0 left-0 max-w-1/3 justify-start rounded-tr-2xl">
+        <Something className="absolute bottom-0 left-0 max-w-1/3 justify-start rounded-tr-2xl animate-in-up delay-200">
           <QuickLink
             href="https://www.youtube.com"
             src="/settings.svg"

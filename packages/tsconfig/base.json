@@ -1,6 +1,10 @@
 {
 	"compilerOptions": {
 		"outDir": "dist",
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"esModuleInterop": true,
 
 		"composite": true,
 		"declaration": true,

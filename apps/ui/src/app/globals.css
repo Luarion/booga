@@ -43,27 +43,118 @@ form label {
   text-transform: capitalize;
 } */
 
-/* Avoid forcing a white background on all inputs so theme and Tailwind classes win */
-/* Improve input contrast and readability inside the app's dark backgrounds.
-   Use stronger, specific rules so they are not overridden by other styles. */
+/* Transparent form input styles matching glassmorphism design */
 form input,
 form textarea,
 form select {
-  background-color: rgba(3, 7, 18, 0.9);
+  background-color: rgba(0, 0, 0, 0.2);
   color: #ffffff;
-  border-radius: 6px;
+  border-radius: 1rem;
   font-weight: 500;
 }
 
 form input::placeholder,
 form textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.3);
   opacity: 1; /* ensure visibility */
 }
 
 /* Keep reduced transparency for disabled/readonly states */
 form input:disabled,
 form textarea:disabled {
-  background-color: rgba(3, 7, 18, 0.65);
-  color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(0, 0, 0, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+@keyframes fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+    filter: blur(12px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.03);
+    filter: blur(0);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.animate-in-up {
+  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-in-down {
+  animation: fade-in-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-in-left {
+  animation: fade-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-in-right {
+  animation: fade-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-pop-in {
+  animation: pop-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-400 {
+  animation-delay: 400ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+.delay-600 {
+  animation-delay: 600ms;
 }

@@ -30,3 +30,5 @@ if (!binary.success) {
 console.info('Success:');
 console.info(`- JS Bundle: ${bundle.outputs[0]?.path}`);
 console.info(`- Binary: ${binary.outputs[0]?.path}`);
+
+export {};

@@ -1,5 +1,8 @@
-import { objects } from '@booga/db/schema';
-import { objects_to_actuators, objects_to_sensors } from '@booga/db/schema';
+import {
+	type objects,
+	objects_to_actuators,
+	objects_to_sensors,
+} from '@booga/db/schema';
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import Service from '@/classes/Service';
 

@@ -178,9 +178,9 @@ const steps: StepDef[] = [
 ];
 
 const inputClass =
-  'bg-gray-950/50 border border-gray-700 text-gray-100 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-pink-600/50 focus:border-pink-500 transition-all placeholder:text-gray-600';
+  'rounded-2xl border border-white/12 bg-black/20 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30';
 const labelClass =
-  'text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1';
+  'text-[10px] font-bold text-white/45 uppercase tracking-[0.3em] ml-1';
 
 function validateStep(stepIndex: number, data: FormData): Errors {
   const errors: Errors = {};
@@ -253,7 +253,7 @@ function FieldInput({
         type="file"
         accept={field.accept}
         onChange={(e) => onChange(e.target.files?.[0] ?? null)}
-        className={`${inputClass} file:mr-3 file:rounded-md file:border-0 file:bg-pink-600 file:px-3 file:py-1 file:text-sm file:text-white file:cursor-pointer`}
+        className={`${inputClass} file:mr-3 file:rounded-full file:border file:border-white/15 file:bg-white/10 file:px-3 file:py-1 file:text-sm file:text-white/80 file:cursor-pointer file:transition-colors hover:file:bg-white/20`}
       />
     );
   } else {
@@ -279,7 +279,7 @@ function FieldInput({
       </label>
       {input}
       {error && (
-        <span className="text-[10px] text-red-400 ml-1 mt-0.5">{error}</span>
+        <span className="text-[10px] text-red-300 ml-1 mt-0.5">{error}</span>
       )}
     </div>
   );
@@ -353,7 +353,7 @@ export default function SetupPage() {
         },
         vehicle: {
           plate: formData.plate,
-          maker: formData.maker,
+          make: formData.maker,
           model: formData.model || undefined,
           fuel: formData.fuel as 'diesel' | 'gasoline' | 'other',
           fuel_consumption: formData.fuel_consumption || undefined,
@@ -382,17 +382,17 @@ export default function SetupPage() {
   }
 
   return (
-    <div className="w-100 rounded-2xl bg-gray-900/80 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+    <div className="w-100 rounded-4xl bg-white/12 backdrop-blur-md border border-white/15 border-t-white/25 border-b-white/5 shadow-2xl overflow-hidden">
       {/* Step indicator */}
       <div className="flex items-center justify-center gap-2 pt-6">
         {steps.map(({ title }, i) => (
           <div key={title} className="flex items-center gap-2">
             <div
-              className={`w-2 h-2 rounded-full transition-colors ${i <= step ? 'bg-pink-500' : 'bg-gray-600'}`}
+              className={`w-2 h-2 rounded-full transition-colors ${i <= step ? 'bg-white/80' : 'bg-white/20'}`}
             />
             {i < steps.length - 1 && (
               <div
-                className={`w-6 h-px transition-colors ${i < step ? 'bg-pink-500' : 'bg-gray-700'}`}
+                className={`w-6 h-px transition-colors ${i < step ? 'bg-white/60' : 'bg-white/15'}`}
               />
             )}
           </div>
@@ -435,7 +435,9 @@ export default function SetupPage() {
 
       {/* API error */}
       {apiError && (
-        <p className="text-sm text-red-400 text-center px-8">{apiError}</p>
+        <div className="mx-8 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+          {apiError}
+        </div>
       )}
 
       {/* Navigation */}
@@ -443,7 +445,7 @@ export default function SetupPage() {
         <button
           type="button"
           onClick={goBack}
-          className={`w-10 h-10 flex items-center justify-center rounded-full border border-gray-700 text-gray-400 hover:border-pink-500 hover:text-pink-400 transition-all ${
+          className={`w-10 h-10 flex items-center justify-center rounded-full border border-white/15 text-white/60 hover:border-white/30 hover:text-white transition-all ${
             step === 0 ? 'invisible' : ''
           }`}
           aria-label="Previous step"
@@ -465,7 +467,7 @@ export default function SetupPage() {
           </svg>
         </button>
 
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-white/45">
           {step + 1} / {steps.length}
         </span>
 
@@ -473,7 +475,7 @@ export default function SetupPage() {
           <button
             type="button"
             onClick={advance}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-pink-600 hover:bg-pink-500 text-white shadow-lg shadow-pink-900/20 active:scale-95 transition-all"
+            className="w-10 h-10 flex items-center justify-center rounded-full border border-white/20 bg-white text-slate-950 shadow-lg active:scale-95 transition-all hover:bg-white/90"
             aria-label="Next step"
           >
             <svg
@@ -497,7 +499,7 @@ export default function SetupPage() {
             type="button"
             onClick={submit}
             disabled={submitting}
-            className="px-6 py-2.5 bg-pink-600 hover:bg-pink-500 disabled:bg-pink-800 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-lg shadow-pink-900/20 active:scale-[0.98] transition-all"
+            className="rounded-full border border-white/20 bg-white px-6 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? 'Saving...' : 'Submit'}
           </button>

@@ -1,4 +1,4 @@
-import { actuators, microcontrollers, sensors } from '@booga/db/schema';
+import { actuators, type microcontrollers, sensors } from '@booga/db/schema';
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import Service from '@/classes/Service';
 
