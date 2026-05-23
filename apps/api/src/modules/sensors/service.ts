@@ -1,5 +1,5 @@
-import { sensors, sensors_readings } from '@booga/db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { type sensors, sensors_readings } from '@booga/db/schema';
+import { desc, eq } from 'drizzle-orm';
 import Service from '@/classes/Service';
 
 class SensorsService extends Service<typeof sensors> {

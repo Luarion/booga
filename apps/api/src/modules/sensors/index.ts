@@ -51,7 +51,7 @@ const plugin = new Elysia({
 									sensor_id: t.Numeric(),
 									value: t.String(),
 									timestamp: t.Date(),
-								})
+								}),
 							),
 						},
 					},

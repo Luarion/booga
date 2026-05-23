@@ -40,9 +40,8 @@ export function SensorChartDialog({
     setLoading(true);
     setError(null);
     try {
-      const { data, error, status } = await api.api
-        .sensors[sensorId]
-        .readings.get();
+      const { data, error, status } =
+        await api.api.sensors[sensorId].readings.get();
 
       if (error) {
         setError(
