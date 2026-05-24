@@ -1,0 +1,56 @@
+{
+	"name": "environment",
+	"dockerComposeFile": "../compose.yaml",
+	"service": "environment",
+	"workspaceFolder": "/workspace",
+	"updateContentCommand": [
+		"sh",
+		"-c",
+		// Install dependencies
+		"bun install",
+		// DB
+		"(cd packages/db; bun run db:generate && bun db:migrate)"
+	],
+	"postAttachCommand": ["sh", "-c", "(cd packages/db; bun run db:studio)"],
+	"waitFor": "updateContentCommand",
+	"shutdownAction": "stopCompose",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				// Language Support
+				"dotenv.dotenv-vscode",
+				"redhat.vscode-yaml",
+				// Linting
+				"exiasr.hadolint",
+				"biomejs.biome",
+				"bradlc.vscode-tailwindcss",
+				// Containers
+				"docker.docker",
+				"ms-azuretools.vscode-containers",
+				// TypeScript
+				"ms-vscode.vscode-typescript-next",
+				// Errors
+				"usernamehw.errorlens",
+				"yoavbls.pretty-ts-errors",
+				// GitHub
+				"github.vscode-github-actions",
+				"github.vscode-pull-request-github",
+				// Icons
+				"pkief.material-icon-theme",
+				// DB
+				"ms-ossdata.vscode-pgsql",
+				"matt-meyers.vscode-dbml",
+				// APIs
+				"postman.postman-for-vscode",
+				// Debug
+				"oven.bun-vscode",
+				// Package versioning
+				"pflannery.vscode-versionlens",
+				// Diagrams
+				"mermaidchart.vscode-mermaid-chart",
+				// Utils
+				"ms-vscode.live-server"
+			]
+		}
+	}
+}

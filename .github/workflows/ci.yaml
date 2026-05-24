@@ -7,31 +7,45 @@ on:
     branches: ["**"]
 
 jobs:
-  hadolint:
+  environment:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: hadolint/hadolint-action@v3.1.0
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y make gettext-base
+          make env
+
+      - name: Build Devcontainer
+        uses: devcontainers/ci@v0.3
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Hadolint Check
+        uses: hadolint/hadolint-action@v3.1.0
+        if: always()
         with:
           recursive: true
 
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - run: bun install --frozen-lockfile
+      - name: TSC
+        if: always()
+        run: bun tsc --noEmit
 
-      - name: Lint
-        run: bun lint
+      - name: Biome CI
+        if: always()
+        run: bunx @biomejs/biome ci .
 
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - run: bun install --frozen-lockfile
-
-      - name: Prettier check
-        run: bun prettier --check .
+      - name: Drizzle-Kit Check
+        if: always()
+        run: bun run --cwd src/db db:check

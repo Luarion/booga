@@ -1,0 +1,12 @@
+{
+	"configurations": [
+		{
+			"type": "bun",
+			"request": "launch",
+			"name": "api",
+			"cwd": "${workspaceFolder}/src/api",
+			"program": "${workspaceFolder}/src/api/src/index.ts",
+			"runtimeArgs": ["--inspect"]
+		}
+	]
+}

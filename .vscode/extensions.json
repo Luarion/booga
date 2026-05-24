@@ -1,6 +1,36 @@
 {
-  "recommendations": [
-    "ms-vscode-remote.remote-containers",
-    "ms-azuretools.vscode-containers"
-  ]
+	"recommendations": [
+		// Linting
+		"exiasr.hadolint",
+		"biomejs.biome",
+		"bradlc.vscode-tailwindcss",
+		// Containers
+		"docker.docker",
+		"ms-azuretools.vscode-containers",
+		// TypeScript
+		"ms-vscode.vscode-typescript-next",
+		// Errors
+		"usernamehw.errorlens",
+		"yoavbls.pretty-ts-errors",
+		// GitHub
+		"github.copilot-chat",
+		"github.vscode-github-actions",
+		// Icons
+		"pkief.material-icon-theme",
+		// DB
+		"ms-ossdata.vscode-pgsql",
+		"matt-meyers.vscode-dbml",
+		// APIs
+		"postman.postman-for-vscode",
+		// Debug
+		"oven.bun-vscode",
+		// Package versioning
+		"pflannery.vscode-versionlens",
+		// Diagrams
+		"mermaidchart.vscode-mermaid-chart",
+		// Utils
+		"ms-vscode.live-server"
+		// Testing
+		// "orta.vscode-jest"
+	]
 }

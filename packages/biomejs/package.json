@@ -1,0 +1,14 @@
+{
+	"name": "@repo/biomejs",
+	"version": "0.0.0",
+	"private": true,
+	"files": [
+		"biome.json"
+	],
+	"exports": {
+		".": "./biome.json"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*"
+	}
+}

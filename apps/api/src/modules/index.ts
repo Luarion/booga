@@ -1,0 +1,12 @@
+export { default as actuators } from './actuators/index';
+export { default as categories } from './categories/index';
+export { default as microcontrollers } from './microcontrollers/index';
+export { default as objects } from './objects/index';
+export { default as roles } from './roles/index';
+export { default as sensors } from './sensors/index';
+export { default as setup } from './setup/index';
+export { default as sign } from './sign/index';
+export { default as trips } from './trips/index';
+export { default as units } from './units/index';
+export { default as users } from './users';
+export { default as vehicles } from './vehicles';
