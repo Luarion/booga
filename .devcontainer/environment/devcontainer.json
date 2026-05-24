@@ -7,9 +7,9 @@
 		"sh",
 		"-c",
 		// Install dependencies
-		"bun install"
+		"bun install",
 		// DB
-		// "(cd packages/db; bun run db:generate && bun db:migrate)"
+		"(cd packages/db; bun run db:generate && bun db:migrate)"
 	],
 	"postAttachCommand": ["sh", "-c", "(cd packages/db; bun run db:studio)"],
 	"waitFor": "updateContentCommand",

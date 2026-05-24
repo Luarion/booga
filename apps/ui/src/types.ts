@@ -22,6 +22,12 @@ export type UserRow = {
   username?: string | null;
   name?: string | null;
   phone?: string | null;
+  roles?: string[];
+};
+
+export type RoleRow = {
+  id: number;
+  name: string;
 };
 
 /* ── Music ───────────────────────────────────────────────────────────── */
@@ -70,7 +76,7 @@ export const datasetConfig: Record<
     icon: '/settings.svg',
   },
   actuators: {
-    label: 'Actuators',
+    label: 'Actuadores',
     icon: '/odometer.svg',
   },
 };

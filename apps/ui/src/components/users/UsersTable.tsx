@@ -4,7 +4,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { formatValue, titleCase } from '@/lib/formatting';
 import type { Row, UserRow } from '@/types';
 
-const COLUMNS = ['id', 'name', 'username', 'email', 'phone', 'timestamp'];
+const COLUMNS = ['id', 'name', 'username', 'email', 'phone', 'roles', 'timestamp'];
 
 /** Convert a generic Row to a typed UserRow. */
 export function toUserRow(row: Row): UserRow {
@@ -15,6 +15,7 @@ export function toUserRow(row: Row): UserRow {
     username: typeof row.username === 'string' ? row.username : null,
     name: typeof row.name === 'string' ? row.name : null,
     phone: typeof row.phone === 'string' ? row.phone : null,
+    roles: Array.isArray(row.roles) ? row.roles : [],
   };
 }
 
@@ -34,7 +35,7 @@ function RowActions({
       <button
         type="button"
         onClick={() => onEdit(toUserRow(row))}
-        className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80 transition-all duration-200 hover:bg-white/20 hover:text-white hover:shadow-lg active:scale-90"
+        className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/80 transition-all duration-200 hover:bg-purple-500/20 hover:border-purple-500/30 hover:text-purple-200 hover:shadow-lg active:scale-90"
       >
         Editar
       </button>
@@ -45,6 +46,26 @@ function RowActions({
       >
         Eliminar
       </button>
+    </div>
+  );
+}
+
+/* ── Helper for Roles Badge ──────────────────────────────────────────── */
+
+function RolesBadges({ roles }: { roles: unknown }) {
+  if (!Array.isArray(roles) || roles.length === 0) {
+    return <span className="text-white/40 italic">—</span>;
+  }
+  return (
+    <div className="flex flex-wrap gap-1">
+      {roles.map((role: string) => (
+        <span
+          key={role}
+          className="rounded-full border border-purple-500/30 bg-purple-500/10 px-2 py-0.5 text-[10px] font-medium text-purple-200"
+        >
+          {role}
+        </span>
+      ))}
     </div>
   );
 }
@@ -89,9 +110,13 @@ function DesktopTable({
                   key={column}
                   className="border-b border-white/5 px-4 py-3 align-top text-white/85"
                 >
-                  <span className="block max-w-[16rem] truncate">
-                    {formatValue(row[column])}
-                  </span>
+                  {column === 'roles' ? (
+                    <RolesBadges roles={row[column]} />
+                  ) : (
+                    <span className="block max-w-[16rem] truncate">
+                      {formatValue(row[column])}
+                    </span>
+                  )}
                 </td>
               ))}
               <td className="border-b border-white/5 px-4 py-3 align-top">
@@ -132,7 +157,11 @@ function MobileCards({
                 {titleCase(column)}
               </span>
               <span className="text-right text-sm text-white/85 break-all">
-                {formatValue(row[column])}
+                {column === 'roles' ? (
+                  <RolesBadges roles={row[column]} />
+                ) : (
+                  formatValue(row[column])
+                )}
               </span>
             </div>
           ))}

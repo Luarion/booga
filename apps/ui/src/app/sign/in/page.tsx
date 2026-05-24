@@ -77,7 +77,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex w-fit h-fit items-center gap-10 p-8 rounded-4xl bg-white/12 backdrop-blur-md border border-white/15 border-t-white/25 border-b-white/5 shadow-2xl transition-all duration-300 hover:border-white/30">
+    <div className="flex w-fit h-fit items-center gap-10 p-8 rounded-4xl bg-white/12 backdrop-blur-md border border-white/15 border-t-white/25 border-b-white/5 shadow-2xl transition-all duration-300 hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]">
       <div className="relative group">
         <Image
           src="/wireless.svg"
@@ -88,7 +88,7 @@ export default function Page() {
           className="rounded-lg shadow-inner brightness-90 group-hover:brightness-110 transition-all"
           loading="eager"
         />
-        <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/5 group-hover:ring-white/20" />
+        <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/5 group-hover:ring-purple-500/50" />
       </div>
 
       <div className="flex flex-col w-64">
@@ -127,7 +127,7 @@ export default function Page() {
 
           <button
             type="submit"
-            className="mt-4 w-full rounded-full border border-white/20 bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-4 w-full rounded-full border border-purple-500/50 bg-purple-500/20 px-4 py-2.5 text-sm font-semibold text-purple-200 transition-colors hover:bg-purple-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             disabled={loading}
           >
             {loading ? 'Ingresando...' : 'Continue'}

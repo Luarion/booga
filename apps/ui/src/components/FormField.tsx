@@ -1,5 +1,5 @@
 const inputClass =
-  'rounded-2xl border border-white/12 bg-black/20 px-4 py-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-white/40 focus:bg-black/40 focus:ring-4 focus:ring-white/10';
+  'rounded-2xl border border-white/12 bg-black/20 px-4 py-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-purple-500/50 focus:bg-black/40 focus:ring-4 focus:ring-purple-500/20';
 
 const labelClass =
   'ml-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white/45';

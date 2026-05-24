@@ -17,8 +17,8 @@ export function UsersRailButton({
       title="Usuarios"
       className={`relative size-17 shrink-0 overflow-hidden rounded-2xl border transition-all animate-pop-in delay-300 ${
         active
-          ? 'border-white/45 bg-white/30 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]'
-          : 'border-white/15 bg-white/20 hover:border-white/30 hover:bg-white/30'
+          ? 'border-purple-400/45 bg-purple-500/30 shadow-[0_0_0_1px_rgba(168,85,247,0.3)]'
+          : 'border-white/15 bg-white/20 hover:border-purple-400/30 hover:bg-purple-500/30'
       }`}
     >
       <svg

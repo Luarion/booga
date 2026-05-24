@@ -40,6 +40,22 @@ const plugin = new Elysia({
 						response: { 200: model.read },
 					},
 				)
+				.get(
+					'/readings',
+					async ({ status, params: { actuator_id } }) =>
+						status(200, await service.getReadings(actuator_id)),
+					{
+						response: {
+							200: t.Array(
+								t.Object({
+									actuator_id: t.Numeric(),
+									value: t.String(),
+									timestamp: t.Date(),
+								}),
+							),
+						},
+					},
+				)
 				.delete('/', async ({ status, params: { actuator_id } }) =>
 					status(200, await service.delete(actuator_id)),
 				),

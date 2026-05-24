@@ -129,14 +129,14 @@ export function UserFormModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-white/15 hover:text-white hover:shadow-lg active:scale-95"
+            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-purple-500/20 hover:border-purple-500/30 hover:text-purple-200 hover:shadow-lg active:scale-95"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-full border border-white/20 bg-white px-5 py-2 text-sm font-semibold text-slate-950 shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-200 hover:bg-white/90 hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+            className="rounded-full border border-purple-500/50 bg-purple-500/20 px-5 py-2 text-sm font-semibold text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-all duration-200 hover:bg-purple-500/30 hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
           >
             {submitting ? config.submittingLabel : config.submitLabel}
           </button>

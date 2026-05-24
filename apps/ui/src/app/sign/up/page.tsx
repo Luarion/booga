@@ -124,7 +124,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex w-fit h-fit flex-col gap-6 rounded-4xl border border-white/15 border-t-white/25 border-b-white/5 bg-white/12 p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-white/30 sm:p-8">
+    <div className="flex w-fit h-fit flex-col gap-6 rounded-4xl border border-white/15 border-t-white/25 border-b-white/5 bg-white/12 p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] sm:p-8">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white">
@@ -139,7 +139,7 @@ export default function SignUpPage() {
 
       <div className="mb-6 h-1.5 overflow-hidden rounded-full bg-white/10">
         <div
-          className="h-full rounded-full bg-white/60 transition-all duration-300"
+          className="h-full rounded-full bg-purple-500 transition-all duration-300 shadow-[0_0_10px_rgba(168,85,247,0.5)]"
           style={{ width: step === 1 ? '50%' : '100%' }}
         />
       </div>
@@ -188,7 +188,7 @@ export default function SignUpPage() {
             <button
               type="button"
               onClick={handleNextStep}
-              className="mt-2 w-full rounded-full border border-white/20 bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-2 w-full rounded-full border border-purple-500/50 bg-purple-500/20 px-4 py-2.5 text-sm font-semibold text-purple-200 transition-colors hover:bg-purple-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={loading}
             >
               Continuar
@@ -244,7 +244,7 @@ export default function SignUpPage() {
               <button
                 type="button"
                 onClick={handlePreviousStep}
-                className="w-full rounded-full border border-white/15 bg-white/5 py-2.5 text-sm font-semibold text-white/70 transition-all hover:bg-white/10 hover:text-white active:scale-[0.98] disabled:opacity-60"
+                className="w-full rounded-full border border-white/15 bg-white/5 py-2.5 text-sm font-semibold text-white/70 transition-all hover:bg-purple-500/20 hover:border-purple-500/30 hover:text-purple-200 active:scale-[0.98] disabled:opacity-60"
                 disabled={loading}
               >
                 Volver
@@ -252,7 +252,7 @@ export default function SignUpPage() {
 
               <button
                 type="submit"
-                className="w-full rounded-full border border-white/20 bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-full border border-purple-500/50 bg-purple-500/20 px-4 py-2.5 text-sm font-semibold text-purple-200 transition-colors hover:bg-purple-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={loading}
               >
                 {loading ? 'Registrando...' : 'Crear Cuenta'}

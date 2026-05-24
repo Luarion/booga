@@ -42,14 +42,47 @@ class UsersService extends Service<
 			return record;
 		});
 	}
-	// override async readById(id: number): Promise<TModel["read"]["static"]> {
-	// 	const { password_hash, ...columns } = this.columns;
-	// 	return (await this.db
-	// 		.select(columns)
-	// 		.from(this.table)
-	// 		.where(eq(this.columns.id, id))
-	// 		.limit(1));
-	// }
+	override async read() {
+		return await this.db.transaction(async (tx) => {
+			const results = await tx.query.users.findMany({
+				with: {
+					users_to_roles: {
+						with: {
+							role: true,
+						},
+					},
+				},
+			});
+			return results.map(user => {
+				const { users_to_roles, ...rest } = user;
+				return {
+					...rest,
+					roles: users_to_roles.map(ur => ur.role.name),
+				};
+			});
+		});
+	}
+
+	override async readById(id: number) {
+		return await this.db.transaction(async (tx) => {
+			const record = await tx.query.users.findFirst({
+				where: eq(this.columns.id, id),
+				with: {
+					users_to_roles: {
+						with: {
+							role: true,
+						},
+					},
+				},
+			});
+			if (!record) throw new Error('Failed getting the specified resource');
+			const { users_to_roles, ...rest } = record;
+			return {
+				...rest,
+				roles: users_to_roles.map(ur => ur.role.name),
+			};
+		});
+	}
 }
 
 export default UsersService;

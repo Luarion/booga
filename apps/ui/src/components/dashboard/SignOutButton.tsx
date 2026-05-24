@@ -37,7 +37,7 @@ export function SignOutButton() {
       className={`relative flex items-center justify-center overflow-hidden rounded-full border bg-white/10 transition-all duration-300 hover:shadow-lg active:scale-95 ${
         isExpanded
           ? 'w-32 h-10 px-4 border-red-400/30 bg-red-500/20 text-red-100 hover:bg-red-500/30'
-          : 'w-10 h-10 border-white/15 hover:bg-white/20'
+          : 'w-10 h-10 border-white/15 hover:border-purple-400/30 hover:bg-purple-500/30'
       }`}
     >
       {/* Icon mode */}

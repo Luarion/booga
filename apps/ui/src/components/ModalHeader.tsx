@@ -30,7 +30,7 @@ export function ModalHeader({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-white/15 hover:text-white hover:shadow-lg active:scale-90"
+          className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-purple-500/20 hover:border-purple-500/30 hover:text-purple-200 hover:shadow-lg active:scale-90"
         >
           X
         </button>

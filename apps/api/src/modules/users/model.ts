@@ -34,7 +34,12 @@ class UsersModel extends Model<typeof users> {
 			}),
 		]),
 	);
-	override read = t.Omit(this.base.select, ['password_hash']);
+	override read = t.Composite([
+		t.Omit(this.base.select, ['password_hash']),
+		t.Object({
+			roles: t.Optional(t.Array(t.String())),
+		}),
+	]);
 }
 
 export default UsersModel;

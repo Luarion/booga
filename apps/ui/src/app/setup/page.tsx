@@ -377,11 +377,11 @@ export default function SetupPage() {
         {steps.map(({ title }, i) => (
           <div key={title} className="flex items-center gap-2">
             <div
-              className={`w-2 h-2 rounded-full transition-colors ${i <= step ? 'bg-white/80' : 'bg-white/20'}`}
+              className={`w-2 h-2 rounded-full transition-colors ${i <= step ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'bg-purple-500/20'}`}
             />
             {i < steps.length - 1 && (
               <div
-                className={`w-6 h-px transition-colors ${i < step ? 'bg-white/60' : 'bg-white/15'}`}
+                className={`w-6 h-px transition-colors ${i < step ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'bg-purple-500/20'}`}
               />
             )}
           </div>
@@ -434,7 +434,7 @@ export default function SetupPage() {
         <button
           type="button"
           onClick={goBack}
-          className={`w-10 h-10 flex items-center justify-center rounded-full border border-white/15 text-white/60 hover:border-white/30 hover:text-white transition-all ${
+          className={`w-10 h-10 flex items-center justify-center rounded-full border border-white/15 text-white/60 hover:border-purple-500/30 hover:bg-purple-500/10 hover:text-purple-200 transition-all ${
             step === 0 ? 'invisible' : ''
           }`}
           aria-label="Previous step"
@@ -464,7 +464,7 @@ export default function SetupPage() {
           <button
             type="button"
             onClick={advance}
-            className="w-10 h-10 flex items-center justify-center rounded-full border border-white/20 bg-white text-slate-950 shadow-lg active:scale-95 transition-all hover:bg-white/90"
+            className="w-10 h-10 flex items-center justify-center rounded-full border border-purple-500/50 bg-purple-500/20 text-purple-200 shadow-[0_0_15px_rgba(168,85,247,0.2)] active:scale-95 transition-all hover:bg-purple-500/30"
             aria-label="Next step"
           >
             <svg
@@ -488,7 +488,7 @@ export default function SetupPage() {
             type="button"
             onClick={submit}
             disabled={submitting}
-            className="rounded-full border border-white/20 bg-white px-6 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-full border border-purple-500/50 bg-purple-500/20 px-6 py-2.5 text-sm font-semibold text-purple-200 transition-colors hover:bg-purple-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? 'Saving...' : 'Submit'}
           </button>

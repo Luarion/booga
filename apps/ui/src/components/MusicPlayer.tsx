@@ -33,15 +33,15 @@ function TrackSlider({
   return (
     <div className="group relative flex items-center w-full h-5">
       {/* Track background */}
-      <div className="absolute inset-x-0 h-1 rounded-full bg-white/15 group-hover:h-1.5 transition-all" />
+      <div className="absolute inset-x-0 h-1 rounded-full bg-purple-500/20 group-hover:h-1.5 transition-all" />
       {/* Filled portion */}
       <div
-        className="absolute left-0 h-1 rounded-full bg-white/70 group-hover:h-1.5 group-hover:bg-white/90 transition-all"
+        className="absolute left-0 h-1 rounded-full bg-purple-500 group-hover:h-1.5 group-hover:bg-purple-400 transition-all shadow-[0_0_8px_rgba(168,85,247,0.5)]"
         style={{ width: `${pct}%` }}
       />
       {/* Thumb (visible on hover) */}
       <div
-        className="absolute h-3 w-3 rounded-full bg-white shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+        className="absolute h-3 w-3 rounded-full bg-purple-200 shadow-[0_0_10px_rgba(168,85,247,0.8)] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
         style={{ left: `calc(${pct}% - 6px)` }}
       />
       <input
@@ -299,7 +299,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={prevTrack}
-              className="hover:text-white transition-all duration-200 p-1 active:scale-75"
+              className="hover:text-purple-300 transition-all duration-200 p-1 active:scale-75"
               aria-label="Anterior"
             >
               <svg
@@ -315,7 +315,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={togglePlay}
-              className="hover:text-white transition-all duration-200 p-1.5 rounded-full bg-white/10 hover:bg-white/25 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] active:scale-90"
+              className="hover:text-purple-200 transition-all duration-200 p-1.5 rounded-full bg-purple-500/20 border border-transparent hover:border-purple-500/50 hover:bg-purple-500/30 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] active:scale-90"
               aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
             >
               {isPlaying ? (
@@ -343,7 +343,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={nextTrack}
-              className="hover:text-white transition-all duration-200 p-1 active:scale-75"
+              className="hover:text-purple-300 transition-all duration-200 p-1 active:scale-75"
               aria-label="Siguiente"
             >
               <svg
@@ -390,7 +390,7 @@ export default function MusicPlayer() {
             <button
               type="button"
               onClick={toggleMute}
-              className="text-white/50 hover:text-white/80 transition-all duration-200 shrink-0 active:scale-90"
+              className="text-white/50 hover:text-purple-300 transition-all duration-200 shrink-0 active:scale-90"
               aria-label={volume === 0 ? 'Activar sonido' : 'Silenciar'}
             >
               <VolumeIcon level={volume} />
@@ -440,7 +440,7 @@ export default function MusicPlayer() {
                       key={al.slug}
                       type="button"
                       onClick={() => selectAlbum(al)}
-                      className={`flex flex-col items-stretch gap-2 rounded-2xl bg-white/8 border p-3 text-left transition-all duration-200 hover:bg-white/12 hover:border-white/30 hover:shadow-lg hover:-translate-y-1 active:scale-95 active:translate-y-0 ${current?.slug === al.slug ? 'border-white/40 ring-2 ring-white/20 shadow-[0_0_15px_rgba(255,255,255,0.15)]' : 'border-white/10'}`}
+                      className={`flex flex-col items-stretch gap-2 rounded-2xl bg-white/8 border p-3 text-left transition-all duration-200 hover:bg-purple-500/10 hover:border-purple-500/30 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:-translate-y-1 active:scale-95 active:translate-y-0 ${current?.slug === al.slug ? 'border-purple-500/50 ring-2 ring-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.25)]' : 'border-white/10'}`}
                     >
                       <div className="relative h-36 w-full overflow-hidden rounded-lg bg-white/5">
                         {al.coverSrc ? (

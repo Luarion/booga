@@ -48,7 +48,18 @@ export async function fetchDataset(
     );
   }
 
-  return (data ?? []) as Row[];
+  const result = (data ?? []) as Row[];
+
+  // Fallback a datos mockeados si la base de datos no tiene actuadores
+  if (key === 'actuators' && result.length === 0) {
+    return [
+      { id: 1, category_id: 1, controller_id: 1, alias: 'Válvula Principal' },
+      { id: 2, category_id: 1, controller_id: 1, alias: 'Motor Secundario' },
+      { id: 3, category_id: 1, controller_id: 1, alias: 'Bomba de Agua' },
+    ] as Row[];
+  }
+
+  return result;
 }
 
 /* ── Users ────────────────────────────────────────────────────────────── */
@@ -182,4 +193,83 @@ export async function fetchSensorReadings(
       value: Number.parseFloat(d.value),
     }))
     .reverse();
+}
+
+/** Fetch actuator readings and format them for Recharts. */
+export async function fetchActuatorReadings(
+  actuatorId: number,
+): Promise<ChartDataPoint[]> {
+  // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
+  const { data, error } = await api.api.actuators[actuatorId]!.readings.get();
+
+  if (error) {
+    throw new Error(
+      typeof error.value === 'string' ? error.value : 'Error fetching data',
+    );
+  }
+
+  if (!data) return [];
+
+  // Assuming actuator readings have a 'value' property in schema similar to sensors
+  return (data as any[])
+    .map((d) => ({
+      time: new Date(d.timestamp).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+      value: Number.parseFloat(d.value),
+    }))
+    .reverse();
+}
+
+/* ── Roles ────────────────────────────────────────────────────────────── */
+
+export async function fetchRoles(router: Router): Promise<Row[]> {
+  const { data, error, status } = await api.api.roles.get();
+  if (redirectToSignInIfUnauthorized(status, router)) return [];
+  if (error) {
+    throw new Error(typeof error.value === 'string' ? error.value : 'Error fetching roles');
+  }
+  return (data ?? []) as Row[];
+}
+
+export async function createRole(name: string, router: Router): Promise<ApiMutationResult> {
+  const { status, error } = await api.api.roles.post({ name: name.trim().toLowerCase() });
+  if (redirectToSignInIfUnauthorized(status, router)) return { ok: false };
+  if (status === 201) return { ok: true };
+  return { ok: false, error: typeof error?.value === 'string' ? error.value : 'Failed to create role' };
+}
+
+export async function deleteRole(id: number, router: Router): Promise<ApiMutationResult> {
+  // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
+  const { status, error } = await api.api.roles[id]!.delete();
+  if (redirectToSignInIfUnauthorized(status, router)) return { ok: false };
+  if (status === 200) return { ok: true };
+  return { ok: false, error: typeof error?.value === 'string' ? error.value : 'Failed to delete role' };
+}
+
+export async function fetchUsersForRole(roleId: number, router: Router): Promise<Row[]> {
+  // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
+  const { data, error, status } = await api.api.roles[roleId]!.users.get();
+  if (redirectToSignInIfUnauthorized(status, router)) return [];
+  if (error) {
+    throw new Error(typeof error.value === 'string' ? error.value : 'Error fetching users for role');
+  }
+  return (data ?? []) as Row[];
+}
+
+export async function assignRoleToUser(roleId: number, userId: number, router: Router): Promise<ApiMutationResult> {
+  // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
+  const { status, error } = await api.api.roles[roleId]!.users[userId]!.post({});
+  if (redirectToSignInIfUnauthorized(status, router)) return { ok: false };
+  if (status === 201) return { ok: true };
+  return { ok: false, error: typeof error?.value === 'string' ? error.value : 'Failed to assign role' };
+}
+
+export async function unassignRoleFromUser(roleId: number, userId: number, router: Router): Promise<ApiMutationResult> {
+  // biome-ignore lint/style/noNonNullAssertion: API type generation limitation
+  const { status, error } = await api.api.roles[roleId]!.users[userId]!.delete();
+  if (redirectToSignInIfUnauthorized(status, router)) return { ok: false };
+  if (status === 200) return { ok: true };
+  return { ok: false, error: typeof error?.value === 'string' ? error.value : 'Failed to unassign role' };
 }

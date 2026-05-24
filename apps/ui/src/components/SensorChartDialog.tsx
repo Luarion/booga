@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { fetchSensorReadings } from '@/lib/api';
+import { fetchSensorReadings, fetchActuatorReadings } from '@/lib/api';
 import type { ChartDataPoint } from '@/types';
 import { RealtimeSensorChart } from './RealtimeSensorChart';
 
@@ -19,6 +19,7 @@ interface SensorChartDialogProps {
   onClose: () => void;
   sensorId: number | null;
   sensorAlias: string;
+  deviceType?: 'sensors' | 'actuators';
 }
 
 export function SensorChartDialog({
@@ -26,6 +27,7 @@ export function SensorChartDialog({
   onClose,
   sensorId,
   sensorAlias,
+  deviceType = 'sensors',
 }: SensorChartDialogProps) {
   const [readings, setReadings] = useState<ChartDataPoint[]>([]);
   const [loading, setLoading] = useState(false);
@@ -37,7 +39,9 @@ export function SensorChartDialog({
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchSensorReadings(sensorId);
+      const data = deviceType === 'actuators' 
+        ? await fetchActuatorReadings(sensorId) 
+        : await fetchSensorReadings(sensorId);
       setReadings(data);
     } catch (err) {
       setError(
@@ -107,7 +111,7 @@ export function SensorChartDialog({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full bg-white/5 p-2 text-white/50 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-full bg-white/5 p-2 text-white/50 transition-colors hover:bg-purple-500/20 hover:text-purple-200"
             >
               <svg
                 aria-hidden="true"
@@ -129,7 +133,7 @@ export function SensorChartDialog({
 
         <div className="h-[400px] w-full">
           {isRealtime ? (
-            <RealtimeSensorChart sensorAlias={sensorAlias} />
+            <RealtimeSensorChart sensorAlias={sensorAlias} deviceType={deviceType} />
           ) : loading ? (
             <div className="flex h-full w-full items-center justify-center">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
@@ -140,7 +144,7 @@ export function SensorChartDialog({
             </div>
           ) : readings.length === 0 ? (
             <div className="flex h-full w-full items-center justify-center text-white/50">
-              No hay lecturas para este sensor.
+              No hay lecturas para este dispositivo.
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">

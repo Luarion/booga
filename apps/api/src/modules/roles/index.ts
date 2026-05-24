@@ -44,7 +44,34 @@ const plugin = new Elysia({
 				)
 				.delete('/', async ({ status, params: { role_id } }) => {
 					status(200, await service.delete(role_id));
-				}),
+				})
+				.get(
+					'/users',
+					async ({ status, params: { role_id } }) =>
+						status(200, await service.getUsersForRole(role_id)),
+				)
+				.post(
+					'/users/:user_id',
+					async ({ status, params: { role_id, user_id } }) =>
+						status(201, await service.assignUserToRole(role_id, user_id)),
+					{
+						params: t.Object({
+							role_id: t.Integer({ minimum: 1 }),
+							user_id: t.Numeric({ minimum: 1 }),
+						}),
+					}
+				)
+				.delete(
+					'/users/:user_id',
+					async ({ status, params: { role_id, user_id } }) =>
+						status(200, await service.unassignUserFromRole(role_id, user_id)),
+					{
+						params: t.Object({
+							role_id: t.Integer({ minimum: 1 }),
+							user_id: t.Numeric({ minimum: 1 }),
+						}),
+					}
+				),
 	);
 
 export default plugin;

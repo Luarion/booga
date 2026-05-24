@@ -36,8 +36,8 @@ function DatasetIconButton({
       title={label}
       className={`relative size-17 shrink-0 overflow-hidden rounded-2xl border transition-all animate-pop-in ${
         active
-          ? 'border-white/45 bg-white/30 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]'
-          : 'border-white/15 bg-white/20 hover:border-white/30 hover:bg-white/30'
+          ? 'border-purple-400/45 bg-purple-500/30 shadow-[0_0_0_1px_rgba(168,85,247,0.3)]'
+          : 'border-white/15 bg-white/20 hover:border-purple-400/30 hover:bg-purple-500/30'
       }`}
     >
       <Image
@@ -60,7 +60,7 @@ function DataTable({
 }: {
   rows: Row[];
   datasetType?: string;
-  onSensorChartClick?: (sensorId: number, sensorAlias: string) => void;
+  onSensorChartClick?: (sensorId: number, sensorAlias: string, type: 'sensors' | 'actuators') => void;
 }) {
   const columns = useMemo(() => {
     const keys = new Set<string>();
@@ -87,7 +87,7 @@ function DataTable({
                 {titleCase(column)}
               </th>
             ))}
-            {datasetType === 'sensors' && (
+            {(datasetType === 'sensors' || datasetType === 'actuators') && (
               <th className="border-b border-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/60">
                 Acciones
               </th>
@@ -110,14 +110,15 @@ function DataTable({
                   </span>
                 </td>
               ))}
-              {datasetType === 'sensors' && (
+              {(datasetType === 'sensors' || datasetType === 'actuators') && (
                 <td className="border-b border-white/5 px-4 py-3 align-top text-white/85">
                   <button
                     type="button"
                     onClick={() =>
                       onSensorChartClick?.(
                         row.id as number,
-                        String(row.alias || row.name || `Sensor ${row.id}`),
+                        String(row.alias || row.name || `Device ${row.id}`),
+                        datasetType as 'sensors' | 'actuators'
                       )
                     }
                     className="flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-semibold text-purple-300 transition-colors hover:bg-purple-500/20 active:scale-95"
@@ -158,7 +159,7 @@ function DataTable({
  * The parent only needs to call `open(key)` via the ref-like callbacks.
  */
 export function useDatasetDialog(
-  onSensorChartClick?: (id: number, alias: string) => void,
+  onSensorChartClick?: (id: number, alias: string, type: 'sensors' | 'actuators') => void,
 ) {
   const router = useRouter();
   const modal = useAnimatedModal();
