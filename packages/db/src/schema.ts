@@ -48,11 +48,6 @@ export const roles = usersSchema.table('roles', {
 	timestamp: timestamp(),
 });
 
-export const app_setup = usersSchema.table('app_setup', {
-	id: id(),
-	completed: p.boolean().notNull().default(false),
-	completed_at: timestamp(),
-});
 
 export const objects = table('objects', {
 	id: id(),
