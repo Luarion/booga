@@ -1,22 +1,8 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import type { MusicAlbum } from '@/types';
 
 export const runtime = 'nodejs';
-
-type MusicTrack = {
-  title: string;
-  artist: string;
-  src: string;
-  fileName: string;
-};
-
-type MusicAlbum = {
-  slug: string;
-  title: string;
-  artist: string;
-  coverSrc: string;
-  tracks: MusicTrack[];
-};
 
 const audioExtensions = new Set([
   '.flac',

@@ -10,13 +10,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import api from '@/lib/eden';
-
-interface Reading {
-  sensor_id: number | string;
-  value: string;
-  timestamp: Date;
-}
+import { fetchSensorReadings } from '@/lib/api';
+import type { ChartDataPoint } from '@/types';
 
 interface SensorChartDialogProps {
   isOpen: boolean;
@@ -31,37 +26,23 @@ export function SensorChartDialog({
   sensorId,
   sensorAlias,
 }: SensorChartDialogProps) {
-  const [readings, setReadings] = useState<any[]>([]);
+  const [readings, setReadings] = useState<ChartDataPoint[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchReadings = useCallback(async () => {
+  const loadReadings = useCallback(async () => {
     if (!sensorId) return;
     setLoading(true);
     setError(null);
     try {
-      const { data, error, status } =
-        await api.api.sensors[sensorId].readings.get();
-
-      if (error) {
-        setError(
-          typeof error.value === 'string' ? error.value : 'Error fetching data',
-        );
-      } else if (data) {
-        // Format the data for Recharts (e.g. format dates to string, values to number)
-        const formatted = data
-          .map((d: Reading) => ({
-            time: new Date(d.timestamp).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-            value: parseFloat(d.value),
-          }))
-          .reverse(); // Reverse to have chronological order (oldest to newest)
-        setReadings(formatted);
-      }
+      const data = await fetchSensorReadings(sensorId);
+      setReadings(data);
     } catch (err) {
-      setError('Unexpected error fetching readings');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Unexpected error fetching readings',
+      );
     } finally {
       setLoading(false);
     }
@@ -69,22 +50,24 @@ export function SensorChartDialog({
 
   useEffect(() => {
     if (isOpen) {
-      fetchReadings();
+      loadReadings();
     }
-  }, [isOpen, fetchReadings]);
+  }, [isOpen, loadReadings]);
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+      <button
+        type="button"
+        aria-label="Cerrar diálogo"
+        className="absolute inset-0 z-0 bg-black/40 backdrop-blur-sm transition-opacity cursor-default w-full h-full border-none"
         onClick={onClose}
       />
 
       {/* Dialog content */}
-      <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black/60 p-8 shadow-2xl shadow-purple-500/10 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative z-10 w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black/60 p-8 shadow-2xl shadow-purple-500/10 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold tracking-tight text-white">
             <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
@@ -93,10 +76,12 @@ export function SensorChartDialog({
             Histórico
           </h2>
           <button
+            type="button"
             onClick={onClose}
             className="rounded-full bg-white/5 p-2 text-white/50 transition-colors hover:bg-white/10 hover:text-white"
           >
             <svg
+              aria-hidden="true"
               className="h-5 w-5"
               fill="none"
               stroke="currentColor"

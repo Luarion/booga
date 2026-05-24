@@ -2,10 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { ErrorBanner } from '@/components/ErrorBanner';
+import { FormField } from '@/components/FormField';
 import api from '@/lib/eden';
 import { redirectToSignInIfUnauthorized } from '@/lib/redirectToSignIn';
 
-type FormData = {
+type SetupFormData = {
   email: string;
   username: string;
   password: string;
@@ -22,10 +24,10 @@ type FormData = {
   registration_date: string;
 };
 
-type Errors = Partial<Record<keyof FormData, string>>;
+type Errors = Partial<Record<keyof SetupFormData, string>>;
 
 type FieldDef = {
-  key: keyof FormData;
+  key: keyof SetupFormData;
   label: string;
   type:
     | 'text'
@@ -177,12 +179,7 @@ const steps: StepDef[] = [
   },
 ];
 
-const inputClass =
-  'rounded-2xl border border-white/12 bg-black/20 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30';
-const labelClass =
-  'text-[10px] font-bold text-white/45 uppercase tracking-[0.3em] ml-1';
-
-function validateStep(stepIndex: number, data: FormData): Errors {
+function validateStep(stepIndex: number, data: SetupFormData): Errors {
   const errors: Errors = {};
   const step = steps[stepIndex];
   if (!step) return errors;
@@ -215,73 +212,62 @@ function validateStep(stepIndex: number, data: FormData): Errors {
   return errors;
 }
 
-function FieldInput({
+/**
+ * Renders a single field from the step definition using the shared FormField.
+ */
+function StepField({
   field,
   value,
   onChange,
   error,
 }: {
   field: FieldDef;
-  value: FormData[keyof FormData];
-  onChange: (value: FormData[keyof FormData]) => void;
+  value: SetupFormData[keyof SetupFormData];
+  onChange: (value: SetupFormData[keyof SetupFormData]) => void;
   error?: string;
 }) {
-  let input: React.ReactNode;
-
   if (field.type === 'select') {
-    input = (
-      <select
+    return (
+      <FormField
         id={field.key}
+        label={field.label}
+        type="select"
         value={value as string}
-        onChange={(e) => onChange(e.target.value)}
-        className={inputClass}
-      >
-        <option value="" disabled>
-          Select
-        </option>
-        {field.options?.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    );
-  } else if (field.type === 'file') {
-    input = (
-      <input
-        id={field.key}
-        type="file"
-        accept={field.accept}
-        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
-        className={`${inputClass} file:mr-3 file:rounded-full file:border file:border-white/15 file:bg-white/10 file:px-3 file:py-1 file:text-sm file:text-white/80 file:cursor-pointer file:transition-colors hover:file:bg-white/20`}
+        onChange={(v) => onChange(v)}
+        options={field.options ?? []}
+        required={field.required}
+        error={error}
       />
     );
-  } else {
-    input = (
-      <input
+  }
+
+  if (field.type === 'file') {
+    return (
+      <FormField
         id={field.key}
-        type={field.type}
-        value={value as string}
-        onChange={(e) => onChange(e.target.value)}
-        className={inputClass}
-        placeholder={field.placeholder}
-        maxLength={field.maxLength}
-        minLength={field.minLength}
-        step={field.step}
+        label={field.label}
+        type="file"
+        onChange={(file) => onChange(file)}
+        accept={field.accept}
+        error={error}
       />
     );
   }
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor={field.key} className={labelClass}>
-        {field.label}
-      </label>
-      {input}
-      {error && (
-        <span className="text-[10px] text-red-300 ml-1 mt-0.5">{error}</span>
-      )}
-    </div>
+    <FormField
+      id={field.key}
+      label={field.label}
+      type={field.type}
+      value={value as string}
+      onChange={(v) => onChange(v)}
+      placeholder={field.placeholder}
+      maxLength={field.maxLength}
+      minLength={field.minLength}
+      step={field.step}
+      required={field.required}
+      error={error}
+    />
   );
 }
 
@@ -291,7 +277,7 @@ export default function SetupPage() {
   const [submitting, setSubmitting] = useState(false);
   const [apiError, setApiError] = useState('');
   const [errors, setErrors] = useState<Errors>({});
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<SetupFormData>({
     email: '',
     username: '',
     password: '',
@@ -308,7 +294,10 @@ export default function SetupPage() {
     registration_date: '',
   });
 
-  function update<K extends keyof FormData>(key: K, value: FormData[K]) {
+  function update<K extends keyof SetupFormData>(
+    key: K,
+    value: SetupFormData[K],
+  ) {
     setFormData((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => {
       const next = { ...prev };
@@ -419,11 +408,13 @@ export default function SetupPage() {
                 }
               >
                 {s.fields.map((f) => (
-                  <FieldInput
+                  <StepField
                     key={f.key}
                     field={f}
                     value={formData[f.key]}
-                    onChange={(v) => update(f.key, v as FormData[typeof f.key])}
+                    onChange={(v) =>
+                      update(f.key, v as SetupFormData[typeof f.key])
+                    }
                     error={errors[f.key]}
                   />
                 ))}
@@ -434,11 +425,9 @@ export default function SetupPage() {
       </div>
 
       {/* API error */}
-      {apiError && (
-        <div className="mx-8 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100">
-          {apiError}
-        </div>
-      )}
+      <div className="mx-8">
+        <ErrorBanner message={apiError || null} />
+      </div>
 
       {/* Navigation */}
       <div className="flex items-center justify-between px-8 pb-6 pt-2">

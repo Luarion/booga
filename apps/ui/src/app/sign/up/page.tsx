@@ -1,12 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
+import { FormField } from '@/components/FormField';
 import api from '@/lib/eden';
 
-type FormData = {
+type SignUpFormData = {
   email: string;
   phone: string;
   username: string;
@@ -17,7 +17,7 @@ type FormData = {
 
 export default function SignUpPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<SignUpFormData>({
     email: '',
     phone: '',
     username: '',
@@ -28,12 +28,9 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
 
-  function handleInputChange(field: keyof FormData, value: string) {
+  function handleInputChange(field: keyof SignUpFormData, value: string) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   }
-
-  // Use native HTML validation for required fields. Password equality is
-  // checked using the Constraint Validation API at submit time.
 
   function handleNextStep() {
     const form = document.getElementById(
@@ -120,17 +117,11 @@ export default function SignUpPage() {
     } catch (err) {
       const errorMsg =
         err instanceof Error ? err.message : 'Error al registrarse';
-      // Use native alert for server errors to avoid custom error blocks
       window.alert(errorMsg);
     } finally {
       setLoading(false);
     }
   }
-
-  const inputClass =
-    'rounded-2xl border border-white/12 bg-black/20 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30';
-  const labelClass =
-    'ml-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white/45';
 
   return (
     <div className="flex w-fit h-fit flex-col gap-6 rounded-4xl border border-white/15 border-t-white/25 border-b-white/5 bg-white/12 p-6 shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-white/30 sm:p-8">
@@ -160,57 +151,39 @@ export default function SignUpPage() {
       >
         {step === 1 ? (
           <>
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="name" className={labelClass}>
-                Nombre Completo
-              </label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                required
-                className={inputClass}
-                placeholder="Juan Pérez"
-                disabled={loading}
-              />
-            </div>
+            <FormField
+              id="name"
+              label="Nombre Completo"
+              type="text"
+              value={formData.name}
+              onChange={(value) => handleInputChange('name', value)}
+              required
+              disabled={loading}
+              placeholder="Juan Pérez"
+            />
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="username" className={labelClass}>
-                Usuario
-              </label>
-              <input
-                id="username"
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={(e) => handleInputChange('username', e.target.value)}
-                required
-                minLength={3}
-                className={inputClass}
-                placeholder="juanperez"
-                disabled={loading}
-              />
-            </div>
+            <FormField
+              id="username"
+              label="Usuario"
+              type="text"
+              value={formData.username}
+              onChange={(value) => handleInputChange('username', value)}
+              required
+              disabled={loading}
+              minLength={3}
+              placeholder="juanperez"
+            />
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className={labelClass}>
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                required
-                className={inputClass}
-                placeholder="juan@company.com"
-                disabled={loading}
-              />
-            </div>
+            <FormField
+              id="email"
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={(value) => handleInputChange('email', value)}
+              required
+              disabled={loading}
+              placeholder="juan@company.com"
+            />
 
             <button
               type="button"
@@ -233,59 +206,39 @@ export default function SignUpPage() {
           </>
         ) : (
           <>
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="phone" className={labelClass}>
-                Teléfono
-              </label>
-              <input
-                id="phone"
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-                required
-                className={inputClass}
-                placeholder="+56912345678"
-                disabled={loading}
-              />
-            </div>
+            <FormField
+              id="phone"
+              label="Teléfono"
+              type="tel"
+              value={formData.phone}
+              onChange={(value) => handleInputChange('phone', value)}
+              required
+              disabled={loading}
+              placeholder="+56912345678"
+            />
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className={labelClass}>
-                Contraseña
-              </label>
-              <input
-                id="password"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={(e) => handleInputChange('password', e.target.value)}
-                required
-                minLength={6}
-                className={inputClass}
-                placeholder="••••••"
-                disabled={loading}
-              />
-            </div>
+            <FormField
+              id="password"
+              label="Contraseña"
+              type="password"
+              value={formData.password}
+              onChange={(value) => handleInputChange('password', value)}
+              required
+              disabled={loading}
+              minLength={6}
+              placeholder="••••••"
+            />
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="passwordConfirm" className={labelClass}>
-                Confirmar Contraseña
-              </label>
-              <input
-                id="passwordConfirm"
-                type="password"
-                name="passwordConfirm"
-                value={formData.passwordConfirm}
-                onChange={(e) =>
-                  handleInputChange('passwordConfirm', e.target.value)
-                }
-                required
-                className={inputClass}
-                placeholder="••••••"
-                disabled={loading}
-              />
-            </div>
+            <FormField
+              id="passwordConfirm"
+              label="Confirmar Contraseña"
+              type="password"
+              value={formData.passwordConfirm}
+              onChange={(value) => handleInputChange('passwordConfirm', value)}
+              required
+              disabled={loading}
+              placeholder="••••••"
+            />
 
             <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <button

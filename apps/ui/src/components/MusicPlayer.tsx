@@ -3,28 +3,13 @@
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-
-type MusicTrack = {
-  title: string;
-  artist: string;
-  src: string;
-  fileName: string;
-};
-
-type Album = {
-  slug: string;
-  title: string;
-  artist: string;
-  coverSrc: string;
-  tracks: MusicTrack[];
-};
-
-function formatTime(seconds: number) {
-  if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
+import { ErrorBanner } from '@/components/ErrorBanner';
+import { LoadingState } from '@/components/LoadingState';
+import { ModalHeader } from '@/components/ModalHeader';
+import { ModalOverlay } from '@/components/ModalOverlay';
+import { useAnimatedModal } from '@/hooks/useAnimatedModal';
+import { formatTime } from '@/lib/formatting';
+import type { MusicAlbum } from '@/types';
 
 /* ── Slider shared styles ────────────────────────────────────────────── */
 
@@ -116,14 +101,12 @@ function VolumeIcon({ level }: { level: number }) {
 }
 
 export default function MusicPlayer() {
-  const [albums, setAlbums] = useState<Album[]>([]);
+  const [albums, setAlbums] = useState<MusicAlbum[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [current, setCurrent] = useState<Album | null>(null);
+  const [current, setCurrent] = useState<MusicAlbum | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [mountedDialog, setMountedDialog] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
 
   /* Seek / progress state */
   const [currentTime, setCurrentTime] = useState(0);
@@ -139,6 +122,9 @@ export default function MusicPlayer() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  /* Album picker dialog */
+  const albumsModal = useAnimatedModal();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -178,20 +164,11 @@ export default function MusicPlayer() {
     };
   }, []);
 
-  function selectAlbum(al: Album) {
+  function selectAlbum(al: MusicAlbum) {
     setCurrent(al);
     setCurrentTrackIndex(0);
     setIsPlaying(true);
-    closeAlbums();
-  }
-
-  function openAlbums() {
-    setMountedDialog(true);
-    setOpenDialog(true);
-  }
-  function closeAlbums() {
-    setOpenDialog(false);
-    setTimeout(() => setMountedDialog(false), 260);
+    albumsModal.close();
   }
 
   const currentTrack = current?.tracks[currentTrackIndex];
@@ -295,7 +272,7 @@ export default function MusicPlayer() {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={openAlbums}
+            onClick={albumsModal.open}
             className="relative size-14 shrink-0 rounded-xl bg-white/10 overflow-hidden cursor-pointer shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-200 hover:shadow-[0_6px_16px_rgba(255,255,255,0.15)] active:scale-90"
           >
             {current?.coverSrc ? (
@@ -430,99 +407,72 @@ export default function MusicPlayer() {
         </div>
       </div>
 
-      {mountedDialog
+      {albumsModal.mounted
         ? createPortal(
-            <div
-              className={`fixed inset-0 z-50 flex items-center justify-center px-4 py-6 backdrop-blur-md transition-all duration-300 ease-out ${
-                openDialog
-                  ? 'bg-slate-950/45 opacity-100'
-                  : 'bg-slate-950/0 opacity-0'
-              }`}
+            <ModalOverlay
+              mounted={albumsModal.mounted}
+              open={albumsModal.isOpen}
+              onClose={albumsModal.close}
+              width="900px"
             >
-              <button
-                type="button"
-                aria-label="Cerrar álbumes"
-                onClick={closeAlbums}
-                className="absolute inset-0 z-0 cursor-default bg-transparent"
+              <ModalHeader
+                subtitle="Álbumes"
+                title="Elige un álbum"
+                onClose={albumsModal.close}
               />
-              <div
-                className={`relative z-10 w-[min(92vw,900px)] max-h-[86vh] bg-white/12 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.2)] border border-white/15 border-t-white/30 border-b-black/20 rounded-4xl p-6 flex flex-col items-stretch transition-all duration-300 ease-out ${
-                  openDialog
-                    ? 'translate-y-0 scale-100 opacity-100'
-                    : 'translate-y-4 scale-95 opacity-0'
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <p className="text-[10px] uppercase tracking-[0.35em] text-white/45">
-                      Álbumes
-                    </p>
-                    <h3 className="mt-2 text-2xl font-semibold text-white">
-                      Elige un álbum
-                    </h3>
+
+              <div className="mt-6 flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 overflow-auto">
+                {loading ? (
+                  <div className="col-span-full">
+                    <LoadingState message="Cargando álbumes..." />
                   </div>
-                  <button
-                    type="button"
-                    onClick={closeAlbums}
-                    className="shrink-0 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/70 transition-all duration-200 hover:bg-white/15 hover:text-white hover:shadow-lg active:scale-90"
-                  >
-                    X
-                  </button>
-                </div>
-
-                <div className="mt-6 flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 overflow-auto">
-                  {loading ? (
-                    <div className="col-span-full flex items-center justify-center text-white/60">
-                      Cargando álbumes...
-                    </div>
-                  ) : error ? (
-                    <div className="col-span-full rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-6 text-sm text-red-100">
-                      {error}
-                    </div>
-                  ) : albums.length === 0 ? (
-                    <div className="col-span-full flex items-center justify-center text-white/60">
-                      No hay álbumes
-                    </div>
-                  ) : (
-                    albums.map((al) => (
-                      <button
-                        key={al.slug}
-                        type="button"
-                        onClick={() => selectAlbum(al)}
-                        className={`flex flex-col items-stretch gap-2 rounded-2xl bg-white/8 border p-3 text-left transition-all duration-200 hover:bg-white/12 hover:border-white/30 hover:shadow-lg hover:-translate-y-1 active:scale-95 active:translate-y-0 ${current?.slug === al.slug ? 'border-white/40 ring-2 ring-white/20 shadow-[0_0_15px_rgba(255,255,255,0.15)]' : 'border-white/10'}`}
-                      >
-                        <div className="relative h-36 w-full overflow-hidden rounded-lg bg-white/5">
-                          {al.coverSrc ? (
-                            <Image
-                              src={al.coverSrc}
-                              alt={al.title}
-                              fill
-                              sizes="160px"
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-white/5" />
-                          )}
+                ) : error ? (
+                  <div className="col-span-full">
+                    <ErrorBanner message={error} />
+                  </div>
+                ) : albums.length === 0 ? (
+                  <div className="col-span-full flex items-center justify-center text-white/60">
+                    No hay álbumes
+                  </div>
+                ) : (
+                  albums.map((al) => (
+                    <button
+                      key={al.slug}
+                      type="button"
+                      onClick={() => selectAlbum(al)}
+                      className={`flex flex-col items-stretch gap-2 rounded-2xl bg-white/8 border p-3 text-left transition-all duration-200 hover:bg-white/12 hover:border-white/30 hover:shadow-lg hover:-translate-y-1 active:scale-95 active:translate-y-0 ${current?.slug === al.slug ? 'border-white/40 ring-2 ring-white/20 shadow-[0_0_15px_rgba(255,255,255,0.15)]' : 'border-white/10'}`}
+                    >
+                      <div className="relative h-36 w-full overflow-hidden rounded-lg bg-white/5">
+                        {al.coverSrc ? (
+                          <Image
+                            src={al.coverSrc}
+                            alt={al.title}
+                            fill
+                            sizes="160px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-white/5" />
+                        )}
+                      </div>
+                      <div className="mt-1">
+                        <div className="text-sm font-semibold text-white truncate">
+                          {al.title}
                         </div>
-                        <div className="mt-1">
-                          <div className="text-sm font-semibold text-white truncate">
-                            {al.title}
-                          </div>
-                          <div className="text-xs text-white/50">
-                            {al.tracks.length} pista
-                            {al.tracks.length === 1 ? '' : 's'}
-                          </div>
+                        <div className="text-xs text-white/50">
+                          {al.tracks.length} pista
+                          {al.tracks.length === 1 ? '' : 's'}
                         </div>
-                      </button>
-                    ))
-                  )}
-                </div>
-
-                <div className="mt-3 text-xs text-white/45">
-                  {albums.length} álbum{albums.length === 1 ? '' : 'es'}
-                </div>
+                      </div>
+                    </button>
+                  ))
+                )}
               </div>
-            </div>,
+
+              <div className="mt-3 text-xs text-white/45">
+                {albums.length} álbum{albums.length === 1 ? '' : 'es'}
+              </div>
+            </ModalOverlay>,
             document.body,
           )
         : null}

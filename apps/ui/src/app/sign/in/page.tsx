@@ -3,23 +3,25 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
+import { ErrorBanner } from '@/components/ErrorBanner';
+import { FormField } from '@/components/FormField';
 import api from '@/lib/eden';
 
-type FormData = {
+type SignInFormData = {
   email: string;
   password: string;
 };
 
 export default function Page() {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<SignInFormData>({
     email: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  function handleInputChange(field: keyof FormData, value: string) {
+  function handleInputChange(field: keyof SignInFormData, value: string) {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setError('');
   }
@@ -83,59 +85,30 @@ export default function Page() {
           className="flex flex-col gap-4"
           onSubmit={handleSubmit}
         >
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="email"
-              className="text-[10px] font-bold text-white/45 uppercase tracking-[0.3em] ml-1"
-            >
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              required
-              autoComplete="email"
-              value={formData.email}
-              onChange={(event) =>
-                handleInputChange('email', event.target.value)
-              }
-              disabled={loading}
-              className="rounded-2xl border border-white/12 bg-black/20 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30"
-              placeholder="name@company.com"
-            />
-          </div>
+          <FormField
+            id="email"
+            label="Email Address"
+            type="email"
+            value={formData.email}
+            onChange={(value) => handleInputChange('email', value)}
+            required
+            disabled={loading}
+            autoComplete="email"
+            placeholder="name@company.com"
+          />
 
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="password"
-              className="text-[10px] font-bold text-white/45 uppercase tracking-[0.3em] ml-1"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              required
-              autoComplete="current-password"
-              value={formData.password}
-              onChange={(event) =>
-                handleInputChange('password', event.target.value)
-              }
-              disabled={loading}
-              className="rounded-2xl border border-white/12 bg-black/20 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-black/30"
-            />
-          </div>
+          <FormField
+            id="password"
+            label="Password"
+            type="password"
+            value={formData.password}
+            onChange={(value) => handleInputChange('password', value)}
+            required
+            disabled={loading}
+            autoComplete="current-password"
+          />
 
-          {error ? (
-            <div
-              className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100"
-              role="alert"
-            >
-              {error}
-            </div>
-          ) : null}
+          <ErrorBanner message={error || null} />
 
           <button
             type="submit"
