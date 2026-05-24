@@ -1,6 +1,6 @@
 {
-	"setup": {
-		"completed": true,
-		"completedAt": null
-	}
+  "setup": {
+    "completed": false,
+    "completedAt": null
+  }
 }
