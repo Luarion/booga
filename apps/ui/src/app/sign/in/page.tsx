@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useState, useEffect } from 'react';
 import { ErrorBanner } from '@/components/ErrorBanner';
 import { FormField } from '@/components/FormField';
 import api from '@/lib/eden';
@@ -20,6 +20,21 @@ export default function Page() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function checkSetup() {
+      try {
+        const { data, error } = await api.api.setup.get();
+        if (!error && data === false) {
+          router.push('/setup');
+        }
+      } catch (err) {
+        console.error('Failed to check setup status:', err);
+      }
+    }
+    
+    checkSetup();
+  }, [router]);
 
   function handleInputChange(field: keyof SignInFormData, value: string) {
     setFormData((prev) => ({ ...prev, [field]: value }));
