@@ -63,10 +63,10 @@ export const vehicles = table(
 		make: p.varchar({ length: 32 }).notNull(),
 		model: p.varchar({ length: 32 }),
 		fuel: fuelEnum().notNull(),
-		fuel_consumption: p.numeric({ precision: 4, scale: 2, mode: 'string' }),
+		fuel_consumption: p.numeric({ precision: 6, scale: 2, mode: 'string' }),
 		drive: driveEnum().notNull(),
 		displacement: p
-			.numeric({ precision: 4, scale: 2, mode: 'string' })
+			.numeric({ precision: 6, scale: 2, mode: 'string' })
 			.notNull(),
 		registration_date: p.date().notNull(),
 		'3dmodel': p.varchar({ length: 64 }),
