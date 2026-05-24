@@ -3,7 +3,7 @@
 import { Environment, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { usePathname } from 'next/navigation';
-import { Suspense, memo, useEffect, useRef, useState } from 'react';
+import { memo, Suspense, useEffect, useRef, useState } from 'react';
 import { Timer } from 'three';
 
 function Model() {

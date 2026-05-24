@@ -11,8 +11,8 @@ import {
   YAxis,
 } from 'recharts';
 import { fetchSensorReadings } from '@/lib/api';
-import { RealtimeSensorChart } from './RealtimeSensorChart';
 import type { ChartDataPoint } from '@/types';
+import { RealtimeSensorChart } from './RealtimeSensorChart';
 
 interface SensorChartDialogProps {
   isOpen: boolean;
@@ -130,88 +130,70 @@ export function SensorChartDialog({
         <div className="h-[400px] w-full">
           {isRealtime ? (
             <RealtimeSensorChart sensorAlias={sensorAlias} />
+          ) : loading ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
+            </div>
+          ) : error ? (
+            <div className="flex h-full w-full items-center justify-center text-red-400">
+              {error}
+            </div>
+          ) : readings.length === 0 ? (
+            <div className="flex h-full w-full items-center justify-center text-white/50">
+              No hay lecturas para este sensor.
+            </div>
           ) : (
-            <>
-              {loading ? (
-                <div className="flex h-full w-full items-center justify-center">
-                  <div className="h-8 w-8 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
-                </div>
-              ) : error ? (
-                <div className="flex h-full w-full items-center justify-center text-red-400">
-                  {error}
-                </div>
-              ) : readings.length === 0 ? (
-                <div className="flex h-full w-full items-center justify-center text-white/50">
-                  No hay lecturas para este sensor.
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart
-                    data={readings}
-                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                  >
-                    <defs>
-                      <linearGradient
-                        id="colorValue"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#a855f7"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#22d3ee"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#ffffff15"
-                      vertical={false}
-                    />
-                    <XAxis
-                      dataKey="time"
-                      stroke="#ffffff50"
-                      tick={{ fill: '#ffffff50', fontSize: 12 }}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      stroke="#ffffff50"
-                      tick={{ fill: '#ffffff50', fontSize: 12 }}
-                      tickLine={false}
-                      axisLine={false}
-                      domain={['auto', 'auto']}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        backdropFilter: 'blur(10px)',
-                        color: '#fff',
-                      }}
-                      itemStyle={{ color: '#a855f7' }}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="value"
-                      stroke="#a855f7"
-                      strokeWidth={3}
-                      fillOpacity={1}
-                      fill="url(#colorValue)"
-                      animationDuration={1500}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              )}
-            </>
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={readings}
+                margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#a855f7" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#ffffff15"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="time"
+                  stroke="#ffffff50"
+                  tick={{ fill: '#ffffff50', fontSize: 12 }}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#ffffff50"
+                  tick={{ fill: '#ffffff50', fontSize: 12 }}
+                  tickLine={false}
+                  axisLine={false}
+                  domain={['auto', 'auto']}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    color: '#fff',
+                  }}
+                  itemStyle={{ color: '#a855f7' }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#a855f7"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  fill="url(#colorValue)"
+                  animationDuration={1500}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           )}
         </div>
       </div>
