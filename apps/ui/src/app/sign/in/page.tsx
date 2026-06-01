@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState, useEffect } from 'react';
 import { ErrorBanner } from '@/components/ErrorBanner';
@@ -32,7 +33,7 @@ export default function Page() {
         console.error('Failed to check setup status:', err);
       }
     }
-    
+
     checkSetup();
   }, [router]);
 
@@ -132,6 +133,13 @@ export default function Page() {
           >
             {loading ? 'Ingresando...' : 'Continue'}
           </button>
+
+          <Link
+            href="/sign/up"
+            className="w-full rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-white/70 transition-all hover:border-purple-500/30 hover:bg-purple-500/20 hover:text-purple-200"
+          >
+            Sign up
+          </Link>
         </form>
       </div>
     </div>

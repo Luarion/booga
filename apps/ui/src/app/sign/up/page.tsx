@@ -87,11 +87,11 @@ export default function SignUpPage() {
         '#passwordConfirm',
       ) as HTMLInputElement | null;
       if (passwordConfirmEl) {
-        passwordConfirmEl.setCustomValidity('Las contraseñas no coinciden');
+        passwordConfirmEl.setCustomValidity('Passwords do not match');
         passwordConfirmEl.reportValidity();
         passwordConfirmEl.setCustomValidity('');
       } else {
-        window.alert('Las contraseñas no coinciden');
+        window.alert('Passwords do not match');
       }
       setLoading(false);
       return;
@@ -112,11 +112,10 @@ export default function SignUpPage() {
       }
 
       const errorMsg =
-        typeof error?.value === 'string' ? error.value : 'Error al registrarse';
+        typeof error?.value === 'string' ? error.value : 'Error signing up';
       window.alert(errorMsg);
     } catch (err) {
-      const errorMsg =
-        err instanceof Error ? err.message : 'Error al registrarse';
+      const errorMsg = err instanceof Error ? err.message : 'Error signing up';
       window.alert(errorMsg);
     } finally {
       setLoading(false);
@@ -128,12 +127,12 @@ export default function SignUpPage() {
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white">
-            Crear Cuenta
+            Create account
           </h1>
-          <p className="text-sm text-white/50">Regístrate para empezar</p>
+          <p className="text-sm text-white/50">Sign up to get started</p>
         </div>
         <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-white/60">
-          Paso {step} de 2
+          Step {step} of 2
         </div>
       </div>
 
@@ -153,25 +152,25 @@ export default function SignUpPage() {
           <>
             <FormField
               id="name"
-              label="Nombre Completo"
+              label="Full Name"
               type="text"
               value={formData.name}
               onChange={(value) => handleInputChange('name', value)}
               required
               disabled={loading}
-              placeholder="Juan Pérez"
+              placeholder="Jane Doe"
             />
 
             <FormField
               id="username"
-              label="Usuario"
+              label="Username"
               type="text"
               value={formData.username}
               onChange={(value) => handleInputChange('username', value)}
               required
               disabled={loading}
               minLength={3}
-              placeholder="juanperez"
+              placeholder="janedoe"
             />
 
             <FormField
@@ -182,7 +181,7 @@ export default function SignUpPage() {
               onChange={(value) => handleInputChange('email', value)}
               required
               disabled={loading}
-              placeholder="juan@company.com"
+              placeholder="jane@company.com"
             />
 
             <button
@@ -191,16 +190,16 @@ export default function SignUpPage() {
               className="mt-2 w-full rounded-full border border-purple-500/50 bg-purple-500/20 px-4 py-2.5 text-sm font-semibold text-purple-200 transition-colors hover:bg-purple-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={loading}
             >
-              Continuar
+              Continue
             </button>
 
             <p className="text-center text-sm text-white/50">
-              ¿Ya tienes cuenta?{' '}
+              Already have an account?{' '}
               <Link
                 href="/sign/in"
                 className="text-white/80 transition hover:text-white"
               >
-                Inicia sesión
+                Sign in
               </Link>
             </p>
           </>
@@ -208,7 +207,7 @@ export default function SignUpPage() {
           <>
             <FormField
               id="phone"
-              label="Teléfono"
+              label="Phone"
               type="tel"
               value={formData.phone}
               onChange={(value) => handleInputChange('phone', value)}
@@ -219,7 +218,7 @@ export default function SignUpPage() {
 
             <FormField
               id="password"
-              label="Contraseña"
+              label="Password"
               type="password"
               value={formData.password}
               onChange={(value) => handleInputChange('password', value)}
@@ -231,7 +230,7 @@ export default function SignUpPage() {
 
             <FormField
               id="passwordConfirm"
-              label="Confirmar Contraseña"
+              label="Confirm Password"
               type="password"
               value={formData.passwordConfirm}
               onChange={(value) => handleInputChange('passwordConfirm', value)}
@@ -247,7 +246,7 @@ export default function SignUpPage() {
                 className="w-full rounded-full border border-white/15 bg-white/5 py-2.5 text-sm font-semibold text-white/70 transition-all hover:bg-purple-500/20 hover:border-purple-500/30 hover:text-purple-200 active:scale-[0.98] disabled:opacity-60"
                 disabled={loading}
               >
-                Volver
+                Back
               </button>
 
               <button
@@ -255,17 +254,17 @@ export default function SignUpPage() {
                 className="w-full rounded-full border border-purple-500/50 bg-purple-500/20 px-4 py-2.5 text-sm font-semibold text-purple-200 transition-colors hover:bg-purple-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={loading}
               >
-                {loading ? 'Registrando...' : 'Crear Cuenta'}
+                {loading ? 'Creating...' : 'Create account'}
               </button>
             </div>
 
             <p className="text-center text-sm text-white/50">
-              ¿Ya tienes cuenta?{' '}
+              Already have an account?{' '}
               <Link
                 href="/sign/in"
                 className="text-white/80 transition hover:text-white"
               >
-                Inicia sesión
+                Sign in
               </Link>
             </p>
           </>
