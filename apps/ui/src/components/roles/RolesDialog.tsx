@@ -5,8 +5,8 @@ import { ErrorBanner } from '@/components/ErrorBanner';
 import { LoadingState } from '@/components/LoadingState';
 import { ModalHeader } from '@/components/ModalHeader';
 import { ModalOverlay } from '@/components/ModalOverlay';
-import type { RoleRow, Row, UserRow } from '@/types';
 import { toUserRow } from '@/components/users/UsersTable';
+import type { RoleRow, Row, UserRow } from '@/types';
 
 export function RolesDialog({
   mounted,
@@ -55,10 +55,14 @@ export function RolesDialog({
 
   return (
     <ModalOverlay mounted={mounted} open={open} onClose={onClose} width="900px">
-      <ModalHeader subtitle="Gestión" title="Roles del Sistema" onClose={onClose} />
+      <ModalHeader
+        subtitle="Gestión"
+        title="Roles del Sistema"
+        onClose={onClose}
+      />
 
       <div className="mt-5 flex h-[500px] gap-6 overflow-hidden">
-        {/* Left Side: Roles List */}
+        {}
         <div className="flex w-1/3 flex-col gap-4 border-r border-white/10 pr-6">
           <form onSubmit={handleCreateSubmit} className="flex gap-2">
             <input
@@ -181,15 +185,19 @@ export function RolesDialog({
                               {user.email || 'Sin email'}
                             </span>
                           </div>
-                          
+
                           <button
                             type="button"
-                            onClick={() => onToggleUserRole(user.id, isAssigned)}
+                            onClick={() =>
+                              onToggleUserRole(user.id, isAssigned)
+                            }
                             className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 ${
                               isAssigned ? 'bg-purple-500' : 'bg-white/20'
                             }`}
                           >
-                            <span className="sr-only">Toggle role assignment</span>
+                            <span className="sr-only">
+                              Toggle role assignment
+                            </span>
                             <span
                               aria-hidden="true"
                               className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${

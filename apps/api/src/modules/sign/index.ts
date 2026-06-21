@@ -30,6 +30,7 @@ const plugin = new Elysia({
 				auth.setCookie();
 				return status(200, user);
 			} catch (error) {
+				console.error('[sign] Sign-in failed with error:', error);
 				if (isInvalidCredentials(error))
 					return status(401, 'Invalid credentials');
 				return status(500, 'Unexpected error');
@@ -54,6 +55,7 @@ const plugin = new Elysia({
 				auth.setCookie();
 				return status(201, user);
 			} catch (error) {
+				console.error('[sign] Sign-up failed with error:', error);
 				if (isUniqueViolation(error)) return status(409, 'User already exists');
 				return status(500, 'Unexpected error');
 			}

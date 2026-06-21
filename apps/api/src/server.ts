@@ -40,6 +40,7 @@ export const server = new Elysia({
 	.use(modules.vehicles)
 	.use(modules.microcontrollers)
 	.use(modules.categories)
+	.use(modules.leds)
 	.use(modules.objects)
 	.use(modules.actuators)
 	.use(modules.sensors)
@@ -51,32 +52,41 @@ export const server = new Elysia({
 server.listen(
 	Number(process.env.API_PORT) || 8080,
 	async ({ protocol, hostname, port }) => {
-		console.info(`Server listening on: ${protocol}://${hostname}:${port}`);
-		const setupCompleted = await serverConfig.getSetupCompleted();
-		if (!setupCompleted) {
-			console.info(
-				'Initial setup not completed; skipping automatic trip start',
+		console.info(`Server listening on: ${protocol}:
+		try {
+			const setupCompleted = await serverConfig.getSetupCompleted();
+			if (!setupCompleted) {
+				console.info(
+					'Initial setup not completed; skipping automatic trip start',
+				);
+				return;
+			}
+
+			let vid: number | undefined;
+			if (process.env.VEHICLE_ID) {
+				const v = Number(process.env.VEHICLE_ID);
+				if (Number.isInteger(v) && v > 0) vid = v;
+			}
+
+			
+			if (!vid) {
+				console.info('Vehicle id not set; querying first vehicle in DB');
+				const [first] = await db.select().from(vehicles).limit(1);
+				if (first?.id) vid = first.id as number;
+			}
+
+			if (vid) {
+				await tripsService.startTrip(vid);
+			} else {
+				console.warn(
+					'No valid vehicle id found; skipping automatic trip start',
+				);
+			}
+		} catch (err: any) {
+			console.error(
+				'[server] Failed to run startup DB/trip initialization:',
+				err.message,
 			);
-			return;
-		}
-
-		let vid: number | undefined;
-		if (process.env.VEHICLE_ID) {
-			const v = Number(process.env.VEHICLE_ID);
-			if (Number.isInteger(v) && v > 0) vid = v;
-		}
-
-		// If not provided by env, use the first vehicle in the database
-		if (!vid) {
-			console.info('Vehicle id not set; querying first vehicle in DB');
-			const [first] = await db.select().from(vehicles).limit(1);
-			if (first?.id) vid = first.id as number;
-		}
-
-		if (vid) {
-			await tripsService.startTrip(vid);
-		} else {
-			console.warn('No valid vehicle id found; skipping automatic trip start');
 		}
 	},
 );

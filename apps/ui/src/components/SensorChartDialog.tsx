@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { fetchSensorReadings, fetchActuatorReadings } from '@/lib/api';
+import { fetchActuatorReadings, fetchSensorReadings } from '@/lib/api';
 import type { ChartDataPoint } from '@/types';
 import { RealtimeSensorChart } from './RealtimeSensorChart';
 
@@ -39,9 +39,10 @@ export function SensorChartDialog({
     setLoading(true);
     setError(null);
     try {
-      const data = deviceType === 'actuators' 
-        ? await fetchActuatorReadings(sensorId) 
-        : await fetchSensorReadings(sensorId);
+      const data =
+        deviceType === 'actuators'
+          ? await fetchActuatorReadings(sensorId)
+          : await fetchSensorReadings(sensorId);
       setReadings(data);
     } catch (err) {
       setError(
@@ -64,7 +65,7 @@ export function SensorChartDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {}
       <button
         type="button"
         aria-label="Cerrar diálogo"
@@ -72,7 +73,7 @@ export function SensorChartDialog({
         onClick={onClose}
       />
 
-      {/* Dialog content */}
+      {}
       <div className="relative z-10 w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-black/60 p-8 shadow-2xl shadow-purple-500/10 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold tracking-tight text-white">
@@ -133,7 +134,10 @@ export function SensorChartDialog({
 
         <div className="h-[400px] w-full">
           {isRealtime ? (
-            <RealtimeSensorChart sensorAlias={sensorAlias} deviceType={deviceType} />
+            <RealtimeSensorChart
+              sensorAlias={sensorAlias}
+              deviceType={deviceType}
+            />
           ) : loading ? (
             <div className="flex h-full w-full items-center justify-center">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />

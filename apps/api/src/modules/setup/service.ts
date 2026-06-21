@@ -8,7 +8,7 @@ class SetupService {
 		setup: SetupModel['create']['static'],
 	): Promise<SetupModel['read']['static']> {
 		const { password, pfp, ...restUser } = setup.user;
-		
+
 		const result = await db.transaction(async (tx) => {
 			const [user] = await tx
 				.insert(users)

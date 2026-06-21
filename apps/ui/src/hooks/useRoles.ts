@@ -2,11 +2,11 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useAnimatedModal } from '@/hooks/useAnimatedModal';
 import {
+  assignRoleToUser,
   createRole,
   deleteRole,
   fetchRoles,
   fetchUsersForRole,
-  assignRoleToUser,
   unassignRoleFromUser,
 } from '@/lib/api';
 import type { RoleRow, Row, UserRow } from '@/types';
@@ -37,17 +37,20 @@ export function useRoles(allUsers: Row[], reloadUsers: () => void) {
     }
   }, [router]);
 
-  const loadRoleUsers = useCallback(async (roleId: number) => {
-    setRoleUsersLoading(true);
-    try {
-      const data = await fetchUsersForRole(roleId, router);
-      setRoleUsers(data as UserRow[]);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setRoleUsersLoading(false);
-    }
-  }, [router]);
+  const loadRoleUsers = useCallback(
+    async (roleId: number) => {
+      setRoleUsersLoading(true);
+      try {
+        const data = await fetchUsersForRole(roleId, router);
+        setRoleUsers(data as UserRow[]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setRoleUsersLoading(false);
+      }
+    },
+    [router],
+  );
 
   const openRolesDialog = useCallback(() => {
     rolesDialog.open();
@@ -56,14 +59,17 @@ export function useRoles(allUsers: Row[], reloadUsers: () => void) {
     }
   }, [rolesDialog, loadRoles, roles.length]);
 
-  const handleSelectRole = useCallback((role: RoleRow | null) => {
-    setSelectedRole(role);
-    if (role) {
-      void loadRoleUsers(role.id);
-    } else {
-      setRoleUsers([]);
-    }
-  }, [loadRoleUsers]);
+  const handleSelectRole = useCallback(
+    (role: RoleRow | null) => {
+      setSelectedRole(role);
+      if (role) {
+        void loadRoleUsers(role.id);
+      } else {
+        setRoleUsers([]);
+      }
+    },
+    [loadRoleUsers],
+  );
 
   const handleCreateRole = async (name: string) => {
     const { ok, error } = await createRole(name, router);
@@ -80,7 +86,7 @@ export function useRoles(allUsers: Row[], reloadUsers: () => void) {
     if (ok) {
       if (selectedRole?.id === roleId) setSelectedRole(null);
       void loadRoles();
-      // Reload users to update their roles badges
+      
       reloadUsers();
     } else {
       alert(error || 'Failed to delete role');
@@ -90,22 +96,24 @@ export function useRoles(allUsers: Row[], reloadUsers: () => void) {
   const handleToggleUserRole = async (userId: number, assigned: boolean) => {
     if (!selectedRole) return;
     const { id: roleId } = selectedRole;
+
     
-    // Optimistic update
     if (assigned) {
-      // It was true, so we unassign
+      
       setRoleUsers((prev) => prev.filter((u) => u.id !== userId));
       await unassignRoleFromUser(roleId, userId, router);
     } else {
-      // It was false, so we assign
-      const userObj = allUsers.find((u) => Number(u.id) === userId) as UserRow | undefined;
+      
+      const userObj = allUsers.find((u) => Number(u.id) === userId) as
+        | UserRow
+        | undefined;
       if (userObj) {
         setRoleUsers((prev) => [...prev, userObj]);
         await assignRoleToUser(roleId, userId, router);
       }
     }
+
     
-    // Reload users so the general table is updated
     reloadUsers();
   };
 

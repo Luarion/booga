@@ -1,5 +1,5 @@
-import { users_to_roles, roles } from '@booga/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { type roles, users_to_roles } from '@booga/db/schema';
+import { and, eq } from 'drizzle-orm';
 import Service from '@/classes/Service';
 
 class RolesService extends Service<typeof roles> {
@@ -11,7 +11,7 @@ class RolesService extends Service<typeof roles> {
 					user: true,
 				},
 			});
-			return results.map(ur => {
+			return results.map((ur) => {
 				const { password_hash, ...safeUser } = ur.user;
 				return safeUser;
 			});
@@ -35,8 +35,8 @@ class RolesService extends Service<typeof roles> {
 				.where(
 					and(
 						eq(users_to_roles.role_id, roleId),
-						eq(users_to_roles.user_id, userId)
-					)
+						eq(users_to_roles.user_id, userId),
+					),
 				);
 			return { success: true };
 		});

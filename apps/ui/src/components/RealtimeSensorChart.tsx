@@ -30,7 +30,7 @@ export function RealtimeSensorChart({
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Initialize with 10 data points
+    
     const initialData: RealtimeDataPoint[] = Array.from(
       { length: 10 },
       (_, i) => {
@@ -47,7 +47,9 @@ export function RealtimeSensorChart({
       },
     );
     setData(initialData);
-    lastValueRef.current = initialData[initialData.length - 1]?.value ?? (deviceType === 'actuators' ? 0 : 50);
+    lastValueRef.current =
+      initialData[initialData.length - 1]?.value ??
+      (deviceType === 'actuators' ? 0 : 50);
 
     // Update every 1 second
     intervalRef.current = setInterval(() => {
@@ -55,7 +57,12 @@ export function RealtimeSensorChart({
         let newValue = 50;
         if (deviceType === 'actuators') {
           // Actuators normally hold state, with occasional toggles
-          newValue = Math.random() > 0.8 ? (lastValueRef.current === 100 ? 0 : 100) : lastValueRef.current;
+          newValue =
+            Math.random() > 0.8
+              ? lastValueRef.current === 100
+                ? 0
+                : 100
+              : lastValueRef.current;
         } else {
           newValue = Math.max(
             30,
@@ -96,8 +103,16 @@ export function RealtimeSensorChart({
         >
           <defs>
             <linearGradient id="colorRealtimeValue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={isActuator ? "#f59e0b" : "#06b6d4"} stopOpacity={0.8} />
-              <stop offset="95%" stopColor={isActuator ? "#f59e0b" : "#06b6d4"} stopOpacity={0} />
+              <stop
+                offset="5%"
+                stopColor={isActuator ? '#f59e0b' : '#06b6d4'}
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="95%"
+                stopColor={isActuator ? '#f59e0b' : '#06b6d4'}
+                stopOpacity={0}
+              />
             </linearGradient>
           </defs>
           <CartesianGrid
@@ -129,15 +144,19 @@ export function RealtimeSensorChart({
             labelStyle={{ color: '#ffffff' }}
             formatter={(value) => {
               if (typeof value === 'number') {
-                return isActuator ? (value === 100 ? 'ON' : 'OFF') : value.toFixed(1);
+                return isActuator
+                  ? value === 100
+                    ? 'ON'
+                    : 'OFF'
+                  : value.toFixed(1);
               }
               return value;
             }}
           />
           <Area
-            type={isActuator ? "stepAfter" : "monotone"}
+            type={isActuator ? 'stepAfter' : 'monotone'}
             dataKey="value"
-            stroke={isActuator ? "#f59e0b" : "#06b6d4"}
+            stroke={isActuator ? '#f59e0b' : '#06b6d4'}
             strokeWidth={2}
             fillOpacity={1}
             fill="url(#colorRealtimeValue)"

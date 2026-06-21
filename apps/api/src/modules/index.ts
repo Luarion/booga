@@ -1,5 +1,6 @@
 export { default as actuators } from './actuators/index';
 export { default as categories } from './categories/index';
+export { default as leds } from './leds/index';
 export { default as microcontrollers } from './microcontrollers/index';
 export { default as objects } from './objects/index';
 export { default as roles } from './roles/index';

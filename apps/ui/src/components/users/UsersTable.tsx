@@ -4,9 +4,17 @@ import { EmptyState } from '@/components/EmptyState';
 import { formatValue, titleCase } from '@/lib/formatting';
 import type { Row, UserRow } from '@/types';
 
-const COLUMNS = ['id', 'name', 'username', 'email', 'phone', 'roles', 'timestamp'];
+const COLUMNS = [
+  'id',
+  'name',
+  'username',
+  'email',
+  'phone',
+  'roles',
+  'timestamp',
+];
 
-/** Convert a generic Row to a typed UserRow. */
+
 export function toUserRow(row: Row): UserRow {
   const id = Number(row.id);
   return {
@@ -19,7 +27,7 @@ export function toUserRow(row: Row): UserRow {
   };
 }
 
-/* ── Action buttons (shared between desktop and mobile rows) ─────────── */
+
 
 function RowActions({
   row,
@@ -50,7 +58,7 @@ function RowActions({
   );
 }
 
-/* ── Helper for Roles Badge ──────────────────────────────────────────── */
+
 
 function RolesBadges({ roles }: { roles: unknown }) {
   if (!Array.isArray(roles) || roles.length === 0) {
@@ -70,7 +78,7 @@ function RolesBadges({ roles }: { roles: unknown }) {
   );
 }
 
-/* ── Desktop table view ──────────────────────────────────────────────── */
+
 
 function DesktopTable({
   rows,

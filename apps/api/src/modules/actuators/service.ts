@@ -1,4 +1,4 @@
-import { actuators, actuators_readings } from '@booga/db/schema';
+import { type actuators, actuators_readings } from '@booga/db/schema';
 import { desc, eq } from 'drizzle-orm';
 import Service from '@/classes/Service';
 

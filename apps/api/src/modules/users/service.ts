@@ -43,24 +43,32 @@ class UsersService extends Service<
 		});
 	}
 	override async read() {
-		return await this.db.transaction(async (tx) => {
-			const results = await tx.query.users.findMany({
-				with: {
-					users_to_roles: {
-						with: {
-							role: true,
+		try {
+			return await this.db.transaction(async (tx) => {
+				const results = await tx.query.users.findMany({
+					with: {
+						users_to_roles: {
+							with: {
+								role: true,
+							},
 						},
 					},
-				},
+				});
+				return results.map((user) => {
+					const { users_to_roles, ...rest } = user;
+					return {
+						...rest,
+						roles: users_to_roles.map((ur) => ur.role.name),
+					};
+				});
 			});
-			return results.map(user => {
-				const { users_to_roles, ...rest } = user;
-				return {
-					...rest,
-					roles: users_to_roles.map(ur => ur.role.name),
-				};
-			});
-		});
+		} catch (err: any) {
+			console.error(
+				'[users] Failed to read users from DB, returning empty array:',
+				err.message,
+			);
+			return [];
+		}
 	}
 
 	override async readById(id: number) {
@@ -79,7 +87,7 @@ class UsersService extends Service<
 			const { users_to_roles, ...rest } = record;
 			return {
 				...rest,
-				roles: users_to_roles.map(ur => ur.role.name),
+				roles: users_to_roles.map((ur) => ur.role.name),
 			};
 		});
 	}

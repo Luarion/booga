@@ -5,17 +5,17 @@ import { alias, id, reference, timestamp } from './common';
 
 export { id };
 
-// SCHEMAS
+
 const table = p.pgTable;
 export const unitsSchema = p.pgSchema('units');
 export const microcontrollersSchema = p.pgSchema('microcontrollers');
 export const usersSchema = p.pgSchema('users');
 
-// ENUMS
+
 export const fuelEnum = p.pgEnum('fuel', ['diesel', 'gasoline', 'other']);
 export const driveEnum = p.pgEnum('drive', ['fwd', 'rwd', 'awd']);
 
-// TABLES
+
 export const categories = unitsSchema.table('categories', {
 	id: id(),
 	name: p.varchar({ length: 32 }).notNull().unique(),
@@ -47,7 +47,6 @@ export const roles = usersSchema.table('roles', {
 	name: p.varchar({ length: 64 }).notNull().unique(),
 	timestamp: timestamp(),
 });
-
 
 export const objects = table('objects', {
 	id: id(),

@@ -14,7 +14,7 @@ import { formatValue, titleCase } from '@/lib/formatting';
 import type { DatasetKey, Row } from '@/types';
 import { datasetConfig } from '@/types';
 
-/* ── Icon button for the sidebar rail ────────────────────────────────── */
+
 
 function DatasetIconButton({
   label,
@@ -60,7 +60,11 @@ function DataTable({
 }: {
   rows: Row[];
   datasetType?: string;
-  onSensorChartClick?: (sensorId: number, sensorAlias: string, type: 'sensors' | 'actuators') => void;
+  onSensorChartClick?: (
+    sensorId: number,
+    sensorAlias: string,
+    type: 'sensors' | 'actuators',
+  ) => void;
 }) {
   const columns = useMemo(() => {
     const keys = new Set<string>();
@@ -118,7 +122,7 @@ function DataTable({
                       onSensorChartClick?.(
                         row.id as number,
                         String(row.alias || row.name || `Device ${row.id}`),
-                        datasetType as 'sensors' | 'actuators'
+                        datasetType as 'sensors' | 'actuators',
                       )
                     }
                     className="flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-semibold text-purple-300 transition-colors hover:bg-purple-500/20 active:scale-95"
@@ -159,7 +163,11 @@ function DataTable({
  * The parent only needs to call `open(key)` via the ref-like callbacks.
  */
 export function useDatasetDialog(
-  onSensorChartClick?: (id: number, alias: string, type: 'sensors' | 'actuators') => void,
+  onSensorChartClick?: (
+    id: number,
+    alias: string,
+    type: 'sensors' | 'actuators',
+  ) => void,
 ) {
   const router = useRouter();
   const modal = useAnimatedModal();
